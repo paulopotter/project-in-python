@@ -8,5 +8,6 @@ class Dollar(Money):
 	def times(self,multiplier):
 		return self.amount*multiplier
 		
-	def equals(self, numObject):
-		return self.amount == Money(numObject).amount
+	# def equals(self, numObject):
+	# 	# Money(self.amount).equals(numObject)
+	# 	return self.amount == Money(numObject).amount

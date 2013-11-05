@@ -6,6 +6,8 @@ class Money(object):
 	def times(self,multiplier):
 		return self.amount*multiplier
 		
-	def equals(self, numObject):
-		return self.amount == Money(numObject).amount
+	def equals(self, dinheiro):
+		return self.amount == dinheiro.amount and self.__class__ == dinheiro.__class__
 
+	def dollar(self,amount):
+		return amount
