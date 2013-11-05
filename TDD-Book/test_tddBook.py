@@ -10,5 +10,9 @@ class testTddBook(unittest.TestCase):
 		dollarFive = Dollar(5).times(3)
 		self.assertEquals(15,dollarFive)
 
+	def testEquallity(self):
+		self.assertTrue(Dollar(5).equals(Dollar(5).amount))
+		self.assertFalse(Dollar(5).equals(Dollar(6).amount))
+
 if __name__ == '__main__':
 	unittest.main()
