@@ -5,9 +5,10 @@ import tddBookFranc
 
 class testTddBook(unittest.TestCase):
 	def testMultiplication(self):
-		dollarFive = Dollar(5)
-		dollarFive.times(2)
-		self.assertEquals(10,dollarFive.amount)
+		dollarFive = Dollar(5).times(2)
+		self.assertEquals(10,dollarFive)
+		dollarFive = Dollar(5).times(3)
+		self.assertEquals(15,dollarFive)
 
 if __name__ == '__main__':
 	unittest.main()

@@ -4,8 +4,7 @@ class Dollar(object):
 		self.amount = amount
 		
 	def times(self,multiplier):
-		self.amount*=multiplier
-		return self.amount
+		return self.amount*multiplier
 		
 	def equals(self, numObject):
 		return self.amount == numObject
