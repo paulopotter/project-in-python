@@ -1,4 +1,6 @@
-class Dollar(object):
+from tddBookMoney import *
+
+class Dollar(Money):
 
 	def __init__(self,amount):
 		self.amount = amount
@@ -7,5 +9,4 @@ class Dollar(object):
 		return self.amount*multiplier
 		
 	def equals(self, numObject):
-		return self.amount == numObject
-
+		return self.amount == Money(numObject).amount
