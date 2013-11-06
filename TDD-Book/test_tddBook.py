@@ -5,9 +5,9 @@ from tddBookFranc import Franc
 
 class testTddBook(unittest.TestCase):
 	def testMultiplication(self):
-		dollarFive = Dollar(5)
-		self.assertEquals(10,dollarFive.times(2))
-		self.assertEquals(15,dollarFive.times(3))
+		five = Money(5)
+		self.assertEquals(Dollar(10).amount,five.times(2))
+		self.assertEquals(Dollar(15).amount,five.times(3))
 
 		francFive = Franc(5)
 		self.assertEquals(10,francFive.times(2))
@@ -21,6 +21,10 @@ class testTddBook(unittest.TestCase):
 		self.assertFalse(Franc(5).equals(Franc(6)))
 		
 		self.assertFalse(Dollar(5).equals(Franc(5)))
+
+	def testCurrency(self):
+		self.assertEquals("USD",Dollar(1).currency())
+		self.assertEquals("CHF",Franc(1).currency())
 
 if __name__ == '__main__':
 	unittest.main()
