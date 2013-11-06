@@ -8,3 +8,5 @@ class Dollar(Money):
 
 	def currency(self):
 		return self.simbologia
+
+	

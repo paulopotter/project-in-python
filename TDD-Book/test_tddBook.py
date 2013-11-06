@@ -2,6 +2,7 @@ import unittest
 from tddBookMoney import Money
 from tddBookDollar import Dollar
 from tddBookFranc import Franc
+from tddBookBank import Bank
 
 class testTddBook(unittest.TestCase):
 	def testMultiplication(self):
@@ -25,6 +26,13 @@ class testTddBook(unittest.TestCase):
 	def testCurrency(self):
 		self.assertEquals("USD",Dollar(1).currency())
 		self.assertEquals("CHF",Franc(1).currency())
+
+	def testSimpleAddition(self):
+		bank = Bank()
+		moneySum = Dollar(5).plus(Dollar(5).amount)
+		moneyReduced = bank.reduce(moneySum,"USD")
+		self.assertEquals(Money(10).amount,moneyReduced)
+
 
 if __name__ == '__main__':
 	unittest.main()

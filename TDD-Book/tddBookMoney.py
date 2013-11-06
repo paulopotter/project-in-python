@@ -12,12 +12,6 @@ class Money(object):
 # e Verifica se a classe passada eh a mesma que esta sendo chamada.
 		return self.amount == dinheiro.amount and self.__class__ == dinheiro.__class__
 
-	def dollar(self,dolar):
-		currency = "USD"
 
-		return currency
-
-	def franc(self,franco):
-		currency = "CHF"
-
-		return currency
+	def plus(self,adicao):
+		return self.amount + adicao
