@@ -1,5 +1,5 @@
-#Perguntar sobre teste que depende de outro, por exemplo, se o que eu for fazer necessita de algo que o outro teste passou, o que fazer...
-# parei na pagina 81
+from TestResult import TestResult
+from TestSuite import TestSuite
 
 class TestCase:
 	def __init__(self,name):
@@ -9,7 +9,12 @@ class TestCase:
 	def tearDown(self):
 		pass
 	def run(self):
+		result = TestResult()
+		result.testStarted()
 		self.setUp()
-		exec "self." + self.name + "()"
+		try:
+			exec "self." + self.name + "()"
+		except:
+			result.testFailed()
 		self.tearDown()
-		return TestResult()
+		return result
