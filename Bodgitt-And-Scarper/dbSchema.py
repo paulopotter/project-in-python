@@ -1,7 +1,8 @@
-# 'db-2x1.db'
-#Tutorial (base de estudos tirado de: http://www.ibm.com/developerworks/br/library/l-parse-memory-dumps/)
-import sys 
 import struct
+import pdb
+
+
+print '\n'
 
 fd = open('./db-2x1.db','rb')
 
@@ -19,46 +20,65 @@ numTotalOverallLength = int(totalOverallLength[3])
 numberOfFields = struct.unpack('2B',ReadBytes(fd,2))
 numNumberOfFields = int(numberOfFields[1])
 
-# #Bytes of Field Name
-bytesOfFieldName = struct.unpack('2B',ReadBytes(fd,2))
-numBytesOfFieldName = int(bytesOfFieldName[1])
+tupla = []
+pdb.set_trace()
+for x in range(0, numNumberOfFields):
 
-# #Nome do Campo
-fieldName = struct.unpack(str(numBytesOfFieldName)+'s',ReadBytes(fd,numBytesOfFieldName))
-strFieldName = fieldName[0]
+	# #Bytes of Field Name
+	bytesOfFieldName = struct.unpack('2B',ReadBytes(fd,2))
+	numBytesOfFieldName = int(bytesOfFieldName[1])
 
-# End of Repeating Block
-endOfRepeatingBlock = struct.unpack('2B',ReadBytes(fd,2))
-numEndOfRepeatingBlock = int(endOfRepeatingBlock[1])
+	#Nome do Campo
+	fieldName = struct.unpack(str(numBytesOfFieldName)+'s',ReadBytes(fd,numBytesOfFieldName))
+	strFieldName = fieldName[0]
 
+	# End of Repeating Block
+	endOfRepeatingBlock = struct.unpack('2B',ReadBytes(fd,2))
+	numEndOfRepeatingBlock = int(endOfRepeatingBlock[1])
 
-print totalOverallLength
-print numberOfFields
-print bytesOfFieldName
-print fieldName
-print endOfRepeatingBlock
+	# print totalOverallLength
+	print "Field Length: ",numBytesOfFieldName
+	print "Field Name:",strFieldName
+	print "end of Repeating Block:",numEndOfRepeatingBlock
+	print '-'*20
+	tupla.append(strFieldName)
 
-
-# for x in range(0, 5):
-# 	for y in range(0, numNumberOfFields):
-
-# 		# #Bytes of Field Name
-# 		bytesOfFieldName = struct.unpack('2B',ReadBytes(fd,2))
-# 		numBytesOfFieldName = int(bytesOfFieldName[1])
-
-# 		# #Nome do Campo
-# 		fieldName = struct.unpack(str(numBytesOfFieldName)+'s',ReadBytes(fd,numBytesOfFieldName))
-# 		# strFieldName = fieldName[0]
-# 		print fieldName
-
-# 		# print "Bytes of Field Name [%i]\n Field Name[%s]"%(bytesOfFieldName[1] , fieldName[0])
-# 		# print endOfRepeatingBlock
+print tupla
+print '\n'
+print '-'*21
 
 
+tupla2 =[]
+for y in range(0,3):
+# for y in range(0,numTotalOverallLength - numNumberOfFields):
+	
+	# #Bytes of Field Name
+	bytesOfFieldName = struct.unpack('2B',ReadBytes(fd,2))
+	numBytesOfFieldName = int(bytesOfFieldName[1])
 
-# dicionario = {}
-# for i in range(0,numNumberOfFields):
-# 	print i
-# 	dicionario[strFieldName] = None
+	#Nome do Campo
+	fieldName = struct.unpack('32s',ReadBytes(fd,32))
+	strFieldName = fieldName[0]
 
-# print dicionario
+	# End of Repeating Block
+	endOfRepeatingBlock = struct.unpack('2B',ReadBytes(fd,2))
+	numEndOfRepeatingBlock = int(endOfRepeatingBlock[1])
+
+
+	# print totalOverallLength
+	print "Field Length: ",numBytesOfFieldName
+	print "Field Name:",strFieldName
+	print "end of Repeating Block:",numEndOfRepeatingBlock
+	print '-'*20
+	tupla2.append(strFieldName)
+
+print tupla2
+
+
+print '\n'
+print "magic Cookie Value : ",magicCookieValue
+print "num Total Overall Length :",numTotalOverallLength
+print "num Number Of Fields :",numNumberOfFields
+
+
+
