@@ -11,23 +11,54 @@ def ReadBytes(fd, noBytes):
 
 magicCookieValue = struct.unpack('4B',ReadBytes(fd,4))
 
+#Total Overall Length
 totalOverallLength = struct.unpack('4B',ReadBytes(fd,4))
-totalOverallLength = totalOverallLength[3]
+numTotalOverallLength = int(totalOverallLength[3])
 
+# Number of Fields
 numberOfFields = struct.unpack('2B',ReadBytes(fd,2))
-numberOfFields = numberOfFields[1]
+numNumberOfFields = int(numberOfFields[1])
 
-print magicCookieValue
+# #Bytes of Field Name
+bytesOfFieldName = struct.unpack('2B',ReadBytes(fd,2))
+numBytesOfFieldName = int(bytesOfFieldName[1])
+
+# #Nome do Campo
+fieldName = struct.unpack(str(numBytesOfFieldName)+'s',ReadBytes(fd,numBytesOfFieldName))
+strFieldName = fieldName[0]
+
+# End of Repeating Block
+endOfRepeatingBlock = struct.unpack('2B',ReadBytes(fd,2))
+numEndOfRepeatingBlock = int(endOfRepeatingBlock[1])
+
+
 print totalOverallLength
 print numberOfFields
+print bytesOfFieldName
+print fieldName
+print endOfRepeatingBlock
 
 
-# for element in range (0,10):
-# #loop 18 since we know the file size and
-# #the record length: 1024/18 = 56 records
-# 	buffer = ReadBytes('./db-2x1.db',fd, 11)
-# 	sourceAddress = struct.unpack_from('6s', buffer,0),struct.unpack_from('6s', buffer,1),struct.unpack_from('2B', buffer,2),struct.unpack_from('2B', buffer,3)
-# 	print "sourceAddress = " , sourceAddress
-# 	print '-'* 10
-# 	print struct.calcsize('2h')
-# 	print '-'* 10
+# for x in range(0, 5):
+# 	for y in range(0, numNumberOfFields):
+
+# 		# #Bytes of Field Name
+# 		bytesOfFieldName = struct.unpack('2B',ReadBytes(fd,2))
+# 		numBytesOfFieldName = int(bytesOfFieldName[1])
+
+# 		# #Nome do Campo
+# 		fieldName = struct.unpack(str(numBytesOfFieldName)+'s',ReadBytes(fd,numBytesOfFieldName))
+# 		# strFieldName = fieldName[0]
+# 		print fieldName
+
+# 		# print "Bytes of Field Name [%i]\n Field Name[%s]"%(bytesOfFieldName[1] , fieldName[0])
+# 		# print endOfRepeatingBlock
+
+
+
+# dicionario = {}
+# for i in range(0,numNumberOfFields):
+# 	print i
+# 	dicionario[strFieldName] = None
+
+# print dicionario
