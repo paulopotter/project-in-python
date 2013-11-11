@@ -3,25 +3,29 @@ import sys
 #Tutorial (base de estudos tirado de: http://www.ibm.com/developerworks/br/library/l-parse-memory-dumps/)
 
 import struct
-import testado
 
+fd = open('./db-2x1.db','rb')
 
-# Le o arquivo
-def ReadBytes( arquivo, noBytes):
-	fd = open(arquivo,'rb')
-	data = fd.read(noBytes)
-	return data
-
-
-
-
-
-for element in range (0,19):
-	buffer = ReadBytes('./db-2x1.db',20)
-
-	sourceAddress = struct.unpack_from('B', buffer,element),struct.unpack_from('s', buffer,element+1)
-	print '-'*element
-	print "sourceAddress = " , sourceAddress
+def ReadBytes(self, fd, noBytes):
+ '''
+ Read file and return the number of bytes as specified
+ '''
+ data = fd.read(noBytes)
+ return data
 	
-	print '%s%s'%(sourceAddress[0][0],sourceAddress[1][0])
 
+def lerArquivo(self, arq , noBytes):
+	arquivoDB = open(arq,'rb')
+	arquivo = arquivoDB.read(noBytes)
+	# arquivoDB.close()
+	return arquivoDB
+
+for element in range (0,10):
+#loop 18 since we know the file size and
+#the record length: 1024/18 = 56 records
+	buffer = ReadBytes('./db-2x1.db',fd, 11)
+	sourceAddress = struct.unpack_from('6s', buffer,0),struct.unpack_from('6s', buffer,1),struct.unpack_from('2B', buffer,2),struct.unpack_from('2B', buffer,3)
+	print "sourceAddress = " , sourceAddress
+	print '-'* 10
+	print struct.calcsize('2h')
+	print '-'* 10
