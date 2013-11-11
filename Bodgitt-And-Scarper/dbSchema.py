@@ -19,7 +19,7 @@ def lerArquivo(self, arq , noBytes):
 	arquivo = arquivoDB.read(noBytes)
 	# arquivoDB.close()
 	return arquivoDB
-
+	
 for element in range (0,10):
 #loop 18 since we know the file size and
 #the record length: 1024/18 = 56 records
