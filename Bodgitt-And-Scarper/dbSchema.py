@@ -1,16 +1,26 @@
-import struct
-import pdb
-import sys
+import struct #pack e unpack
+import pdb #Debug
+import sys #exit()
 
-print '\n'
-
+tuplaMetaDados = []
+tuplaDados =[]
+dicionario = {}
 fd = open('./db-2x1.db','rb+')
+
+def tamanhoArquivo(fd1 ='./db-2x1.db'):
+	fda = open(fd1,'rb')
+	tamanho = len(fda.read())
+	fda.close()
+	return tamanho
+
 
 def ReadBytes(fd, noBytes):
  data = fd.read(noBytes)
  return data
 
-# print fd.lines
+
+
+
 # Magic Cookie
 magicCookieValue = struct.unpack('4B',ReadBytes(fd,4))
 
@@ -22,7 +32,7 @@ numTotalOverallLength = int(totalOverallLength[3])
 numberOfFields = struct.unpack('2B',ReadBytes(fd,2))
 numNumberOfFields = int(numberOfFields[1])
 
-tuplaMetaDados = []
+
 
 # MetaDado
 for x in range(numNumberOfFields):
@@ -47,10 +57,6 @@ for x in range(numNumberOfFields):
 	tuplaMetaDados.append(strFieldName)
 	# tuplaMetaDados.append(numEndOfRepeatingBlock)
 
-print "MetaDados :",tuplaMetaDados
-print '-'*21
-tuplaDados =[]
-dicionario = {}
 
 # Cria as variaveis metaDado(x) dinamicamente
 for i in range(numNumberOfFields):
@@ -59,9 +65,7 @@ tuplaByteFlag = []
 
 print numberOfFields
 # Dados
-for y in range(0,29):
-# for y in range(numTotalOverallLength - numNumberOfFields):
-	
+for y in range(int(tamanhoArquivo())/int(numTotalOverallLength)):
 	# Byte flag
 	byteFlag = struct.unpack('B',ReadBytes(fd,1))
 	#Bytes of Field Name
@@ -77,12 +81,20 @@ for y in range(0,29):
 	tuplaByteFlag.append(byteFlag[0])
 
 
+fd.close()
 
 # Adicionando todos os campos metadado(x) no dicionario
 for i in range(numNumberOfFields):
 	dicionario[tuplaMetaDados[i]] = locals()['metaDado%d'%i]
 dicionario["byteFlag"] = tuplaByteFlag
 
+
+
+
+#-------------
+
+print "MetaDados :",tuplaMetaDados
+print '-'*21
 print '\n'
 print "Data: ",dicionario
 print '\n'
@@ -91,6 +103,4 @@ print "num Total Overall Length :",numTotalOverallLength
 print "num Number Of Fields :",numNumberOfFields
 
 
-
-fd.close()
 
