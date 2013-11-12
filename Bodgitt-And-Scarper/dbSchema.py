@@ -1,14 +1,16 @@
 import struct
 import pdb
-
+import sys
 
 print '\n'
 
-fd = open('./db-2x1.db','rb')
+fd = open('./db-2x1.db','rb+')
 
 def ReadBytes(fd, noBytes):
  data = fd.read(noBytes)
  return data
+
+# print fd.lines
 # Magic Cookie
 magicCookieValue = struct.unpack('4B',ReadBytes(fd,4))
 
@@ -20,11 +22,10 @@ numTotalOverallLength = int(totalOverallLength[3])
 numberOfFields = struct.unpack('2B',ReadBytes(fd,2))
 numNumberOfFields = int(numberOfFields[1])
 
-tupla = []
-# pdb.set_trace()
+tuplaMetaDados = []
 
 # MetaDado
-for x in range(0, numNumberOfFields):
+for x in range(numNumberOfFields):
 
 	# Bytes of Field Name
 	bytesOfFieldName = struct.unpack('2B',ReadBytes(fd,2))
@@ -43,53 +44,53 @@ for x in range(0, numNumberOfFields):
 	# print "Field Name:",strFieldName
 	# print "end of Repeating Block:",numEndOfRepeatingBlock
 	# print '-'*20
-	tupla.append(strFieldName)
-	# tupla.append(numEndOfRepeatingBlock)
+	tuplaMetaDados.append(strFieldName)
+	# tuplaMetaDados.append(numEndOfRepeatingBlock)
 
-print "MetaDados :",tupla
+print "MetaDados :",tuplaMetaDados
 print '-'*21
-tupla2 =[]
+tuplaDados =[]
 dicionario = {}
-estrutura1 = []
-estrutura2 = []
-estrutura3 = []
-estrutura4 = []
-estrutura5 = []
-estrutura6 = []
+
+# Cria as variaveis metaDado(x) dinamicamente
+for i in range(numNumberOfFields):
+	locals()['metaDado%d'%i] = []
+tuplaByteFlag = []
+
+print numberOfFields
 # Dados
-for y in range(0,3):
-# for y in range(0,numTotalOverallLength - numNumberOfFields):
+for y in range(0,29):
+# for y in range(numTotalOverallLength - numNumberOfFields):
 	
-	#Bytes of Field Name
-	bytesOfFieldName = struct.unpack('B 30s 2B 62s 2B 62s 2B 4s 2B 6s 2B 6s B',ReadBytes(fd,numTotalOverallLength))
+	# Byte flag
 	byteFlag = struct.unpack('B',ReadBytes(fd,1))
+	#Bytes of Field Name
+	bytesOfFieldName = struct.unpack('30s 2B 62s 2B 62s 2B 4s 2B 6s 2B 6s 2B',ReadBytes(fd,numTotalOverallLength))
 
-	# print "Field Length: ",bytesOfFieldName
-	# print '-'*20
-	tupla2.append(bytesOfFieldName)
-	estrutura1.append(tupla2[y][1].strip())
-	estrutura2.append(tupla2[y][4].strip())
-	estrutura3.append(tupla2[y][7].strip())
-	estrutura4.append(tupla2[y][10].strip())
-	estrutura5.append(tupla2[y][13].strip())
-	estrutura6.append(tupla2[y][16].strip())
+	tuplaDados.append(bytesOfFieldName)
+	metaDado0.append(tuplaDados[y][0].strip())
+	metaDado1.append(tuplaDados[y][3].strip())
+	metaDado2.append(tuplaDados[y][6].strip())
+	metaDado3.append(tuplaDados[y][9].strip())
+	metaDado4.append(tuplaDados[y][12].strip())
+	metaDado5.append(tuplaDados[y][15].strip())
+	tuplaByteFlag.append(byteFlag[0])
 
-# print tupla2 
-dicionario[tupla[0]] = estrutura1
-dicionario[tupla[1]] = estrutura2
-dicionario[tupla[2]] = estrutura3
-dicionario[tupla[3]] = estrutura4
-dicionario[tupla[4]] = estrutura5
-dicionario[tupla[5]] = estrutura6
 
+
+# Adicionando todos os campos metadado(x) no dicionario
+for i in range(numNumberOfFields):
+	dicionario[tuplaMetaDados[i]] = locals()['metaDado%d'%i]
+dicionario["byteFlag"] = tuplaByteFlag
 
 print '\n'
 print "Data: ",dicionario
-
 print '\n'
 print "magic Cookie Value : ",magicCookieValue
 print "num Total Overall Length :",numTotalOverallLength
 print "num Number Of Fields :",numNumberOfFields
 
 
+
+fd.close()
 
