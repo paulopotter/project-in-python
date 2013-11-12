@@ -22,6 +22,7 @@ numNumberOfFields = int(numberOfFields[1])
 
 tupla = []
 pdb.set_trace()
+
 for x in range(0, numNumberOfFields):
 
 	# #Bytes of Field Name
