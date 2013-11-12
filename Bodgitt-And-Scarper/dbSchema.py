@@ -47,13 +47,9 @@ for x in range(numNumberOfFields):
 	tuplaMetaDados.append(strFieldName)
 	tuplaMetaFieldLength.append(numEndOfRepeatingBlock)
 
-
-# Cria as variaveis metaDado(x) dinamicamente
-for i in range(numNumberOfFields):
-	locals()['metaDado%d'%i] = []
-
+totalLinhasRegistro = int(tamanhoArquivo())/int(numTotalOverallLength)
 # Dados
-for y in range(int(tamanhoArquivo())/int(numTotalOverallLength)):
+for y in range(totalLinhasRegistro):
 	# Byte flag
 	byteFlag = struct.unpack('B',ReadBytes(fd,1))
 
@@ -64,9 +60,9 @@ for y in range(int(tamanhoArquivo())/int(numTotalOverallLength)):
 	
 	i = -3
 	metaDadoFormatado = {}
-	for metaDado1 in tuplaMetaDados:
+	for metaDado in tuplaMetaDados:
 		i += 3
-		metaDadoFormatado[metaDado1] = tuplaDados[y][i].strip()
+		metaDadoFormatado[metaDado] = tuplaDados[y][i].strip()
 	
 	metaDadoFormatado['Byte Flag'] = byteFlag[0]
 	listDados.append(metaDadoFormatado)
