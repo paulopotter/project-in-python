@@ -17,8 +17,5 @@ class TestFile(unittest.TestCase):
 			j += 3
 			self.assertEqual(len(dbSchema.bytesOfFieldName[j])+2, dbSchema.tuplaMetaFieldLength[i])
 
-
-
-
 if __name__ == '__main__':
 	unittest.main()
