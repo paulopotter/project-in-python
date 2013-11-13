@@ -7,16 +7,15 @@ tuplaDados =[]
 listDados = []
 
 fd = open(arquivo,'rb+')
-
-def tamanhoArquivo(fd1 = arquivo):
-	fda = open(fd1,'rb')
-	tamanho = len(fda.read())
-	fda.close()
-	return tamanho
-
 def ReadBytes(fd, noBytes):
 	data = fd.read(noBytes)
 	return data
+
+def tamanhoArquivo(fd1 = arquivo):
+	fd = open(fd1,'rb')
+	tamanho = len(fd.read())
+	fd.close()
+	return tamanho
 
 # Magic Cookie
 magicCookieValue = struct.unpack('4B',ReadBytes(fd,4))
@@ -28,7 +27,6 @@ numTotalOverallLength = int(totalOverallLength[-1])
 # Number of Fields
 numberOfFields = struct.unpack('2B',ReadBytes(fd,2))
 numNumberOfFields = int(numberOfFields[-1])
-
 # MetaDado
 for x in range(numNumberOfFields):
 
@@ -46,6 +44,7 @@ for x in range(numNumberOfFields):
 
 	tuplaMetaDados.append(strFieldName)
 	tuplaMetaFieldLength.append(numEndOfRepeatingBlock)
+
 
 totalLinhasRegistro = int(tamanhoArquivo())/int(numTotalOverallLength)
 # Dados
@@ -67,7 +66,6 @@ for y in range(totalLinhasRegistro):
 	metaDadoFormatado['Byte Flag'] = byteFlag[0]
 	listDados.append(metaDadoFormatado)
 
-#fechando o arquivo aberto
 fd.close()
 
 
