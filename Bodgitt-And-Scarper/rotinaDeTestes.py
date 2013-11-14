@@ -1,21 +1,22 @@
 import unittest
 import dbSchema
 
-class TestFile(unittest.TestCase):
+class TestDBSchema(unittest.TestCase):
 
 	# def test_IndentifiesDataFile(self):
 	# 	self.assertEqual(dbSchema.magicCookieValue, (0,0,2,1))
 
-	def test_TotalOverallLength(self):
+	def test_total_overall_length(self):
 		# total overall length in bytes of each record 
-		self.assertEqual(dbSchema.numTotalOverallLength,sum(dbSchema.tuplaMetaFieldLength))
+		self.assertEqual(dbSchema.number_total_overall_length, sum(dbSchema.tuple_meta_field_length))
 
-	def test_LengthForFieldsName(self):
+	def test_length_for_fields_name(self):
 		# number of fields in each record
 		j = -3
-		for i in range(len(dbSchema.tuplaMetaFieldLength)):
+		for x in range(len(dbSchema.tuple_meta_field_length)):
 			j += 3
-			self.assertEqual(len(dbSchema.bytesOfFieldName[j])+2, dbSchema.tuplaMetaFieldLength[i])
+			self.assertEqual(len(dbSchema.bytes_of_field_name[j]) + 2, dbSchema.tuple_meta_field_length[x])
+
 
 if __name__ == '__main__':
 	unittest.main()
