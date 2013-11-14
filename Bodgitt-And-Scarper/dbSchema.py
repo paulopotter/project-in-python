@@ -52,20 +52,20 @@ for y in range(total_linhas_registro):
 
     byte_flag = struct.unpack('B',ReadBytes(fd,1))
 
-    bytes_of_field_name = struct.unpack(str(tuple_meta_field_length[0] - 2) + 's 2B ' + str(tuple_meta_field_length[1] - 2) + 's 2B ' +
-                                        str(tuple_meta_field_length[2] - 2) + 's 2B ' + str(tuple_meta_field_length[3] - 2) + 's 2B ' +
-                                        str(tuple_meta_field_length[4] - 2) + 's 2B ' + str(tuple_meta_field_length[5] - 2) + 's 2B',
+    bytes_of_field_name = struct.unpack(str(tuple_meta_field_length[0]) + 's ' + str(tuple_meta_field_length[1]) + 's ' +
+                                        str(tuple_meta_field_length[2]) + 's ' + str(tuple_meta_field_length[3]) + 's' +
+                                        str(tuple_meta_field_length[4]) + 's ' + str(tuple_meta_field_length[5]) + 's',
                                         ReadBytes(fd,number_total_overall_length))
-    
+
     tuple_dados.append(bytes_of_field_name)
-    
-    k = -3
+
+    k = 0
     meta_dado_formatado = {}
     for meta_dado in tuple_meta_dados:
-        k += 3
-        meta_dado_formatado[meta_dado] = tuple_dados[y][k].strip()
+        meta_dado_formatado[meta_dado] = tuple_dados[y][k]
+        k += 1
 
-    
+
     meta_dado_formatado['Byte Flag'] = byte_flag[0]
     list_dados.append(meta_dado_formatado)
 
