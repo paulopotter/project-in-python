@@ -38,3 +38,5 @@ nosetests.xml
 .pyc
 .pyo
 .DS_Store
+
+.ropeproject/
