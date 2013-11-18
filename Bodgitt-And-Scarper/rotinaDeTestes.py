@@ -9,7 +9,7 @@ class TestDBSchema(unittest.TestCase):
         self.assertNotEqual(db_schema.length_of_file(),0)
 
     def test_unpack_file(self):
-        self.assertFalse(db_schema.unpack_file("4B"))
+        self.assertTrue(db_schema.unpack_file(4,"B"))
 
 
 
