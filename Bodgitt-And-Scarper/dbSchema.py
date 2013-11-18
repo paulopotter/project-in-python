@@ -6,3 +6,7 @@ class dbSchema:
     def length_of_file(self):
         size_of_file = len(self.open_file.read())
         return size_of_file
+
+    def read_bytes(self,number_bytes):
+        data = self.open_file.read(number_bytes)
+        return data
