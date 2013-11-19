@@ -13,10 +13,10 @@ class TestDBSchema(unittest.TestCase):
     def test_start_of_file(self):
         self.assertIsInstance(self.db_schema.start_of_file(),dict)
 
-    # def test_schema_description(self):
-    #     self.assertIsInstance(db_schema.schema_description(),dict)
-    # print db_schema.schema_description()
+    def test_schema_description(self):
+        self.db_schema.start_of_file()
 
+        self.assertIsInstance(self.db_schema.schema_description(),list)
 
 
 if __name__ == '__main__':
