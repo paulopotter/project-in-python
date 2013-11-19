@@ -23,9 +23,7 @@ class TestDBSchema(unittest.TestCase):
         self.assertIsInstance(self.db_schema.schema_description(), list)
 
     def test_number_of_records(self):
-        self.assertEqual(len(self.db_schema.records()),self.db_schema.number_of_lines())
-
-
+        self.assertEqual(len(self.db_schema.records()), self.db_schema.number_of_lines())
 
 if __name__ == '__main__':
 	unittest.main()
