@@ -97,6 +97,7 @@ class DbSchema:
         return records
 
 
-
+    def __del__(self):
+        self.open_file.close()
 
 
