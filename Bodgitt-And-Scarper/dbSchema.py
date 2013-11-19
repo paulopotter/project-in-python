@@ -8,17 +8,17 @@ class DbSchema:
         self.format_of_data = self.start_of_file()
 
     def length_of_file(self):
-        open_file_position = self.open_file.tell()
-
         length_of_file = len(self.open_file.read())
-
-        self.open_file.seek(open_file_position)
 
         return length_of_file
 
     def number_of_lines(self):
+        pointer_position = self.open_file.tell()
+        self.open_file.seek(0)
+        number_of_lines = self.length_of_file() / self.format_of_data["total_overall_length"]
+        self.open_file.seek(pointer_position)
 
-        return self.length_of_file() / self.format_of_data["total_overall_length"]
+        return number_of_lines
 
     def read_bytes(self, open_file, number_of_bytes):
         return open_file.read(number_of_bytes)
@@ -60,15 +60,11 @@ class DbSchema:
         return meta_dados
 
     def records(self):
-        schema_description = self.schema_description()
-
-#         pointer_position = self.open_file.tell()
         number_of_lines = self.number_of_lines()
-#         self.open_file.seek(pointer_position)
-
+        schema_description = self.schema_description()
         record = []
 
-        for numbers_of_lines in range(number_of_lines):
+        for x in range(number_of_lines):
             byte_flag = self.unpack_file(1, 'B', self.open_file)
 
             field_of_record_1 = self.unpack_file(schema_description[0][1], 's ', self.open_file)
