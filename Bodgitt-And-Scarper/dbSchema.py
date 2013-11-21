@@ -66,15 +66,22 @@ class DbSchema:
 
         for x in range(number_of_lines):
             byte_flag = self.unpack_file(1, 'B', self.open_file)
+            name = self.unpack_file(schema_description[0][1], 's ', self.open_file)
+            location = self.unpack_file(schema_description[1][1], 's ', self.open_file)
+            specialties = self.unpack_file(schema_description[2][1], 's ', self.open_file)
+            size = self.unpack_file(schema_description[3][1], 's ', self.open_file)
+            rate = self.unpack_file(schema_description[4][1], 's ', self.open_file)
+            owner = self.unpack_file(schema_description[5][1], 's ', self.open_file)
 
-            field_of_record_1 = self.unpack_file(schema_description[0][1], 's ', self.open_file)
-            field_of_record_2 = self.unpack_file(schema_description[1][1], 's ', self.open_file)
-            field_of_record_3 = self.unpack_file(schema_description[2][1], 's ', self.open_file)
-            field_of_record_4 = self.unpack_file(schema_description[3][1], 's ', self.open_file)
-            field_of_record_5 = self.unpack_file(schema_description[4][1], 's ', self.open_file)
-            field_of_record_6 = self.unpack_file(schema_description[5][1], 's ', self.open_file)
-
-            record.append((field_of_record_1[0], field_of_record_2[0], field_of_record_3[0], field_of_record_4[0], field_of_record_5[0], field_of_record_6[0], byte_flag[0]))
+            record.append((
+                        name[0],
+                        location[0],
+                        specialties[0],
+                        size[0],
+                        rate[0],
+                        owner[0],
+                        byte_flag[0]
+                    ))
 
         return record
 
@@ -82,19 +89,19 @@ class DbSchema:
         number_of_lines = self.number_of_lines()
         schema_description = self.schema_description()
         record  = self.records()
-        records = []
+        formatted_record = []
 
         for number_of_lines in range(number_of_lines):
-            records.append({
-                        schema_description[0][0] : record[number_of_lines][0],
-                        schema_description[1][0] : record[number_of_lines][1],
-                        schema_description[2][0] : record[number_of_lines][2],
-                        schema_description[3][0] : record[number_of_lines][3],
-                        schema_description[4][0] : record[number_of_lines][4],
-                        schema_description[5][0] : record[number_of_lines][5],
-                        "byte_flag" : record[number_of_lines][6]})
-        return records
-
+            formatted_record.append({
+                                schema_description[0][0] : record[number_of_lines][0],
+                                schema_description[1][0] : record[number_of_lines][1],
+                                schema_description[2][0] : record[number_of_lines][2],
+                                schema_description[3][0] : record[number_of_lines][3],
+                                schema_description[4][0] : record[number_of_lines][4],
+                                schema_description[5][0] : record[number_of_lines][5],
+                                "byte_flag" : record[number_of_lines][6]
+                            })
+        return formatted_record
 
     def __del__(self):
         self.open_file.close()
