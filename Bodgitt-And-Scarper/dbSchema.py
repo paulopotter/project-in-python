@@ -42,7 +42,7 @@ class DbSchema:
         }
 
     def schema_description(self):
-
+        self.start_of_file()
         meta_dados = []
         for number_of_fields in range(self.format_of_data["number_of_fields"]):
 
@@ -74,27 +74,27 @@ class DbSchema:
             field_of_record_5 = self.unpack_file(schema_description[4][1], 's ', self.open_file)
             field_of_record_6 = self.unpack_file(schema_description[5][1], 's ', self.open_file)
 
-            record.append((field_of_record_1[0], field_of_record_2[0], field_of_record_3[0], field_of_record_4[0], field_of_record_5[0], field_of_record_6[0], byte_flag))
+            record.append((field_of_record_1[0], field_of_record_2[0], field_of_record_3[0], field_of_record_4[0], field_of_record_5[0], field_of_record_6[0], byte_flag[0]))
 
         return record
 
+    def formatted_records(self):
+        number_of_lines = self.number_of_lines()
+        schema_description = self.schema_description()
+        record  = self.records()
+        records = []
 
-# #-------------------------
-#         records = []
-
-#         for numbers_of_lines in range(number_of_lines):
-#             records.append({
-#                         schema_description[0][0] : record[numbers_of_lines][0],
-#                         schema_description[1][0] : record[numbers_of_lines][1],
-#                         schema_description[2][0] : record[numbers_of_lines][2],
-#                         schema_description[3][0] : record[numbers_of_lines][3],
-#                         schema_description[4][0] : record[numbers_of_lines][4],
-#                         schema_description[5][0] : record[numbers_of_lines][5],
-#                         "byte_flag" : byte_flag})
-#         return records
+        for number_of_lines in range(number_of_lines):
+            records.append({
+                        schema_description[0][0] : record[number_of_lines][0],
+                        schema_description[1][0] : record[number_of_lines][1],
+                        schema_description[2][0] : record[number_of_lines][2],
+                        schema_description[3][0] : record[number_of_lines][3],
+                        schema_description[4][0] : record[number_of_lines][4],
+                        schema_description[5][0] : record[number_of_lines][5],
+                        "byte_flag" : record[number_of_lines][6]})
+        return records
 
 
     def __del__(self):
         self.open_file.close()
-
-
