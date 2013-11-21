@@ -1,6 +1,5 @@
 import unittest
 import dbSchema
-import pdb
 
 
 class TestDBSchema(unittest.TestCase):
@@ -18,12 +17,17 @@ class TestDBSchema(unittest.TestCase):
         self.assertIsInstance(self.db_schema.start_of_file(), dict)
 
     def test_schema_description(self):
-        self.db_schema.start_of_file()
-
         self.assertIsInstance(self.db_schema.schema_description(), list)
 
     def test_number_of_records(self):
         self.assertEqual(len(self.db_schema.records()), self.db_schema.number_of_lines())
+
+    def test_formatted_records(self):
+        self.assertIsInstance(self.db_schema.formatted_records(), list)
+
+
+
+
 
 if __name__ == '__main__':
 	unittest.main()
