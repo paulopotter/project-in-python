@@ -28,11 +28,8 @@ class DbSchema:
 
     def start_of_file(self):
         self.open_file.seek(0)
-
         magic_cookie = self.unpack_file(4, "B", self.open_file)
-
         total_overall_length = self.unpack_file(4, "B", self.open_file)
-
         number_of_fields = self.unpack_file(2, "B", self.open_file)
 
         return {
