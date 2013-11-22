@@ -50,7 +50,10 @@ class DbSchema:
             field_content_length = self.extract_data_by_format(2, 'B')
             field_content_length = field_content_length[-1]
 
-            meta_dados.append({"field_name": field_name, "field_content_length": field_content_length})
+            meta_dados.append({
+                "field_name": field_name,
+                "field_content_length": field_content_length
+            })
 
         return meta_dados
 
@@ -69,14 +72,14 @@ class DbSchema:
             owner = self.extract_data_by_format(schema_description[5]['field_content_length'], 's')
 
             record.append((
-                        name[0],
-                        location[0],
-                        specialties[0],
-                        size[0],
-                        rate[0],
-                        owner[0],
-                        byte_flag[0]
-                    ))
+                name[0],
+                location[0],
+                specialties[0],
+                size[0],
+                rate[0],
+                owner[0],
+                byte_flag[0]
+            ))
 
         return record
 
@@ -87,14 +90,14 @@ class DbSchema:
 
         for number_of_records in range(self.number_of_records()):
             formatted_record.append({
-                                schema_description[0]['field_name'] : record[number_of_records][0],
-                                schema_description[1]['field_name'] : record[number_of_records][1],
-                                schema_description[2]['field_name'] : record[number_of_records][2],
-                                schema_description[3]['field_name'] : record[number_of_records][3],
-                                schema_description[4]['field_name'] : record[number_of_records][4],
-                                schema_description[5]['field_name'] : record[number_of_records][5],
-                                "byte_flag" : record[number_of_records][6]
-                            })
+                schema_description[0]['field_name'] : record[number_of_records][0],
+                schema_description[1]['field_name'] : record[number_of_records][1],
+                schema_description[2]['field_name'] : record[number_of_records][2],
+                schema_description[3]['field_name'] : record[number_of_records][3],
+                schema_description[4]['field_name'] : record[number_of_records][4],
+                schema_description[5]['field_name'] : record[number_of_records][5],
+                "byte_flag" : record[number_of_records][6]
+            })
         return formatted_record
 
     def __del__(self):
