@@ -8,33 +8,31 @@ class DbSchema:
         self.format_of_data = self.start_of_file()
 
     def length_of_file(self):
-        length_of_file = len(self.open_file.read())
+        return len(self.open_file.read())
 
-        return length_of_file
-
-    def number_of_lines(self):
+    def number_of_records(self):
         pointer_position = self.open_file.tell()
         self.open_file.seek(0)
-        number_of_lines = self.length_of_file() / self.format_of_data["total_overall_length"]
+        number_of_records = self.length_of_file() / self.format_of_data["length_of_each_record"]
         self.open_file.seek(pointer_position)
 
-        return number_of_lines
+        return number_of_records
 
-    def read_bytes(self, open_file, number_of_bytes):
-        return open_file.read(number_of_bytes)
+    def read_chars(self, quantity):
+        return self.open_file.read(quantity)
 
-    def unpack_file(self, number_of_bytes, format_character, open_file):
-        return struct.unpack(str(number_of_bytes) + format_character, self.read_bytes(open_file, number_of_bytes))
+    def extract_data_by_format(self, number_of_bytes, format_character):
+        return struct.unpack(str(number_of_bytes) + format_character, self.read_chars(number_of_bytes))
 
     def start_of_file(self):
         self.open_file.seek(0)
-        magic_cookie = self.unpack_file(4, "B", self.open_file)
-        total_overall_length = self.unpack_file(4, "B", self.open_file)
-        number_of_fields = self.unpack_file(2, "B", self.open_file)
+        magic_cookie = self.extract_data_by_format(4, "B")
+        length_of_each_record = self.extract_data_by_format(4, "B")
+        number_of_fields = self.extract_data_by_format(2, "B")
 
         return {
             "magic_cookie": magic_cookie,
-            "total_overall_length": total_overall_length[-1],
+            "length_of_each_record": length_of_each_record[-1],
             "number_of_fields": number_of_fields[-1]
         }
 
@@ -43,13 +41,13 @@ class DbSchema:
         meta_dados = []
         for number_of_fields in range(self.format_of_data["number_of_fields"]):
 
-            field_length = self.unpack_file(2, "B", self.open_file)
+            field_length = self.extract_data_by_format(2, "B")
             field_length = field_length[-1]
 
-            field_name = self.unpack_file(field_length, 's', self.open_file)
+            field_name = self.extract_data_by_format(field_length, 's')
             field_name = field_name[0]
 
-            field_content_length = self.unpack_file(2, 'B', self.open_file)
+            field_content_length = self.extract_data_by_format(2, 'B')
             field_content_length = field_content_length[-1]
 
             meta_dados.append((field_name, field_content_length))
@@ -57,18 +55,18 @@ class DbSchema:
         return meta_dados
 
     def records(self):
-        number_of_lines = self.number_of_lines()
+        number_of_records = self.number_of_records()
         schema_description = self.schema_description()
         record = []
 
-        for x in range(number_of_lines):
-            byte_flag = self.unpack_file(1, 'B', self.open_file)
-            name = self.unpack_file(schema_description[0][1], 's ', self.open_file)
-            location = self.unpack_file(schema_description[1][1], 's ', self.open_file)
-            specialties = self.unpack_file(schema_description[2][1], 's ', self.open_file)
-            size = self.unpack_file(schema_description[3][1], 's ', self.open_file)
-            rate = self.unpack_file(schema_description[4][1], 's ', self.open_file)
-            owner = self.unpack_file(schema_description[5][1], 's ', self.open_file)
+        for x in range(number_of_records):
+            byte_flag = self.extract_data_by_format(1, 'B')
+            name = self.extract_data_by_format(schema_description[0][1], 's')
+            location = self.extract_data_by_format(schema_description[1][1], 's')
+            specialties = self.extract_data_by_format(schema_description[2][1], 's')
+            size = self.extract_data_by_format(schema_description[3][1], 's')
+            rate = self.extract_data_by_format(schema_description[4][1], 's')
+            owner = self.extract_data_by_format(schema_description[5][1], 's')
 
             record.append((
                         name[0],
@@ -83,20 +81,20 @@ class DbSchema:
         return record
 
     def formatted_records(self):
-        number_of_lines = self.number_of_lines()
+        number_of_records = self.number_of_records()
         schema_description = self.schema_description()
         record  = self.records()
         formatted_record = []
 
-        for number_of_lines in range(number_of_lines):
+        for number_of_records in range(number_of_records):
             formatted_record.append({
-                                schema_description[0][0] : record[number_of_lines][0],
-                                schema_description[1][0] : record[number_of_lines][1],
-                                schema_description[2][0] : record[number_of_lines][2],
-                                schema_description[3][0] : record[number_of_lines][3],
-                                schema_description[4][0] : record[number_of_lines][4],
-                                schema_description[5][0] : record[number_of_lines][5],
-                                "byte_flag" : record[number_of_lines][6]
+                                schema_description[0][0] : record[number_of_records][0],
+                                schema_description[1][0] : record[number_of_records][1],
+                                schema_description[2][0] : record[number_of_records][2],
+                                schema_description[3][0] : record[number_of_records][3],
+                                schema_description[4][0] : record[number_of_records][4],
+                                schema_description[5][0] : record[number_of_records][5],
+                                "byte_flag" : record[number_of_records][6]
                             })
         return formatted_record
 
