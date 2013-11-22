@@ -18,7 +18,7 @@ class TestDBSchema(unittest.TestCase):
         schema_description = self.db_schema.schema_description()
 
         for number_of_fields in range(self.db_schema.format_of_data["number_of_fields"]):
-            total += schema_description[number_of_fields][1]
+            total += schema_description[number_of_fields]['field_content_length']
 
         self.assertEqual(total, self.db_schema.format_of_data["length_of_each_record"])
 
@@ -26,7 +26,7 @@ class TestDBSchema(unittest.TestCase):
         formatted_records = self.db_schema.formatted_records()
 
         for number_of_record in range(self.db_schema.number_of_records()):
-            self.assertIn("byte_flag",formatted_records[number_of_record].keys())
+            self.assertIn("byte_flag", formatted_records[number_of_record].keys())
 
     def test_length_of_file_should_be_5367(self):
         self.assertEqual(self.db_schema.length_of_file(), 5367)
@@ -47,13 +47,40 @@ class TestDBSchema(unittest.TestCase):
     def test_size_of_each_field_record(self):
         schema_description = self.db_schema.schema_description()
 
-        self.assertEqual(schema_description[0][1],32)
-        self.assertEqual(schema_description[1][1],64)
-        self.assertEqual(schema_description[2][1],64)
-        self.assertEqual(schema_description[3][1],6)
-        self.assertEqual(schema_description[4][1],8)
-        self.assertEqual(schema_description[5][1],8)
+        self.assertEqual(schema_description[0]['field_content_length'], 32)
+        self.assertEqual(schema_description[1]['field_content_length'], 64)
+        self.assertEqual(schema_description[2]['field_content_length'], 64)
+        self.assertEqual(schema_description[3]['field_content_length'], 6)
+        self.assertEqual(schema_description[4]['field_content_length'], 8)
+        self.assertEqual(schema_description[5]['field_content_length'], 8)
 
+
+    def test_values_of_field_name(self):
+        schema_description = self.db_schema.schema_description()
+
+        self.assertEqual(schema_description[0]['field_name'], "name")
+        self.assertEqual(schema_description[1]['field_name'], "location")
+        self.assertEqual(schema_description[2]['field_name'], "specialties")
+        self.assertEqual(schema_description[3]['field_name'], "size")
+        self.assertEqual(schema_description[4]['field_name'], "rate")
+        self.assertEqual(schema_description[5]['field_name'], "owner")
+
+    def test_records_is_valid_with_byte_flag(self):
+        records = self.db_schema.records()
+
+        for number_of_records in range(self.db_schema.number_of_records()):
+            self.assertEqual(records[number_of_records][6], 0)
+
+    def test_tamanho_de_cada_data(self):
+        records = self.db_schema.records()
+
+        for number_of_records in range(self.db_schema.number_of_records()):
+            self.assertEqual(len(records[number_of_records][0]),32)
+            self.assertEqual(len(records[number_of_records][1]),64)
+            self.assertEqual(len(records[number_of_records][2]),64)
+            self.assertEqual(len(records[number_of_records][3]),6)
+            self.assertEqual(len(records[number_of_records][4]),8)
+            self.assertEqual(len(records[number_of_records][5]),8)
 
 
 
