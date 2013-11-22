@@ -50,7 +50,7 @@ class DbSchema:
             field_content_length = self.extract_data_by_format(2, 'B')
             field_content_length = field_content_length[-1]
 
-            meta_dados.append((field_name, field_content_length))
+            meta_dados.append({"field_name": field_name, "field_content_length": field_content_length})
 
         return meta_dados
 
@@ -61,12 +61,12 @@ class DbSchema:
 
         for x in range(number_of_records):
             byte_flag = self.extract_data_by_format(1, 'B')
-            name = self.extract_data_by_format(schema_description[0][1], 's')
-            location = self.extract_data_by_format(schema_description[1][1], 's')
-            specialties = self.extract_data_by_format(schema_description[2][1], 's')
-            size = self.extract_data_by_format(schema_description[3][1], 's')
-            rate = self.extract_data_by_format(schema_description[4][1], 's')
-            owner = self.extract_data_by_format(schema_description[5][1], 's')
+            name = self.extract_data_by_format(schema_description[0]['field_content_length'], 's')
+            location = self.extract_data_by_format(schema_description[1]['field_content_length'], 's')
+            specialties = self.extract_data_by_format(schema_description[2]['field_content_length'], 's')
+            size = self.extract_data_by_format(schema_description[3]['field_content_length'], 's')
+            rate = self.extract_data_by_format(schema_description[4]['field_content_length'], 's')
+            owner = self.extract_data_by_format(schema_description[5]['field_content_length'], 's')
 
             record.append((
                         name[0],
@@ -87,12 +87,12 @@ class DbSchema:
 
         for number_of_records in range(self.number_of_records()):
             formatted_record.append({
-                                schema_description[0][0] : record[number_of_records][0],
-                                schema_description[1][0] : record[number_of_records][1],
-                                schema_description[2][0] : record[number_of_records][2],
-                                schema_description[3][0] : record[number_of_records][3],
-                                schema_description[4][0] : record[number_of_records][4],
-                                schema_description[5][0] : record[number_of_records][5],
+                                schema_description[0]['field_name'] : record[number_of_records][0],
+                                schema_description[1]['field_name'] : record[number_of_records][1],
+                                schema_description[2]['field_name'] : record[number_of_records][2],
+                                schema_description[3]['field_name'] : record[number_of_records][3],
+                                schema_description[4]['field_name'] : record[number_of_records][4],
+                                schema_description[5]['field_name'] : record[number_of_records][5],
                                 "byte_flag" : record[number_of_records][6]
                             })
         return formatted_record
