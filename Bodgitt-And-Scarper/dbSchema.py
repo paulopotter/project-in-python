@@ -24,16 +24,22 @@ class DbSchema:
     def extract_data_by_format(self, number_of_bytes, format_character):
         return struct.unpack(str(number_of_bytes) + format_character, self.read_chars(number_of_bytes))
 
+    def extract_data_by_byte(self, number_of_bytes):
+        return self.extract_data_by_format(number_of_bytes, 'B')[-1]
+
+    def extract_data_by_string(self, number_of_bytes):
+        return self.extract_data_by_format(number_of_bytes, 's')[0]
+
     def start_of_file(self):
         self.open_file.seek(0)
-        magic_cookie = self.extract_data_by_format(4, "B")
-        length_of_each_record = self.extract_data_by_format(4, "B")
-        number_of_fields = self.extract_data_by_format(2, "B")
+        magic_cookie = self.extract_data_by_format(4, 'B')
+        length_of_each_record = self.extract_data_by_byte(4)
+        number_of_fields = self.extract_data_by_byte(2)
 
         return {
             "magic_cookie": magic_cookie,
-            "length_of_each_record": length_of_each_record[-1],
-            "number_of_fields": number_of_fields[-1]
+            "length_of_each_record": length_of_each_record,
+            "number_of_fields": number_of_fields
         }
 
     def schema_description(self):
@@ -41,14 +47,9 @@ class DbSchema:
         meta_dados = []
         for number_of_fields in range(self.format_of_data["number_of_fields"]):
 
-            field_length = self.extract_data_by_format(2, "B")
-            field_length = field_length[-1]
-
-            field_name = self.extract_data_by_format(field_length, 's')
-            field_name = field_name[0]
-
-            field_content_length = self.extract_data_by_format(2, 'B')
-            field_content_length = field_content_length[-1]
+            field_length = self.extract_data_by_byte(2)
+            field_name = self.extract_data_by_string(field_length)
+            field_content_length = self.extract_data_by_byte(2)
 
             meta_dados.append({
                 "field_name": field_name,
@@ -60,28 +61,19 @@ class DbSchema:
     def records(self):
         number_of_records = self.number_of_records()
         schema_description = self.schema_description()
-        record = []
+        records = []
 
         for x in range(number_of_records):
-            byte_flag = self.extract_data_by_format(1, 'B')
-            name = self.extract_data_by_format(schema_description[0]['field_content_length'], 's')
-            location = self.extract_data_by_format(schema_description[1]['field_content_length'], 's')
-            specialties = self.extract_data_by_format(schema_description[2]['field_content_length'], 's')
-            size = self.extract_data_by_format(schema_description[3]['field_content_length'], 's')
-            rate = self.extract_data_by_format(schema_description[4]['field_content_length'], 's')
-            owner = self.extract_data_by_format(schema_description[5]['field_content_length'], 's')
+            byte_flag = self.extract_data_by_byte(1)
+            the_record = []
+            for field in schema_description:
+                the_record.append(self.extract_data_by_format(field['field_content_length'], 's')[0])
 
-            record.append((
-                name[0],
-                location[0],
-                specialties[0],
-                size[0],
-                rate[0],
-                owner[0],
-                byte_flag[0]
-            ))
+            the_record.append(byte_flag)
 
-        return record
+            records.append(the_record)
+
+        return records
 
     def formatted_records(self):
         schema_description = self.schema_description()
