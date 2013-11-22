@@ -1,30 +1,58 @@
 import unittest
 import dbSchema
-
+import pdb
 
 class TestDBSchema(unittest.TestCase):
 
     def setUp(self):
         self.db_schema = dbSchema.DbSchema()
 
-    def test_file_not_empty(self):
-        self.assertNotEqual(self.db_schema.length_of_file(), 0)
+    def test_start_of_file_should_return_magic_cookie_total_overall_length_and_number_of_fields(self):
+        format_of_data = self.db_schema.start_of_file()
+        self.assertEqual(format_of_data["magic_cookie"], (0, 0, 2, 1))
+        self.assertEqual(format_of_data["length_of_each_record"], 182)
+        self.assertEqual(format_of_data["number_of_fields"], 6)
 
-    def test_number_of_lines(self):
-        self.assertNotEqual(self.db_schema.number_of_lines(), 0)
+    def test_bytes_sum_of_each_field_should_be_equal_to_length_of_each_record(self):
+        total = 0
+        schema_description = self.db_schema.schema_description()
 
-    def test_start_of_file(self):
-        self.assertIsInstance(self.db_schema.start_of_file(), dict)
+        for number_of_fields in range(self.db_schema.format_of_data["number_of_fields"]):
+            total += schema_description[number_of_fields][1]
 
-    def test_schema_description(self):
-        self.assertIsInstance(self.db_schema.schema_description(), list)
+        self.assertEqual(total, self.db_schema.format_of_data["length_of_each_record"])
 
-    def test_number_of_records(self):
-        self.assertEqual(len(self.db_schema.records()), self.db_schema.number_of_lines())
+    def test_record_should_have_byte_flag_key(self):
+        formatted_records = self.db_schema.formatted_records()
 
-    def test_formatted_records(self):
-        self.assertIsInstance(self.db_schema.formatted_records(), list)
+        for number_of_record in range(self.db_schema.number_of_records()):
+            self.assertIn("byte_flag",formatted_records[number_of_record].keys())
 
+    def test_length_of_file_should_be_5367(self):
+        self.assertEqual(self.db_schema.length_of_file(), 5367)
+
+    def test_file_should_have_29_records(self):
+        self.assertEqual(self.db_schema.number_of_records(), 29)
+
+    def test_should_return_x_chars(self):
+        self.assertEqual(self.db_schema.read_chars(5), '\x00\x04nam')
+
+    def test_extract_data_from_file_by_format(self):
+        byte_char = self.db_schema.extract_data_by_format(2, "B")
+        string_char = self.db_schema.extract_data_by_format(4, "s")
+
+        self.assertEqual(byte_char, (0, 4))
+        self.assertEqual(string_char, ("name",))
+
+    def test_size_of_each_field_record(self):
+        schema_description = self.db_schema.schema_description()
+
+        self.assertEqual(schema_description[0][1],32)
+        self.assertEqual(schema_description[1][1],64)
+        self.assertEqual(schema_description[2][1],64)
+        self.assertEqual(schema_description[3][1],6)
+        self.assertEqual(schema_description[4][1],8)
+        self.assertEqual(schema_description[5][1],8)
 
 
 
