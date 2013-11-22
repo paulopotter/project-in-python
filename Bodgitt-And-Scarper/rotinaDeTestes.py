@@ -44,6 +44,12 @@ class TestDBSchema(unittest.TestCase):
         self.assertEqual(byte_char, (0, 4))
         self.assertEqual(string_char, ("name",))
 
+    def test_extract_data_from_file_by_byte(self):
+        self.assertEqual(self.db_schema.extract_data_by_byte(2), 4)
+
+    def test_extract_data_from_file_by_string(self):
+        self.assertEqual(self.db_schema.extract_data_by_string(5), '\x00\x04nam')
+
     def test_size_of_each_field_record(self):
         schema_description = self.db_schema.schema_description()
 
@@ -53,7 +59,6 @@ class TestDBSchema(unittest.TestCase):
         self.assertEqual(schema_description[3]['field_content_length'], 6)
         self.assertEqual(schema_description[4]['field_content_length'], 8)
         self.assertEqual(schema_description[5]['field_content_length'], 8)
-
 
     def test_values_of_field_name(self):
         schema_description = self.db_schema.schema_description()
@@ -69,18 +74,14 @@ class TestDBSchema(unittest.TestCase):
         records = self.db_schema.records()
 
         for number_of_records in range(self.db_schema.number_of_records()):
-            self.assertEqual(records[number_of_records][6], 0)
+            self.assertEqual(records[number_of_records][-1], 0)
 
     def test_tamanho_de_cada_data(self):
         records = self.db_schema.records()
+        schema_description = self.db_schema.schema_description()
 
         for number_of_records in range(self.db_schema.number_of_records()):
-            self.assertEqual(len(records[number_of_records][0]),32)
-            self.assertEqual(len(records[number_of_records][1]),64)
-            self.assertEqual(len(records[number_of_records][2]),64)
-            self.assertEqual(len(records[number_of_records][3]),6)
-            self.assertEqual(len(records[number_of_records][4]),8)
-            self.assertEqual(len(records[number_of_records][5]),8)
+            self.assertEqual(len(records[number_of_records][0]), schema_description[0]['field_content_length'])
 
 
 
