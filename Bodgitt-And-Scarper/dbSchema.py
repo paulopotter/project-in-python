@@ -81,12 +81,11 @@ class DbSchema:
         return record
 
     def formatted_records(self):
-        number_of_records = self.number_of_records()
         schema_description = self.schema_description()
         record  = self.records()
         formatted_record = []
 
-        for number_of_records in range(number_of_records):
+        for number_of_records in range(self.number_of_records()):
             formatted_record.append({
                                 schema_description[0][0] : record[number_of_records][0],
                                 schema_description[1][0] : record[number_of_records][1],
