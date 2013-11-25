@@ -67,7 +67,7 @@ class DbSchema:
             byte_flag = self.extract_data_by_byte(1)
             the_record = []
             for field in schema_description:
-                the_record.append(self.extract_data_by_format(field['field_content_length'], 's')[0])
+                the_record.append(self.extract_data_by_string(field['field_content_length']))
 
             the_record.append(byte_flag)
 
@@ -81,15 +81,12 @@ class DbSchema:
         formatted_record = []
 
         for number_of_records in range(self.number_of_records()):
-            formatted_record.append({
-                schema_description[0]['field_name'] : record[number_of_records][0],
-                schema_description[1]['field_name'] : record[number_of_records][1],
-                schema_description[2]['field_name'] : record[number_of_records][2],
-                schema_description[3]['field_name'] : record[number_of_records][3],
-                schema_description[4]['field_name'] : record[number_of_records][4],
-                schema_description[5]['field_name'] : record[number_of_records][5],
-                "byte_flag" : record[number_of_records][6]
-            })
+            dicionario = {}
+            for number_of_fields in range(self.start_of_file()["number_of_fields"]):
+                dicionario[schema_description[number_of_fields]['field_name']] = record[number_of_records][number_of_fields]
+            dicionario["byte_flag"] =  record[number_of_records][6]
+            formatted_record.append(dicionario)
+
         return formatted_record
 
     def __del__(self):
