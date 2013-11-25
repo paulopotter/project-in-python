@@ -76,7 +76,7 @@ class TestDBSchema(unittest.TestCase):
         for number_of_records in range(self.db_schema.number_of_records()):
             self.assertEqual(records[number_of_records][-1], 0)
 
-    def test_tamanho_de_cada_data(self):
+    def test_size_of_each_data(self):
         records = self.db_schema.records()
         schema_description = self.db_schema.schema_description()
 
