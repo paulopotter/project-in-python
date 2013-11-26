@@ -81,7 +81,8 @@ class TestDBSchema(unittest.TestCase):
         schema_description = self.db_schema.schema_description()
 
         for number_of_records in range(self.db_schema.number_of_records()):
-            self.assertEqual(len(records[number_of_records][0]), schema_description[0]['field_content_length'])
+            for number_of_fields in range(self.db_schema.start_of_file()['number_of_fields']):
+                self.assertEqual(len(records[number_of_records][number_of_fields]), schema_description[number_of_fields]['field_content_length'])
 
 
 
