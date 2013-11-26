@@ -13,3 +13,4 @@ project-in-python
 
 + Estudo de Django (mysite):
   + [Parte 1](https://docs.djangoproject.com/en/1.6/intro/tutorial01/)
+  + [Parte 2](https://docs.djangoproject.com/en/1.6/intro/tutorial02/)
