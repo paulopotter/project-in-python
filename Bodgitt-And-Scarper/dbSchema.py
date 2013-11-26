@@ -1,84 +1,95 @@
 import struct
 
-arquivo = './db-2x1.db'
-tuple_meta_dados = []
-tuple_meta_field_length = []
-tuple_dados =[]
-list_dados = []
 
-fd = open(arquivo,'rb+')
-def ReadBytes(fd, noBytes):
-    data = fd.read(noBytes)
-    return data
+class DbSchema:
+    def __init__(self):
+        self.chosen_file = './db-2x1.db'
+        self.open_file = open(self.chosen_file, 'rb')
+        self.format_of_data = self.start_of_file()
 
-def tamanhoArquivo(fd1):
-    fd = open(fd1,'rb')
-    tamanho = len(fd.read())
-    fd.close()
-    return tamanho
+    def length_of_file(self):
+        return len(self.open_file.read())
 
-# Magic Cookie
-magic_cookie_value = struct.unpack('4B',ReadBytes(fd,4))
+    def number_of_records(self):
+        pointer_position = self.open_file.tell()
+        self.open_file.seek(0)
+        number_of_records = self.length_of_file() / self.format_of_data["length_of_each_record"]
+        self.open_file.seek(pointer_position)
 
-# Total Overall Length
-total_overall_length = struct.unpack('4B',ReadBytes(fd,4))
-number_total_overall_length = int(total_overall_length[-1])
+        return number_of_records
 
-# Number of Fields
-number_of_fields = struct.unpack('2B',ReadBytes(fd,2))
-number_number_of_fields = int(number_of_fields[-1])
-# meta_dado
-for x in range(number_number_of_fields):
+    def read_chars(self, quantity):
+        return self.open_file.read(quantity)
 
-    # Bytes of Field Name
-    bytes_of_field_name = struct.unpack('2B',ReadBytes(fd,2))
-    number_bytes_of_field_name = int(bytes_of_field_name[-1])
+    def extract_data_by_format(self, number_of_bytes, format_character):
+        return struct.unpack(str(number_of_bytes) + format_character, self.read_chars(number_of_bytes))
 
-    # Nome do Campo
-    field_name = struct.unpack(str(number_bytes_of_field_name)+'s',ReadBytes(fd,number_bytes_of_field_name))
-    string_field_name = field_name[0]
+    def extract_data_by_byte(self, number_of_bytes):
+        return self.extract_data_by_format(number_of_bytes, 'B')[-1]
 
-    # End of Repeating Block
-    end_of_repeating_block = struct.unpack('2B',ReadBytes(fd,2))
-    numend_of_repeating_block = int(end_of_repeating_block[-1])
+    def extract_data_by_string(self, number_of_bytes):
+        return self.extract_data_by_format(number_of_bytes, 's')[0]
 
-    tuple_meta_dados.append(string_field_name)
-    tuple_meta_field_length.append(numend_of_repeating_block)
+    def start_of_file(self):
+        self.open_file.seek(0)
+        magic_cookie = self.extract_data_by_format(4, 'B')
+        length_of_each_record = self.extract_data_by_byte(4)
+        number_of_fields = self.extract_data_by_byte(2)
 
+        return {
+            "magic_cookie": magic_cookie,
+            "length_of_each_record": length_of_each_record,
+            "number_of_fields": number_of_fields
+        }
 
-total_linhas_registro = int(tamanhoArquivo(arquivo)) / int(number_total_overall_length)
+    def schema_description(self):
+        self.start_of_file()
+        meta_dados = []
+        for number_of_fields in range(self.format_of_data["number_of_fields"]):
 
-for y in range(total_linhas_registro):
+            field_length = self.extract_data_by_byte(2)
+            field_name = self.extract_data_by_string(field_length)
+            field_content_length = self.extract_data_by_byte(2)
 
-    byte_flag = struct.unpack('B',ReadBytes(fd,1))
+            meta_dados.append({
+                "field_name": field_name,
+                "field_content_length": field_content_length
+            })
 
-    bytes_of_field_name = struct.unpack(str(tuple_meta_field_length[0]) + 's ' + str(tuple_meta_field_length[1]) + 's ' +
-                                        str(tuple_meta_field_length[2]) + 's ' + str(tuple_meta_field_length[3]) + 's' +
-                                        str(tuple_meta_field_length[4]) + 's ' + str(tuple_meta_field_length[5]) + 's',
-                                        ReadBytes(fd,number_total_overall_length))
+        return meta_dados
 
-    tuple_dados.append(bytes_of_field_name)
+    def records(self):
+        number_of_records = self.number_of_records()
+        schema_description = self.schema_description()
+        records = []
 
-    k = 0
-    meta_dado_formatado = {}
-    for meta_dado in tuple_meta_dados:
-        meta_dado_formatado[meta_dado] = tuple_dados[y][k]
-        k += 1
+        for x in range(number_of_records):
+            byte_flag = self.extract_data_by_byte(1)
+            the_record = []
+            for field in schema_description:
+                the_record.append(self.extract_data_by_string(field['field_content_length']))
 
+            the_record.append(byte_flag)
 
-    meta_dado_formatado['Byte Flag'] = byte_flag[0]
-    list_dados.append(meta_dado_formatado)
+            records.append(the_record)
 
-fd.close()
+        return records
 
+    def formatted_records(self):
+        schema_description = self.schema_description()
+        record  = self.records()
+        formatted_record = []
 
-#------- Exibindo ------
-# print '='*50,'\n'
-# print "Primeiro dado da Lista: ",list_dados[0]
-# print '\n','-'*21,'\n'
-# print "Segundo dado da Lista: ",list_dados[1]
-# print '\n','-'*21,'\n'
-# print "Lista no formato: ",type(list_dados)
-# print '\n','-'*21,'\n'
-# print "Todos os dados da lista: ",list_dados
-# print '\n','='*50
+        for number_of_records in range(self.number_of_records()):
+            dicionario = {}
+
+            for number_of_fields in range(self.start_of_file()["number_of_fields"]):
+                dicionario[schema_description[number_of_fields]['field_name']] = record[number_of_records][number_of_fields]
+
+            dicionario["byte_flag"] =  record[number_of_records][6]
+            formatted_record.append(dicionario)
+
+        return formatted_record
+
+    def __del__(self):
+        self.open_file.close()
