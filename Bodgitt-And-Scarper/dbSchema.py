@@ -82,8 +82,10 @@ class DbSchema:
 
         for number_of_records in range(self.number_of_records()):
             dicionario = {}
+
             for number_of_fields in range(self.start_of_file()["number_of_fields"]):
                 dicionario[schema_description[number_of_fields]['field_name']] = record[number_of_records][number_of_fields]
+
             dicionario["byte_flag"] =  record[number_of_records][6]
             formatted_record.append(dicionario)
 
