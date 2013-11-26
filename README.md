@@ -12,4 +12,4 @@ project-in-python
   + [Parte 1](https://docs.google.com/document/d/1yZQ7PpMdRlRtDIinSFwY7ZzLkIk34MuIkb-pIEqXzgg/edit?usp=sharing)
 
 + Estudo de Django (mysite):
-  + [Parte 1](http://docs.djangobrasil.org/intro/tutorial01.html)
+  + [Parte 1](https://docs.djangoproject.com/en/1.6/intro/tutorial01/)
