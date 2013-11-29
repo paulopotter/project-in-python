@@ -6,6 +6,8 @@ class DbSchema:
         self.chosen_file = './db-2x1.db'
         self.open_file = open(self.chosen_file, 'rb')
         self.format_of_data = self.start_of_file()
+        self.meta_dada = self.schema_description()
+        self.pointer_position = self.open_file.tell()
 
     def length_of_file(self):
         return len(self.open_file.read())
@@ -60,13 +62,12 @@ class DbSchema:
 
     def records(self):
         number_of_records = self.number_of_records()
-        schema_description = self.schema_description()
         records = []
 
         for x in range(number_of_records):
             byte_flag = self.extract_data_by_byte(1)
             the_record = []
-            for field in schema_description:
+            for field in self.meta_dada:
                 the_record.append(self.extract_data_by_string(field['field_content_length']))
 
             the_record.append(byte_flag)
@@ -76,7 +77,6 @@ class DbSchema:
         return records
 
     def formatted_records(self):
-        schema_description = self.schema_description()
         record  = self.records()
         formatted_record = []
 
@@ -84,7 +84,7 @@ class DbSchema:
             dicionario = {}
 
             for number_of_fields in range(self.start_of_file()["number_of_fields"]):
-                dicionario[schema_description[number_of_fields]['field_name']] = record[number_of_records][number_of_fields]
+                dicionario[self.meta_dada[number_of_fields]['field_name']] = record[number_of_records][number_of_fields]
 
             dicionario["byte_flag"] =  record[number_of_records][6]
             formatted_record.append(dicionario)
