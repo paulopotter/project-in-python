@@ -28,27 +28,27 @@ class TestDBSchema(unittest.TestCase):
         for number_of_record in range(self.db_schema.number_of_records()):
             self.assertIn("byte_flag", formatted_records[number_of_record].keys())
 
-    def test_length_of_file_should_be_5367(self):
-        self.assertEqual(self.db_schema.length_of_file(), 5367)
+    def test_length_of_file_should_be_5307(self):
+        self.assertEqual(self.db_schema.length_of_file(), 5307)
 
     def test_file_should_have_29_records(self):
         self.assertEqual(self.db_schema.number_of_records(), 29)
 
     def test_should_return_x_chars(self):
-        self.assertEqual(self.db_schema.read_chars(5), '\x00\x04nam')
+        self.assertEqual(self.db_schema.read_chars(5), '\x00Buon')
 
     def test_extract_data_from_file_by_format(self):
         byte_char = self.db_schema.extract_data_by_format(2, "B")
         string_char = self.db_schema.extract_data_by_format(4, "s")
 
-        self.assertEqual(byte_char, (0, 4))
-        self.assertEqual(string_char, ("name",))
+        self.assertEqual(byte_char, (0, 66))
+        self.assertEqual(string_char, ("uona",))
 
     def test_extract_data_from_file_by_byte(self):
-        self.assertEqual(self.db_schema.extract_data_by_byte(2), 4)
+        self.assertEqual(self.db_schema.extract_data_by_byte(2), 66)
 
     def test_extract_data_from_file_by_string(self):
-        self.assertEqual(self.db_schema.extract_data_by_string(5), '\x00\x04nam')
+        self.assertEqual(self.db_schema.extract_data_by_string(5), '\x00Buon')
 
     def test_size_of_each_field_record(self):
         schema_description = self.db_schema.schema_description()
@@ -83,7 +83,6 @@ class TestDBSchema(unittest.TestCase):
         for number_of_records in range(self.db_schema.number_of_records()):
             for number_of_fields in range(self.db_schema.start_of_file()['number_of_fields']):
                 self.assertEqual(len(records[number_of_records][number_of_fields]), schema_description[number_of_fields]['field_content_length'])
-
 
 if __name__ == '__main__':
     unittest.main()
