@@ -1,4 +1,3 @@
-# import argparse
 import dbSchema
 
 
@@ -11,7 +10,7 @@ class Search(object):
         match_values = []
         formatted_records = self.db_schema.formatted_records()
         for number_of_lines in range(self.db_schema.number_of_records()):
-            if value != '*' and value in formatted_records[number_of_lines]['name']:
+            if value != '*' and value.lower() in formatted_records[number_of_lines]['name'].lower():
                 match_values.append(formatted_records[number_of_lines])
             elif value == '*':
                 match_values.append(formatted_records[number_of_lines])
@@ -22,7 +21,7 @@ class Search(object):
         match_values = []
         formatted_records = self.db_schema.formatted_records()
         for number_of_lines in range(self.db_schema.number_of_records()):
-            if value != '*' and value in formatted_records[number_of_lines]['location']:
+            if value != '*' and value.lower() in formatted_records[number_of_lines]['location'].lower():
                 match_values.append(formatted_records[number_of_lines])
             elif value == '*':
                 match_values.append(formatted_records[number_of_lines])
@@ -37,24 +36,7 @@ class Search(object):
         for values in dictionary:
             table_data += table_column_widths.format(values["name"], values["location"], values["specialties"], values["size"], values["rate"], values["owner"]) + "\n+" + "-"*180 + "+"
 
-        if len(dictionary) < 0:
+        if len(dictionary) >= 1:
             return table_header + '\n'+ table_data
         else:
             return 'ERROR'
-
-
-
-
-
-
-# # --------- parametros por linha de comando------- #
-#     def searching():
-#         parser = argparse.ArgumentParser(description = 'DESCRIPTION: Arquivo de busca para o dbSchema')
-
-#         parser.add_argument('--name, --n', action = 'store', dest = 'name', default = '*', required = False, help = 'Name of data')
-#         parser.add_argument('--location, --loc', action = 'store', dest = 'location', default = '*', required = False, help = 'Location of data')
-
-#         arguments = parser.parse_args()
-#         return arguments.name
-
-# # print searching()
