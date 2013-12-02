@@ -9,9 +9,13 @@ class Search(object):
     def search_for_name(self, value = ''):
         match_values = []
         formatted_records = self.db_schema.formatted_records()
+
         for number_of_lines in range(self.db_schema.number_of_records()):
-            if value != '*' and value.lower() in formatted_records[number_of_lines]['name'].lower():
+            formatted_records_lower = formatted_records[number_of_lines]['name'].lower()
+
+            if value != '*' and value.lower() == formatted_records_lower[:len(value)]:
                 match_values.append(formatted_records[number_of_lines])
+
             elif value == '*':
                 match_values.append(formatted_records[number_of_lines])
 
@@ -20,9 +24,13 @@ class Search(object):
     def search_for_location(self, value = ''):
         match_values = []
         formatted_records = self.db_schema.formatted_records()
+
         for number_of_lines in range(self.db_schema.number_of_records()):
-            if value != '*' and value.lower() in formatted_records[number_of_lines]['location'].lower():
+            formatted_records_lower = formatted_records[number_of_lines]['location'].lower()
+
+            if value != '*' and  value.lower() == formatted_records_lower[:len(value)]:
                 match_values.append(formatted_records[number_of_lines])
+
             elif value == '*':
                 match_values.append(formatted_records[number_of_lines])
 
@@ -36,7 +44,7 @@ class Search(object):
         for values in dictionary:
             table_data += table_column_widths.format(values["name"], values["location"], values["specialties"], values["size"], values["rate"], values["owner"]) + "\n+" + "-"*180 + "+"
 
-        if len(dictionary) >= 1:
+        if len(dictionary) > 1:
             return table_header + '\n'+ table_data
         else:
             return 'ERROR'
