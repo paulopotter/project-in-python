@@ -36,15 +36,22 @@ class Search(object):
         return match_values
 
     def formatted_table(self, dictionary_name, dictionary_location):
-        table_column_widths = "| {0:32} | {1:64} | {2:64} | {3:6} | {4:8} | {5:8} |"
-        table_header = table_column_widths.format("Name", "Location", "specialties", "size", "rate", "owner") + "\n+" + "="*180 + "+"
+        table_column_widths = "| {0:2} | {1:32} | {2:64} | {3:64} | {4:6} | {5:8} | {6:8} |"
+        table_header = table_column_widths.format("#", "Name", "Location", "Specialties", "Size", "Rate", "Owner")
+        table_header += "\n+" + "="*180 + "+"
+
         table_data = ""
+        number_of_line = 0
 
         for values in dictionary_name:
-            table_data += table_column_widths.format(values["name"], values["location"], values["specialties"], values["size"], values["rate"], values["owner"]) + "\n+" + "-"*180 + "+"
+            number_of_line += 1
+            table_data += table_column_widths.format(number_of_line, values["name"], values["location"], values["specialties"], values["size"], values["rate"], values["owner"])
+            table_data += "\n+" + "-"*180 + "+"
 
         for values in dictionary_location:
-            table_data += table_column_widths.format(values["name"], values["location"], values["specialties"], values["size"], values["rate"], values["owner"]) + "\n+" + "-"*180 + "+"
+            number_of_line += 1
+            table_data += table_column_widths.format(number_of_line, values["name"], values["location"], values["specialties"], values["size"], values["rate"], values["owner"])
+            table_data += "\n+" + "-"*180 + "+"
 
         if len(dictionary_name) + len(dictionary_location) >= 1:
             return table_header + '\n'+ table_data
