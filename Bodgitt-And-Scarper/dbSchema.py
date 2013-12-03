@@ -26,17 +26,17 @@ class DbSchema:
     def extract_data_by_format(self, number_of_bytes, format_character):
         return struct.unpack(str(number_of_bytes) + format_character, self.read_chars(number_of_bytes))
 
-    def extract_data_by_byte(self, number_of_bytes):
+    def extract_by_byte(self, number_of_bytes):
         return self.extract_data_by_format(number_of_bytes, 'B')[-1]
 
-    def extract_data_by_string(self, number_of_bytes):
+    def extract_by_string(self, number_of_bytes):
         return self.extract_data_by_format(number_of_bytes, 's')[0]
 
     def start_of_file(self):
         self.open_file.seek(0)
         magic_cookie = self.extract_data_by_format(4, 'B')
-        length_of_each_record = self.extract_data_by_byte(4)
-        number_of_fields = self.extract_data_by_byte(2)
+        length_of_each_record = self.extract_by_byte(4)
+        number_of_fields = self.extract_by_byte(2)
 
         return {
             "magic_cookie": magic_cookie,
@@ -49,9 +49,9 @@ class DbSchema:
         meta_dados = []
         for number_of_fields in range(self.format_of_data["number_of_fields"]):
 
-            field_length = self.extract_data_by_byte(2)
-            field_name = self.extract_data_by_string(field_length)
-            field_content_length = self.extract_data_by_byte(2)
+            field_length = self.extract_by_byte(2)
+            field_name = self.extract_by_string(field_length)
+            field_content_length = self.extract_by_byte(2)
 
             meta_dados.append({
                 "field_name": field_name,
@@ -65,10 +65,10 @@ class DbSchema:
         records = []
 
         for x in range(number_of_records):
-            byte_flag = self.extract_data_by_byte(1)
+            byte_flag = self.extract_by_byte(1)
             the_record = []
             for field in self.meta_dada:
-                the_record.append(self.extract_data_by_string(field['field_content_length']))
+                the_record.append(self.extract_by_string(field['field_content_length']))
 
             the_record.append(byte_flag)
 
