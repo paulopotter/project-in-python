@@ -32,7 +32,7 @@ class Search(object):
                 table_line += self.line_of_table(table_column_widths, self.search_for(dict_value, dict_key), number_of_line)
             number_of_line += len(dict_key)
 
-        if number_of_line >= 1:
+        if table_line != '':
             return table_header + '\n'+ table_line
         else:
             return 'ERROR'
