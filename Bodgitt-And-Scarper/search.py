@@ -19,22 +19,21 @@ class Search(object):
 
         return match_values
 
-    def search_for_name(self, value = ''):
-        return self.search_for(value,'name')
-
-    def search_for_location(self, value = ''):
-        return self.search_for(value,'location')
-
-    def formatted_table(self, dictionary_name, dictionary_location):
+    def formatted_table(self, dictionary_val):
         table_column_widths = "| {0:2} | {1:32} | {2:64} | {3:64} | {4:6} | {5:8} | {6:8} |"
         table_header = table_column_widths.format("#", "Name", "Location", "Specialties", "Size", "Rate", "Owner")
         table_header += "\n+" + "="*204 + "+"
 
-        name = self.line_of_table(table_column_widths, dictionary_name)
-        location = self.line_of_table(table_column_widths, dictionary_location, len(dictionary_name))
+        table_line = ''
+        number_of_line = 0
 
-        if len(dictionary_name) + len(dictionary_location) >= 1:
-            return table_header + '\n'+ name + '\n'+ location
+        for dict_key, dict_value in dictionary_val.items():
+            if dict_value != '':
+                table_line += self.line_of_table(table_column_widths, self.search_for(dict_value, dict_key), number_of_line)
+            number_of_line += len(dict_key)
+
+        if number_of_line >= 1:
+            return table_header + '\n'+ table_line
         else:
             return 'ERROR'
 
