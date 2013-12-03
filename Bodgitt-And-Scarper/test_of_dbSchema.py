@@ -45,10 +45,10 @@ class TestDBSchema(unittest.TestCase):
         self.assertEqual(string_char, ("uona",))
 
     def test_extract_data_from_file_by_byte(self):
-        self.assertEqual(self.db_schema.extract_data_by_byte(2), 66)
+        self.assertEqual(self.db_schema.extract_by_byte(2), 66)
 
     def test_extract_data_from_file_by_string(self):
-        self.assertEqual(self.db_schema.extract_data_by_string(5), '\x00Buon')
+        self.assertEqual(self.db_schema.extract_by_string(5), '\x00Buon')
 
     def test_size_of_each_field_record(self):
         schema_description = self.db_schema.schema_description()
