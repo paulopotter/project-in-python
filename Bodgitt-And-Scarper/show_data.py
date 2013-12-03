@@ -1,11 +1,7 @@
 import argparse
 import search
 
-
 search_class = search.Search()
-
-
-
 
 def searching():
     parser = argparse.ArgumentParser(description = 'DESCRIPTION: Arquivo de busca para o dbSchema')
@@ -17,15 +13,8 @@ def searching():
     return {'name' : arguments.name,'location' : arguments.location}
 
 
-if searching()['name'] != '' :
-    if searching()['location'] == '':
-        print search_class.formatted_table(search_class.search_for_name(searching()['name']), {})
-    else:
-        print search_class.formatted_table(search_class.search_for_name(searching()['name']), search_class.search_for_location(searching()['location'])
-            )
+if searching()['name'] == '' and searching()['location'] == '':
+    print search_class.formatted_table({'name': '*'})
 else:
-    if searching()['location'] != '':
-        print search_class.formatted_table({}, search_class.search_for_location(searching()['location']))
+    print search_class.formatted_table(searching())
 
-    else:
-        print search_class.formatted_table(search_class.search_for_name('*'), {})
