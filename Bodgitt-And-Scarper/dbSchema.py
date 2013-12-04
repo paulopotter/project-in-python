@@ -81,7 +81,7 @@ class DbSchema:
         formatted_record = []
 
         for number_of_records in range(self.number_of_records()):
-            dicionario = {}
+            dicionario = {'id': number_of_records}
 
             for number_of_fields in range(self.start_of_file()["number_of_fields"]):
                 dicionario[self.meta_dada[number_of_fields]['field_name']] = record[number_of_records][number_of_fields]
