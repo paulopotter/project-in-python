@@ -2,6 +2,10 @@
 import dbSchema
 
 
+class RecordNotFoundException(Exception):
+    pass
+
+
 class Search(object):
 
     def search_for(self, value, field_to_search):
@@ -10,9 +14,11 @@ class Search(object):
         formatted_records = db_schema.formatted_records()
 
         for number_of_lines in range(db_schema.number_of_records()):
-            formatted_records_lower = formatted_records[number_of_lines][field_to_search].lower()
+            formatted_record = formatted_records[number_of_lines][field_to_search]
 
-            if value == '*' or value.lower() == formatted_records_lower[:len(value)]:
+            if value == '*' or \
+            (type(value) == str and value.lower() == formatted_record.lower()[:len(value)]) or \
+            (type(value) == int and value == formatted_record) :
                 match_values.append(formatted_records[number_of_lines])
 
         return match_values
@@ -61,3 +67,10 @@ class Search(object):
             positions.append(find_value[line]['id'])
 
         return positions
+
+    def read(self, recNo):
+        try:
+            return self.search_for(recNo, 'id')[0]
+        except IndexError:
+            raise RecordNotFoundException('Record with this position not found.')
+
