@@ -1,17 +1,15 @@
 # coding:utf-8
-import dbSchema
+import data_conn
+import formatting_of_data
+from my_exceptions import RecordNotFoundException
 
-
-class RecordNotFoundException(Exception):
-    pass
-
-
-class Search(object):
+class SearchControl(object):
 
     def search_for(self, value, field_to_search):
-        db_schema = dbSchema.DbSchema()
+        db_schema = data_conn.DataConn()
+        formatted_of_data = formatting_of_data.FormattingOfData()
         match_values = []
-        formatted_records = db_schema.formatted_records()
+        formatted_records = formatted_of_data.formatted_records()
 
         for number_of_lines in range(db_schema.number_of_records()):
             formatted_record = formatted_records[number_of_lines][field_to_search]
