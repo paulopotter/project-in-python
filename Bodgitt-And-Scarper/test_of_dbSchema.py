@@ -22,12 +22,6 @@ class TestDBSchema(unittest.TestCase):
 
         self.assertEqual(total, self.db_schema.format_of_data["length_of_each_record"])
 
-    def test_record_should_have_byte_flag_key(self):
-        formatted_records = self.db_schema.formatted_records()
-
-        for number_of_record in range(self.db_schema.number_of_records()):
-            self.assertIn("byte_flag", formatted_records[number_of_record].keys())
-
     def test_length_of_file_should_be_5307(self):
         self.assertEqual(self.db_schema.length_of_file(), 5307)
 
