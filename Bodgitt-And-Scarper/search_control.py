@@ -21,23 +21,6 @@ class SearchControl(object):
 
         return match_values
 
-    def line_of_table(self, table_column_widths, dictionary_for_lines):
-        table_data = ""
-
-        for values in dictionary_for_lines:
-            table_data += table_column_widths.format(
-                values['id'],
-                values["name"],
-                values["location"],
-                values["specialties"],
-                values["size"],
-                values["rate"],
-                values["owner"]
-            )
-            table_data += "\n+" + "-" * 204 + "+\n"
-
-        return table_data
-
     def find(self, criteria):
         find_value = self.search_for(criteria, 'name')
         positions = []
