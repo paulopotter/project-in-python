@@ -76,20 +76,6 @@ class DbSchema:
 
         return records
 
-    def formatted_records(self):
-        record  = self.records()
-        formatted_record = []
-
-        for number_of_records in range(self.number_of_records()):
-            dicionario = {'id': number_of_records}
-
-            for number_of_fields in range(self.start_of_file()["number_of_fields"]):
-                dicionario[self.meta_dada[number_of_fields]['field_name']] = record[number_of_records][number_of_fields]
-
-            dicionario["byte_flag"] =  record[number_of_records][6]
-            formatted_record.append(dicionario)
-
-        return formatted_record
 
     def __del__(self):
         self.open_file.close()
