@@ -23,11 +23,14 @@ class SearchControl(object):
 
     def find(self, criteria):
         find_value = self.search_for(criteria, 'name')
+        find_value += self.search_for(criteria, 'location')
         positions = []
         for line in range(len(find_value)):
             positions.append(find_value[line]['id'])
 
-        return positions
+        new_position = list(set(positions))
+        new_position.sort()
+        return new_position
 
     def read(self, recNo):
         try:
