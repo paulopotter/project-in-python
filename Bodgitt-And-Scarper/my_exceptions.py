@@ -1,4 +1,5 @@
 
 
 class RecordNotFoundException(Exception):
-    pass
+    def __str__(self):
+        return 'Record with this position not found.'
