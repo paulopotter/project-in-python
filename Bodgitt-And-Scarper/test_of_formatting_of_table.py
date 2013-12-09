@@ -22,7 +22,7 @@ class TestFormattingData(unittest.TestCase):
                                                           'owner': 'strOwner'
                                                           }]),
             '| 12 | strName | strLocation | strSpecialties | 12 | strRate | strOwner |\n+' +
-            '-' * 204 + '+\n'
+            '-'*204 + '+\n'
         )
 
     def test_formatted_table_error(self):
