@@ -35,6 +35,6 @@ class SearchControl(object):
     def read(self, recNo):
         try:
             return self.search_for(recNo, 'id')[0]
-        except IndexError:
-            raise RecordNotFoundException('Record with this position not found.')
+        except Exception:
+            raise RecordNotFoundException
 
