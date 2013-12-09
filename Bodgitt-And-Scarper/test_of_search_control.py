@@ -41,6 +41,9 @@ class TestSearch(unittest.TestCase):
     def test_read_exception(self):
         self.assertRaises(RecordNotFoundException, self.search_class.read, 30)
 
+    def test_duplicate_data_in_find_method(self):
+        self.assertEqual(self.search_class.find('s'), [0, 1, 12, 22])
+
 
 if __name__ == '__main__':
     unittest.main()
