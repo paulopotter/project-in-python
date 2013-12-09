@@ -14,21 +14,21 @@ def searching():
         dest = 'name',
         default = '',
         required = False,
-        help = 'Name of data'
+        help = 'Search and list all names according to specified criteria.'
     )
     parser.add_argument('--location',
         action = 'store',
         dest = 'location',
         default = '',
         required = False,
-        help = 'Location of data'
+        help = 'Search and list all locations according to specified criteria.'
     )
     parser.add_argument('--read',
         action = 'store',
         dest = 'read',
         default = '',
         required = False,
-        help = 'Read data'
+        help = 'Read a single data'
     )
     parser.add_argument('--find',
         action = 'store',
