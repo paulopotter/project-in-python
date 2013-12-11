@@ -6,7 +6,7 @@ import formatting_of_table
 class TestFormattingData(unittest.TestCase):
 
     def setUp(self):
-        self.formatting_of_table_class = formatting_of_table.FormattingData()
+        self.formatting_of_table_class = formatting_of_table.FormattingOfTable()
 
     def test_line_of_table(self):
         table_column_widths = "| {0} | {1} | {2} | {3} | {4} | {5} | {6} |"

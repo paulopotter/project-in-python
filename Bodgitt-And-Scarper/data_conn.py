@@ -66,16 +66,15 @@ class DataConn:
 
         for x in range(number_of_records):
             byte_flag = self.extract_by_byte(1)
-            the_record = []
+            new_records = []
             for field in self.meta_dada:
-                the_record.append(self.extract_by_string(field['field_content_length']))
+                new_records.append(self.extract_by_string(field['field_content_length']))
 
-            the_record.append(byte_flag)
+            new_records.append(byte_flag)
 
-            records.append(the_record)
+            records.append(new_records)
 
         return records
-
 
     def __del__(self):
         self.open_file.close()

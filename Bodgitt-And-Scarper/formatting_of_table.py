@@ -2,7 +2,7 @@
 import search_control
 
 
-class FormattingData(object):
+class FormattingOfTable(object):
 
     def __init__(self):
         self.search_class = search_control.SearchControl()

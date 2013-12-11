@@ -3,6 +3,7 @@ import data_conn
 import formatting_of_data
 from my_exceptions import RecordNotFoundException
 
+
 class SearchControl(object):
 
     def search_for(self, value, field_to_search):
@@ -14,10 +15,10 @@ class SearchControl(object):
         for number_of_lines in range(db_schema.number_of_records()):
             formatted_record = formatted_records[number_of_lines][field_to_search]
 
-            if value == '*' or \
-            (type(value) == str and value.lower() == formatted_record.lower()[:len(value)]) or \
-            (type(value) == int and value == formatted_record) :
-                match_values.append(formatted_records[number_of_lines])
+            if value == '*' or
+            (type(value) == str and value.lower() == formatted_record.lower()[:len(value)]) or
+            (type(value) == int and value == formatted_record):
+                    match_values.append(formatted_records[number_of_lines])
 
         return match_values
 
@@ -37,4 +38,3 @@ class SearchControl(object):
             return self.search_for(recNo, 'id')[0]
         except Exception:
             raise RecordNotFoundException
-

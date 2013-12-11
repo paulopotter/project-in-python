@@ -16,12 +16,16 @@ class TestFormattingOfData(unittest.TestCase):
 
     def test_model_of_data_in_formatted_recods(self):
         formatted_records = self.formatting_of_data.formatted_records()[0]
-        self.assertEqual(formatted_records.values(), [0, 'Buonarotti & Company            ',
-                '$40.00  ', 'Air Conditioning, Painting, Painting                            ',
-                'Smallville                                                      ',
-                '        ', 0, '10    '
-            ]
-        )
+        self.assertEqual(formatted_records.values(), [
+            0,
+            'Buonarotti & Company            ',
+            '$40.00  ',
+            'Air Conditioning, Painting, Painting                            ',
+            'Smallville                                                      ',
+            '        ',
+            0,
+            '10    '
+        ])
 
 if __name__ == '__main__':
     unittest.main()
