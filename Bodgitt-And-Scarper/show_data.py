@@ -35,8 +35,8 @@ if 'read' in search:
     read = search_class.read(int(search['read']))
     print formatting_table_class.formatted_table({'id': read['id']})
 
-elif 'find' in search:
-    print search_class.find(search['find'])
+elif search['name'] != '*':
+    print search_class.find(search)
 
 else:
     print formatting_table_class.formatted_table(searching())
