@@ -24,7 +24,7 @@ class TestSearch(unittest.TestCase):
         self.assertEqual(len(self.search_class.search_for('*', 'name')), 29)
 
     def test_find_of_criteria(self):
-        self.assertEqual(self.search_class.find('Buo'), [0, 5, 18, 25])
+        self.assertEqual(self.search_class.find({'Name': 'Buo'}), [0, 5, 18, 25])
 
     def test_read_a_record(self):
         dicto = {'byte_flag': 0,
@@ -42,7 +42,7 @@ class TestSearch(unittest.TestCase):
         self.assertRaises(RecordNotFoundException, self.search_class.read, 30)
 
     def test_duplicate_data_in_find_method(self):
-        self.assertEqual(self.search_class.find('s'), [0, 1, 12, 22])
+        self.assertEqual(self.search_class.find({'name': 's', 'location': 's'}), [0, 1, 12, 22])
 
 
 if __name__ == '__main__':
