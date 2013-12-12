@@ -40,3 +40,7 @@ nosetests.xml
 .DS_Store
 
 .ropeproject/
+
+#Arquivos de ajuda visual
+
+visual.py
