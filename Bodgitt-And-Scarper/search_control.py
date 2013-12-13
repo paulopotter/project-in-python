@@ -15,13 +15,13 @@ class SearchControl(object):
 
         if criteria['name'] is not None:
             for line in range(len(records)):
-                if records[line][0].lower().find(criteria['name'].lower()) != -1 and records[line][0].lower().find(criteria['name'].lower()) == 0:
+                if records[line][0].lower().find(criteria['name'].lower()) == 0:
 
                     positions.append(line)
 
         if criteria['location'] is not None:
             for line in range(len(records)):
-                if records[line][1].lower().find(criteria['location'].lower()) != -1 and records[line][1].lower().find(criteria['location'].lower()) == 0:
+                if records[line][1].lower().find(criteria['location'].lower()) == 0:
 
                     positions.append(line)
 
