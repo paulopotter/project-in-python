@@ -36,7 +36,6 @@ else:
 
     for line_records in range(len(find)):
         row = search.read(find[line_records])
-        row.insert(0, line_records)
         row.pop(-1)  # Remove a exibiçao do byte flag
         text_table.add_row(row)
 
