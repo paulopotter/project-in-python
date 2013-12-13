@@ -70,13 +70,6 @@ class TestDataConn(unittest.TestCase):
         for number_of_records in range(self.data_conn.number_of_records()):
             self.assertEqual(records[number_of_records][-1], 0)
 
-    def test_size_of_each_data(self):
-        records = self.data_conn.records()
-        schema_description = self.data_conn.schema_description()
-
-        for number_of_records in range(self.data_conn.number_of_records()):
-            for number_of_fields in range(self.data_conn.start_of_file()['number_of_fields']):
-                self.assertEqual(len(records[number_of_records][number_of_fields]), schema_description[number_of_fields]['field_content_length'])
 
 if __name__ == '__main__':
     unittest.main()
