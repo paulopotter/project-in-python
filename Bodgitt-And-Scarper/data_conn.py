@@ -66,7 +66,7 @@ class DataConn:
 
         for x in range(number_of_records):
             byte_flag = self.extract_by_byte(1)
-            new_records = []
+            new_records = [x]
             for field in self.meta_dada:
                 new_records.append(self.extract_by_string(field['field_content_length']))
 
