@@ -1,6 +1,6 @@
 import unittest
 import search_control
-# from my_exceptions import RecordNotFoundException
+from my_exceptions import RecordNotFoundException
 
 
 class TestSearch(unittest.TestCase):
@@ -24,10 +24,10 @@ class TestSearch(unittest.TestCase):
         self.assertEqual(type(self.search.read(0)), list)
 
     def test_read(self):
-        self.assertEqual(self.search.read(0), ['Buonarotti & Company            ', 'Smallville                                                      ', 'Air Conditioning, Painting, Painting                            ', '10    ', '$40.00  ', '        ', 0])
+        self.assertEqual(self.search.read(0), [0, 'Buonarotti & Company            ', 'Smallville                                                      ', 'Air Conditioning, Painting, Painting                            ', '10    ', '$40.00  ', '        ', 0])
 
     def test_read_error(self):
-        self.assertEqual(self.search.read(30), 'Record with this position not found.')
+        self.assertRaises(RecordNotFoundException, self.search.read, 300)
 
 if __name__ == '__main__':
     unittest.main()
