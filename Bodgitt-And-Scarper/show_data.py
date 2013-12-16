@@ -7,7 +7,7 @@ import texttable
 class CommandTerminal(object):
 
     def __init__(self):
-        parser = argparse.ArgumentParser(description='Arquivo de busca para o dbSchema')
+        parser = argparse.ArgumentParser(description='File search for dbSchema')
         parser.add_argument('-n, --name', action='store', dest='name', default=None, required=False, help='Search and list all names according to specified criteria.')
         parser.add_argument('-l, --location', action='store', dest='location', default=None, required=False, help='Search and list all locations according to specified criteria.')
 
