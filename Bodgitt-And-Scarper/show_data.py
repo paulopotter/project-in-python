@@ -16,29 +16,27 @@ class CommandTerminal(object):
         self.name = arguments.name
         self.location = arguments.location
 
+        self.search = search_control.SearchControl()
+        self.find = self.search.find(**{'name': self.name, 'location': self.location})
+
+        if self.find == []:
+            print 'Sorry, we could not find the value of the search.'
+
+        else:
+            text_table = texttable.Texttable()
+            header = ['#', 'Name', 'Location', 'Specialties', 'Size', 'Rate', 'Owner']
+
+            text_table.header(header)
+
+            for line_records in range(len(self.find)):
+                row = self.search.read(self.find[line_records])
+                row.pop(-1)  # Remove a exibiçao do byte flag
+                text_table.add_row(row)
+
+            text_table.set_cols_width([2, 25, 15, 50, 5, 10, 5])
+            text_table.set_cols_align(['c', 'l', 'l', 'l', 'c', 'l', 'l'])
+            print text_table.draw()
+
 
 if __name__ == '__main__':
     CommandTerminal()
-
-
-search = search_control.SearchControl()
-find = search.find(**{'name': CommandTerminal().name, 'location': CommandTerminal().location})
-
-
-if find == []:
-    print 'Sorry, we could not find the value of the search.'
-
-else:
-    text_table = texttable.Texttable()
-    header = ['#', 'Name', 'Location', 'Specialties', 'Size', 'Rate', 'Owner']
-
-    text_table.header(header)
-
-    for line_records in range(len(find)):
-        row = search.read(find[line_records])
-        row.pop(-1)  # Remove a exibiçao do byte flag
-        text_table.add_row(row)
-
-    text_table.set_cols_width([2, 25, 15, 50, 5, 10, 5])
-    text_table.set_cols_align(['c', 'l', 'l', 'l', 'c', 'l', 'l'])
-    print text_table.draw()
