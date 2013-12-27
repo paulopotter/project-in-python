@@ -10,6 +10,8 @@ class CommandTerminal(object):
         parser = argparse.ArgumentParser(description='File search for dbSchema')
         parser.add_argument('-n, --name', action='store', dest='name', default=None, required=False, help='Search and list all names according to specified criteria.')
         parser.add_argument('-l, --location', action='store', dest='location', default=None, required=False, help='Search and list all locations according to specified criteria.')
+        parser.add_argument('-c, --create', action='store', dest='create', default=None, required=False, help='Cria um novo registro.')
+        parser.add_argument('-d, --delete', action='store', dest='delete', default=None, required=False, help='Apaga um registro.')
 
         arguments = parser.parse_args()
 
