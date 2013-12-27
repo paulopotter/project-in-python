@@ -1,6 +1,6 @@
 # coding:utf-8
 import argparse
-import search_control
+import crud
 import texttable
 
 
@@ -18,8 +18,8 @@ class CommandTerminal(object):
         self.name = arguments.name
         self.location = arguments.location
 
-        self.search = search_control.SearchControl()
-        self.find = self.search.find(**{'name': self.name, 'location': self.location})
+        self.crud = crud.CRUD()
+        self.find = self.crud.find(**{'name': self.name, 'location': self.location})
 
         if self.find == []:
             print 'Sorry, we could not find the value of the search.'
@@ -31,7 +31,7 @@ class CommandTerminal(object):
             text_table.header(header)
 
             for line_records in range(len(self.find)):
-                row = self.search.read(self.find[line_records])
+                row = self.crud.read(self.find[line_records])
                 row.pop(-1)  # Remove a exibiçao do byte flag
                 text_table.add_row(row)
 
