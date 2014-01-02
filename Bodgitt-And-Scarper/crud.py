@@ -28,7 +28,6 @@ class CRUD(object):
                     if records[line][2].lower().find(criteria['location'].lower()) == 0:
                         positions.append(line)
 
-
         line_records = list(set(positions))
         line_records.sort()
 
@@ -41,3 +40,6 @@ class CRUD(object):
             return line_value
         except IndexError:
             raise RecordNotFoundException
+
+    def create(self, *value):
+            DataConn().pack_in_file(value)
