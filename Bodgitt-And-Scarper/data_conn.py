@@ -77,6 +77,9 @@ class DataConn:
         return records
 
     def pack_in_file(self, values):
+        self.records()
+        pointer_position = self.open_file.tell()
+        self.open_file.seek(pointer_position - 1)
         x = -1
         self.open_file.write(struct.pack("x"))  # byte flag
         for value in values:
