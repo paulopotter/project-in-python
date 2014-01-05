@@ -4,7 +4,7 @@ import struct
 class DataConn:
     def __init__(self):
         self.chosen_file = './db-2x1.db'
-        self.open_file = open(self.chosen_file, 'rb')
+        self.open_file = open(self.chosen_file, 'ab+')
         self.format_of_data = self.start_of_file()
         self.meta_dada = self.schema_description()
         self.pointer_position = self.open_file.tell()
@@ -75,6 +75,15 @@ class DataConn:
             records.append(new_records)
 
         return records
+
+    def pack_in_file(self, values):
+        x = -1
+        self.open_file.write(struct.pack("x"))  # byte flag
+        for value in values:
+            x += 1
+            if len(value) == self.meta_dada[x]['field_content_length']:
+                s = bytes(value)
+                self.open_file.write(struct.pack(str(self.meta_dada[x]['field_content_length']) + "s", s))
 
     def __del__(self):
         self.open_file.close()

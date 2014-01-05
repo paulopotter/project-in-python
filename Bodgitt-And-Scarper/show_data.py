@@ -8,18 +8,20 @@ class CommandTerminal(object):
 
     def __init__(self):
         parser = argparse.ArgumentParser(description='File search for dbSchema')
-        parser.add_argument('-n, --name', action='store', dest='name', default=None, required=False, help='Search and list all names according to specified criteria.')
-        parser.add_argument('-l, --location', action='store', dest='location', default=None, required=False, help='Search and list all locations according to specified criteria.')
-        parser.add_argument('-c, --create', action='store', dest='create', default=None, required=False, help='Cria um novo registro.')
-        parser.add_argument('-d, --delete', action='store', dest='delete', default=None, required=False, help='Apaga um registro.')
+        parser.add_argument('-n', '--name', action='store', dest='name', default=None, required=False, help='Search and list all names according to specified criteria.')
+        parser.add_argument('-l', '--location', action='store', dest='location', default=None, required=False, help='Search and list all locations according to specified criteria.')
+        parser.add_argument('-a', '--and', action='store_true', dest='search_and', default=False, required=False, help='Se utilizado será feito a busca no nome E location( name e location obrigatorios).')
+        parser.add_argument('-c', '--create', action='store', dest='create', default=None, required=False, help='Cria um novo registro.')
+        parser.add_argument('-d', '--delete', action='store', dest='delete', default=None, required=False, help='Apaga um registro.')
 
         arguments = parser.parse_args()
 
         self.name = arguments.name
         self.location = arguments.location
+        self.search_and = arguments.search_and
 
         self.crud = crud.CRUD()
-        self.find = self.crud.find(**{'name': self.name, 'location': self.location})
+        self.find = self.crud.find(**{'name': self.name, 'location': self.location, 'search_and': self.search_and})
 
         if self.find == []:
             print 'Sorry, we could not find the value of the search.'
