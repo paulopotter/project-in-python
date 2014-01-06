@@ -1,10 +1,11 @@
+# coding:utf-8
 import struct
 
 
 class DataConn:
     def __init__(self):
         self.chosen_file = './db-2x1.db'
-        self.open_file = open(self.chosen_file, 'ab+')
+        self.open_file = open(self.chosen_file, 'rb+')
         self.format_of_data = self.start_of_file()
         self.meta_dada = self.schema_description()
         self.pointer_position = self.open_file.tell()
@@ -77,13 +78,39 @@ class DataConn:
         return records
 
     def pack_in_file(self, values):
+        self.records()
+        pointer_position = self.open_file.tell()
+        self.open_file.seek(pointer_position)
         x = -1
-        self.open_file.write(struct.pack("x"))  # byte flag
+        self.open_file.write('x')  # byte flag
         for value in values:
             x += 1
             if len(value) == self.meta_dada[x]['field_content_length']:
                 s = bytes(value)
                 self.open_file.write(struct.pack(str(self.meta_dada[x]['field_content_length']) + "s", s))
+
+        return self.number_of_records()
+
+    def delete_on_file(self, recNo):
+        records = self.records()
+        file_header = open(self.chosen_file, 'rb').read(self.pointer_position)
+        open_file_to_write = open(self.chosen_file, 'wb')
+        open_file_to_write.seek(0)
+        open_file_to_write.write(file_header)
+
+        for line in records:
+            if line[0] != recNo:
+                del line[0]  # numeraçao criada no records
+                del line[-1]  # byte flag
+                open_file_to_write.write(struct.pack('x'))  # byte flag
+                x = 0
+                for value in line:
+                    value = str(value)
+                    if len(value) == self.meta_dada[x]['field_content_length']:
+                        s = bytes(value)
+                        open_file_to_write.write(struct.pack(str(self.meta_dada[x]['field_content_length']) + "s", s))
+                    x += 1
+        open_file_to_write.close()
 
     def __del__(self):
         self.open_file.close()
