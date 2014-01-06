@@ -82,7 +82,7 @@ class DataConn:
         pointer_position = self.open_file.tell()
         self.open_file.seek(pointer_position)
         x = -1
-        self.open_file.write('x')  # byte flag
+        self.open_file.write(struct.pack('x'))  # byte flag
         for value in values:
             x += 1
             if len(value) == self.meta_dada[x]['field_content_length']:
