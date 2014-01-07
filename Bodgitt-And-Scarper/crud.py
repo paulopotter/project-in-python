@@ -42,4 +42,27 @@ class CRUD(object):
             raise RecordNotFoundException
 
     def create(self, *value):
-            DataConn().pack_in_file(value)
+        if value == () or value[0] == '' or value[1] == '':
+            raise Exception
+        else:
+            number_of_fields = len(DataConn().meta_dada)
+            x = 0
+            new_value = []
+            while x < number_of_fields:
+                new_value.append(self.format_for_necessary_size(value[x], DataConn().meta_dada[x]['field_content_length']))
+                x += 1
+        return DataConn().pack_in_file(new_value)
+
+    def format_for_necessary_size(self, value, size):
+        if len(value) < size:
+            difference = size - len(value)
+            return value + (' ' * difference)
+        else:
+            return value
+
+    def delete(self, recNo):
+        try:
+            records = DataConn().records()
+            DataConn().delete_on_file(records[recNo][0])
+        except IndexError:
+            raise RecordNotFoundException
