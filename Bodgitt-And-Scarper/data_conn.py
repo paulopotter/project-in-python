@@ -89,7 +89,7 @@ class DataConn:
                 s = bytes(value)
                 self.open_file.write(struct.pack(str(self.meta_dada[x]['field_content_length']) + "s", s))
 
-        return self.number_of_records()
+        return self.number_of_records() - 1
 
     def delete_on_file(self, recNo):
         records = self.records()
