@@ -58,6 +58,18 @@ class TestSearch(unittest.TestCase):
     def test_delete_error(self):
         self.assertRaises(RecordNotFoundException, self.crud.delete, 999)
 
+    def test_update(self):
+        record = ('Teste' + ' ' * 27, 'Teste' + ' ' * 59 , ' ' * 64, ' ' * 6, ' ' * 8 , ' ' * 8)
+        create_record = self.crud.create(*record)
+
+        self.crud.update(create_record, **{'name': '1Teste', 'location': '2Teste','owner': '123'})
+        bco = self.crud.read(create_record)
+        del bco[0]
+        del bco[-1]
+        self.assertNotEqual(list(record), bco)
+
+        self.crud.delete(create_record)
+
 
 if __name__ == '__main__':
     unittest.main()
