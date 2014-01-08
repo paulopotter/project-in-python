@@ -1,5 +1,6 @@
 # coding:utf-8
 import struct
+# import pdb
 
 
 class DataConn:
@@ -110,6 +111,44 @@ class DataConn:
                         s = bytes(value)
                         open_file_to_write.write(struct.pack(str(self.meta_dada[x]['field_content_length']) + "s", s))
                     x += 1
+        open_file_to_write.close()
+
+    def update_record(self, recNo, field_name, changed_value):
+
+        records = self.records()
+        file_header = open(self.chosen_file, 'rb').read(self.pointer_position)
+        open_file_to_write = open(self.chosen_file, 'wb')
+        open_file_to_write.seek(0)
+        open_file_to_write.write(file_header)
+
+        for line in records:
+            if line[0] != recNo:
+                del line[0]  # numeraçao criada no records
+                del line[-1]  # byte flag
+                open_file_to_write.write(struct.pack('x'))  # byte flag
+                x = 0
+                for value in line:
+                    value = str(value)
+                    if len(value) == self.meta_dada[x]['field_content_length']:
+                        s = bytes(value)
+                        open_file_to_write.write(struct.pack(str(self.meta_dada[x]['field_content_length']) + "s", s))
+                    x += 1
+            else:
+                del line[0]  # numeraçao criada no records
+                del line[-1]  # byte flag
+                open_file_to_write.write(struct.pack('x'))  # byte flag
+                x = 0
+                for value in line:
+                    value = str(value)
+                    if len(value) == self.meta_dada[x]['field_content_length']:
+                        if self.meta_dada[x]['field_name'] == field_name:
+                            s = bytes(changed_value)
+                        else:
+                            s = bytes(value)
+                        open_file_to_write.write(struct.pack(str(self.meta_dada[x]['field_content_length']) + "s", s))
+
+                    x += 1
+
         open_file_to_write.close()
 
     def __del__(self):
