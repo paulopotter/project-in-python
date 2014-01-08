@@ -1,6 +1,5 @@
 # coding:utf-8
 import struct
-# import pdb
 
 
 class DataConn:
@@ -118,15 +117,15 @@ class DataConn:
         records = self.records()
         file_header = open(self.chosen_file, 'rb').read(self.pointer_position)
         open_file_to_write = open(self.chosen_file, 'wb')
-        open_file_to_write.seek(0)
         open_file_to_write.write(file_header)
 
         for line in records:
+            del line[-1]  # byte flag
+            open_file_to_write.write(struct.pack('?', False))  # byte flag
+            x = 0
+
             if line[0] != recNo:
                 del line[0]  # numeraçao criada no records
-                del line[-1]  # byte flag
-                open_file_to_write.write(struct.pack('x'))  # byte flag
-                x = 0
                 for value in line:
                     value = str(value)
                     if len(value) == self.meta_dada[x]['field_content_length']:
@@ -135,9 +134,6 @@ class DataConn:
                     x += 1
             else:
                 del line[0]  # numeraçao criada no records
-                del line[-1]  # byte flag
-                open_file_to_write.write(struct.pack('x'))  # byte flag
-                x = 0
                 for value in line:
                     value = str(value)
                     if len(value) == self.meta_dada[x]['field_content_length']:
