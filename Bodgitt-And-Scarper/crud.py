@@ -42,19 +42,29 @@ class CRUD(object):
             raise RecordNotFoundException
 
     def create(self, *value):
-        if value == () or value[0] == '' or value[1] == '':
-            raise Exception
+        records = DataConn().records()
+        empty_fields = []
+        for row in records:
+            if row[-1] == 1:
+                empty_fields.append(row[0])
+
+        meta_dada = DataConn().meta_dada
+
+        if not empty_fields:
+            formatted_records = []
+            for x in range(len(value)):
+                formatted_records.append(self.format_for_necessary_size(value[x], meta_dada[x]['field_content_length']))
+            DataConn().pack_in_file(formatted_records)
+
         else:
-            number_of_fields = len(DataConn().meta_dada)
-            x = 0
-            new_value = []
-            while x < number_of_fields:
-                new_value.append(self.format_for_necessary_size(value[x], DataConn().meta_dada[x]['field_content_length']))
-                x += 1
-        return DataConn().pack_in_file(new_value)
+            formatted_records = {}
+            for x in range(len(value)):
+                formatted_records[meta_dada[x]['field_name']] = self.format_for_necessary_size(value[x], meta_dada[x]['field_content_length'])
+
+            self.update(empty_fields[0], **formatted_records)
 
     def format_for_necessary_size(self, value, size):
-        if len(value) < size:
+        if len(value) < size or value == '':
             difference = size - len(value)
             return value + (' ' * difference)
         else:
