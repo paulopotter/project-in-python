@@ -44,17 +44,20 @@ class CRUD(object):
     def create(self, *value):
         records = DataConn().records()
         empty_fields = []
+        meta_dada = DataConn().meta_dada
+        value = list(value)
+        if len(value) < len(meta_dada):
+            for x in range(len(meta_dada) - len(value)):
+                value.append(' ')
         for row in records:
             if row[-1] == 1:
                 empty_fields.append(row[0])
-
-        meta_dada = DataConn().meta_dada
 
         if not empty_fields:
             formatted_records = []
             for x in range(len(value)):
                 formatted_records.append(self.format_for_necessary_size(value[x], meta_dada[x]['field_content_length']))
-            DataConn().pack_in_file(formatted_records)
+            field_number_created = DataConn().pack_in_file(formatted_records)
 
         else:
             formatted_records = {}
@@ -62,6 +65,10 @@ class CRUD(object):
                 formatted_records[meta_dada[x]['field_name']] = self.format_for_necessary_size(value[x], meta_dada[x]['field_content_length'])
 
             self.update(empty_fields[0], **formatted_records)
+
+            field_number_created = empty_fields[0]
+
+        return field_number_created
 
     def format_for_necessary_size(self, value, size):
         if len(value) < size or value == '':
