@@ -63,7 +63,7 @@ class CRUD(object):
     def delete(self, recNo):
         try:
             records = DataConn().records()
-            DataConn().delete_on_file(records[recNo][0])
+            DataConn().set_byte_flag_true(records[recNo][0])
         except IndexError:
             raise RecordNotFoundException
 
