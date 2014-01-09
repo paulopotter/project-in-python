@@ -17,18 +17,17 @@ class CommandTerminal(object):
         arguments = parser.parse_args()
 
         self.crud = crud.CRUD()
-        self.find = self.crud.find(**{'name': arguments.name, 'location': arguments.location, 'search_and': arguments.search_and})
+        self.find = self.crud.find({'name': arguments.name, 'location': arguments.location, 'search_and': arguments.search_and})
 
         if arguments.create:
-            show = self.crud.create(arguments.create)
+            return self.crud.create(arguments.create)
 
         elif arguments.delete:
             self.crud.delete(int(arguments.delete))
-            show = ''
 
         else:
             if self.find == []:
-                show = 'Sorry, we could not find the value of the search.'
+                return 'Sorry, we could not find the value of the search.'
 
             else:
                 text_table = texttable.Texttable()
@@ -47,9 +46,7 @@ class CommandTerminal(object):
 
                 text_table.set_cols_width([2, 25, 15, 50, 5, 10, 5])
                 text_table.set_cols_align(['c', 'l', 'l', 'l', 'c', 'l', 'l'])
-                show = text_table.draw()
-
-        print show
+                return text_table.draw()
 
 if __name__ == '__main__':
     try:
