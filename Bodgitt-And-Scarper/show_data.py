@@ -31,11 +31,17 @@ class CommandTerminal(object):
             header = ['#', 'Name', 'Location', 'Specialties', 'Size', 'Rate', 'Owner']
 
             text_table.header(header)
+            bla = 0
 
             for line_records in range(len(self.find)):
                 row = self.crud.read(self.find[line_records])
-                row.pop(-1)  # Remove a exibiçao do byte flag
-                text_table.add_row(row)
+                bla = bla + row[0]
+
+                if row[-1] != 1:  # Se o byte flag for false, exibe
+                    row.pop(-1)  # Remove a exibiçao do byte flag
+                    text_table.add_row(row)
+                else:
+                    row.pop(-1)  # Remove a exibiçao do byte flag
 
             text_table.set_cols_width([2, 25, 15, 50, 5, 10, 5])
             text_table.set_cols_align(['c', 'l', 'l', 'l', 'c', 'l', 'l'])
@@ -43,4 +49,7 @@ class CommandTerminal(object):
 
 
 if __name__ == '__main__':
-    CommandTerminal()
+    try:
+        CommandTerminal()
+    except:
+        print 'erro: no show data'
