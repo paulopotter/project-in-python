@@ -16,31 +16,28 @@ class CommandTerminal(object):
 
         arguments = parser.parse_args()
 
-        self.name = arguments.name
-        self.location = arguments.location
-        self.search_and = arguments.search_and
-        self.create = arguments.create
-        self.delete = arguments.delete
-
         self.crud = crud.CRUD()
-        self.find = self.crud.find(**{'name': self.name, 'location': self.location, 'search_and': self.search_and})
+        self.find = self.crud.find(**{'name': arguments.name, 'location': arguments.location, 'search_and': arguments.search_and})
 
-        if self.create:
-            print crud.CRUD().create(*self.create)
+        if arguments.create:
+            show = self.crud.create(arguments.create)
+
+        elif arguments.delete:
+            self.crud.delete(int(arguments.delete))
+            show = ''
+
         else:
             if self.find == []:
-                print 'Sorry, we could not find the value of the search.'
+                show = 'Sorry, we could not find the value of the search.'
 
             else:
                 text_table = texttable.Texttable()
                 header = ['#', 'Name', 'Location', 'Specialties', 'Size', 'Rate', 'Owner']
 
                 text_table.header(header)
-                bla = 0
 
                 for line_records in range(len(self.find)):
                     row = self.crud.read(self.find[line_records])
-                    bla = bla + row[0]
 
                     if row[-1] != 1:  # Se o byte flag for false, exibe
                         row.pop(-1)  # Remove a exibiçao do byte flag
@@ -50,8 +47,9 @@ class CommandTerminal(object):
 
                 text_table.set_cols_width([2, 25, 15, 50, 5, 10, 5])
                 text_table.set_cols_align(['c', 'l', 'l', 'l', 'c', 'l', 'l'])
-                print text_table.draw()
+                show = text_table.draw()
 
+        print show
 
 if __name__ == '__main__':
     try:
