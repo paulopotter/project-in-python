@@ -22,12 +22,6 @@ class TestDataConn(unittest.TestCase):
 
         self.assertEqual(total, self.data_conn.format_of_data["length_of_each_record"])
 
-    def test_length_of_file_should_be_5307(self):
-        self.assertEqual(self.data_conn.length_of_file(), 5307)
-
-    def test_file_should_have_29_records(self):
-        self.assertEqual(self.data_conn.number_of_records(), 29)
-
     def test_should_return_x_chars(self):
         self.assertEqual(self.data_conn.read_chars(5), '\x00Buon')
 
@@ -66,9 +60,9 @@ class TestDataConn(unittest.TestCase):
 
     def test_records_is_valid_with_byte_flag(self):
         records = self.data_conn.records()
+        self.assertEqual(records[0][-1], 0)
 
-        for number_of_records in range(self.data_conn.number_of_records()):
-            self.assertEqual(records[number_of_records][-1], 0)
+    # def test_
 
 
 if __name__ == '__main__':
