@@ -5,7 +5,7 @@ from my_exceptions import RecordNotFoundException
 
 class CRUD(object):
 
-    def find(self, **criteria):
+    def find(self, criteria):
         records = DataConn().records()
         positions = []
 
@@ -65,7 +65,7 @@ class CRUD(object):
             for x in range(len(value)):
                 formatted_records[meta_dada[x]['field_name']] = self.format_for_necessary_size(value[x], meta_dada[x]['field_content_length'])
 
-            self.update(empty_fields[0], **formatted_records)
+            self.update(empty_fields[0], formatted_records)
 
             field_number_created = empty_fields[0]
 
@@ -85,7 +85,7 @@ class CRUD(object):
         except IndexError:
             raise RecordNotFoundException
 
-    def update(self, recNo, **data):
+    def update(self, recNo, data):
 
         meta_dada = DataConn().meta_dada
 
