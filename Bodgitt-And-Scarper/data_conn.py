@@ -73,7 +73,15 @@ class DataConn:
 
             new_records.append(byte_flag)
 
+            if byte_flag == 1:
+                remove_data = x
+            else:
+                remove_data = False
+
             records.append(new_records)
+
+        if remove_data:
+            records.pop(remove_data)
 
         return records
 
@@ -91,25 +99,34 @@ class DataConn:
 
         return self.number_of_records() - 1
 
-    def delete_on_file(self, recNo):
+    def set_byte_flag_true(self, recNo):
         records = self.records()
         file_header = open(self.chosen_file, 'rb').read(self.pointer_position)
         open_file_to_write = open(self.chosen_file, 'wb')
-        open_file_to_write.seek(0)
         open_file_to_write.write(file_header)
-
         for line in records:
+            x = 0
             if line[0] != recNo:
-                del line[0]  # numeraçao criada no records
-                del line[-1]  # byte flag
-                open_file_to_write.write(struct.pack('x'))  # byte flag
-                x = 0
+                open_file_to_write.write(struct.pack('?', line[-1]))  # byte flag
+                line.pop(-1)
+                line.pop(0)  # numeraçao criada no records
                 for value in line:
                     value = str(value)
                     if len(value) == self.meta_dada[x]['field_content_length']:
                         s = bytes(value)
                         open_file_to_write.write(struct.pack(str(self.meta_dada[x]['field_content_length']) + "s", s))
                     x += 1
+            else:
+                open_file_to_write.write(struct.pack('?', True))  # byte flag
+                line.pop(-1)
+                line.pop(0)  # numeraçao criada no records
+                for value in line:
+                    value = str(value)
+                    if len(value) == self.meta_dada[x]['field_content_length']:
+                        s = bytes(value)
+                        open_file_to_write.write(struct.pack(str(self.meta_dada[x]['field_content_length']) + "s", s))
+                    x += 1
+
         open_file_to_write.close()
 
     def update_record(self, recNo, field_name, changed_value):
