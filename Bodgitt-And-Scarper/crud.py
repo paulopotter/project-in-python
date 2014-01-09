@@ -41,7 +41,7 @@ class CRUD(object):
         except IndexError:
             raise RecordNotFoundException
 
-    def create(self, *value):
+    def create(self, value):
         records = DataConn().records()
         empty_fields = []
         meta_dada = DataConn().meta_dada
@@ -49,6 +49,7 @@ class CRUD(object):
         if len(value) < len(meta_dada):
             for x in range(len(meta_dada) - len(value)):
                 value.append(' ')
+
         for row in records:
             if row[-1] == 1:
                 empty_fields.append(row[0])
@@ -57,7 +58,7 @@ class CRUD(object):
             formatted_records = []
             for x in range(len(value)):
                 formatted_records.append(self.format_for_necessary_size(value[x], meta_dada[x]['field_content_length']))
-            field_number_created = DataConn().pack_in_file(formatted_records)
+            field_number_created = DataConn().pack_in_file(formatted_records) + 1
 
         else:
             formatted_records = {}
