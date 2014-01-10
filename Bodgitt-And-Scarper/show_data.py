@@ -12,7 +12,7 @@ class CommandTerminal(object):
         parser.add_argument('-l', '--location', action='store', dest='location', default=None, required=False, help='Procura e lista todos os registros com a \'location\' informada.')
         parser.add_argument('-a', '--and', action='store_true', dest='search_and', default=False, required=False, help='Se utilizado será feito a busca no \'name\' E \'location\'( \'name\' e \'location\' obrigatórios).')
         parser.add_argument('-c', '--create', action='store', nargs='+', dest='create', default=None, required=False, help='Cria um novo registro. Espaços serão considerados novos campos (para digitar um texto com espaço use aspas). \'name\' e \'location\' obrigatórios.')
-        parser.add_argument('-d', '--delete', action='store', dest='delete', nargs='+', default=None, required=False, help='Apaga registro com o ID passado.')
+        parser.add_argument('-d', '--delete', action='store', dest='delete', nargs='+', default=None, required=False, help='Apaga registro com o ID passado (use espaços para apagar mais de um registro ao mesmo tempo).')
 
         arguments = parser.parse_args()
 
@@ -23,7 +23,8 @@ class CommandTerminal(object):
             print self.crud.create(arguments.create)
 
         elif arguments.delete:
-            print self.crud.delete(int(arguments.delete))
+            for recNo in arguments.delete:
+                print self.crud.delete(int(recNo))
 
         else:
             if self.find == []:
@@ -53,4 +54,4 @@ if __name__ == '__main__':
     try:
         CommandTerminal()
     except Exception as e:
-        print 'Exception:', e
+        print 'Erro:', e
