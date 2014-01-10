@@ -12,19 +12,27 @@ class TestSearch(unittest.TestCase):
         self.assertIsInstance(self.crud.find({'name': None, 'location': None, 'search_and': False}), list)
 
     def test_find_location(self):
-        self.assertEqual(self.crud.find({'name': None, 'location': 'X', 'search_and': False}), [19, 20, 21])
+        create_record = self.crud.create(('Teste 123', 'Teste 321'))
+        self.assertEqual(self.crud.find({'name': None, 'location': 'Teste 321', 'search_and': False}), [create_record])
+        self.crud.delete(create_record)
 
     def test_find_name(self):
-        self.assertEqual(self.crud.find({'name': 'Buon', 'location': None, 'search_and': False}), [0, 5, 18, 25])
+        create_record = self.crud.create(('Teste 321', 'Teste 311'))
+        self.assertEqual(self.crud.find({'name': 'Teste 321', 'location': None, 'search_and': False}), [create_record])
+        self.crud.delete(create_record)
 
     def test_find_record_with_name_and_location(self):
-        self.assertEqual(self.crud.find({'name': 'B', 'location': 's', 'search_and': True}), [0])
+        create_record = self.crud.create(('Teste name', 'Teste location'))
+        self.assertEqual(self.crud.find({'name': 'Teste name', 'location': 'Teste location', 'search_and': True}), [create_record])
+        self.crud.delete(create_record)
 
     def test_read_return_type(self):
         self.assertIsInstance(self.crud.read(0), list)
 
     def test_read(self):
-        self.assertEqual(self.crud.read(0), [0, 'Buonarotti & Company            ', 'Smallville                                                      ', 'Air Conditioning, Painting, Painting                            ', '10    ', '$40.00  ', '        ', 0])
+        create_record = self.crud.create(('Teste read', 'Teste read'))
+        self.assertEqual(self.crud.read(create_record), [create_record, 'Teste read                      ', 'Teste read                                                      ', ' ' * 64, ' ' * 6, ' ' * 8, ' ' * 8, 0])
+        self.crud.delete(create_record)
 
     def test_read_error(self):
         self.assertRaises(RecordNotFoundException, self.crud.read, 999)
