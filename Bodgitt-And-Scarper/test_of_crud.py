@@ -58,6 +58,11 @@ class TestSearch(unittest.TestCase):
 
         self.crud.delete(create_record)
 
+    def test_format_for_necessary_size(self):
+        self.assertEqual(self.crud.format_for_necessary_size('123456789', 5), '12345')
+        self.assertEqual(self.crud.format_for_necessary_size('1234', 5), '1234 ')
+        self.assertEqual(self.crud.format_for_necessary_size('12345', 5), '12345')
+
 
 if __name__ == '__main__':
     unittest.main()
