@@ -52,7 +52,6 @@ class CRUD(object):
             records = DataConn().records()
             empty_fields = []
             meta_dada = DataConn().meta_dada
-            value = list(value)
             if len(value) < len(meta_dada):
                 for x in range(len(meta_dada) - len(value)):
                     value.append(' ')
