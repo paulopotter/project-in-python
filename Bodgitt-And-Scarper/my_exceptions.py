@@ -1,10 +1,11 @@
+# coding: utf-8
 
 
 class RecordNotFoundException(Exception):
     def __str__(self):
-        return 'Record with this position not found.'
+        return 'Registro não encontrado.'
 
 
 class DuplicateKeyException(Exception):
     def __str__(self):
-        return 'Record with this position is duplicate.'
+        return 'Registro com posição duplicada.'
