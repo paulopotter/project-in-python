@@ -85,7 +85,7 @@ class CRUD(object):
         try:
             records = DataConn().records()
             DataConn().set_byte_flag_true(records[recNo][0])
-            return 'Registro apagado com sucesso!'
+            return 'Registro [%i] apagado com sucesso!' % recNo
         except IndexError:
             raise RecordNotFoundException
 
