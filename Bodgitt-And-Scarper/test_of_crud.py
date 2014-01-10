@@ -17,9 +17,6 @@ class TestSearch(unittest.TestCase):
     def test_find_name(self):
         self.assertEqual(self.crud.find({'name': 'Buon', 'location': None, 'search_and': False}), [0, 5, 18, 25])
 
-    # def test_find_all(self):
-    #     self.assertEqual(self.crud.find({'name': None, 'location': None, 'search_and': False}), range(29))
-
     def test_find_record_with_name_and_location(self):
         self.assertEqual(self.crud.find({'name': 'B', 'location': 's', 'search_and': True}), [0])
 
@@ -33,19 +30,17 @@ class TestSearch(unittest.TestCase):
         self.assertRaises(RecordNotFoundException, self.crud.read, 999)
 
     def test_create(self):
-        create_record = self.crud.create(('Teste', 'Teste', '', '', '', ''))
-        # self.assertItemsEqual()
-
+        create_record = self.crud.create(('Teste', 'Teste'))
         self.assertRaises(self.crud.read(create_record))
         self.crud.delete(create_record)
 
     def test_create_return_type(self):
-        create_record = self.crud.create(('Teste', 'Teste', '', '', '', ''))
+        create_record = self.crud.create(('Teste', 'Teste'))
         self.assertIsInstance(create_record, int)
         self.crud.delete(create_record)
 
     def test_delete(self):
-        create_record = self.crud.create(('Teste', 'Teste', '', '', '', ''))
+        create_record = self.crud.create(('Teste', 'Teste'))
         self.crud.delete(create_record)
 
     def test_delete_error(self):
