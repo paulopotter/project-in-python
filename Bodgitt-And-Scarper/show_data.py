@@ -42,8 +42,6 @@ class CommandTerminal(object):
                     if row[-1] != 1:  # Se o byte flag for false, exibe
                         row.pop(-1)  # Remove a exibiçao do byte flag
                         text_table.add_row(row)
-                    else:
-                        row.pop(-1)  # Remove a exibiçao do byte flag
 
                 text_table.set_cols_width([2, 25, 15, 50, 5, 10, 5])
                 text_table.set_cols_align(['c', 'l', 'l', 'l', 'c', 'l', 'l'])
