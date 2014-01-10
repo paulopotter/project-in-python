@@ -34,6 +34,7 @@ class CommandTerminal(object):
                 records = self.crud.find({'name': str(value), 'location': None, 'search_and': False})
                 for recNo in records:
                     print self.crud.delete(int(recNo))
+
         elif arguments.update:
             if len(arguments.update) != 2:
                 print 'Erro: São necessario 2 valores, você digitou %i. Lembrando: o primeiro valor é o campo a ser editado e o segundo o ID do usuario' % len(arguments.update)
