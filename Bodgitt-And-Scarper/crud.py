@@ -97,12 +97,16 @@ class CRUD(object):
             raise RecordNotFoundException
 
     def update(self, recNo, data):
+        if self.read(recNo)[-1] == 0:
+            meta_dada = DataConn().meta_dada
 
-        meta_dada = DataConn().meta_dada
+            for field_name in data.keys():
+                x = -1
+                for item in meta_dada:
+                    x += 1
+                    if field_name in item.values():
+                        DataConn().update_record(recNo, field_name, self.format_for_necessary_size(data[field_name], meta_dada[x]['field_content_length']))
 
-        for field_name in data.keys():
-            x = -1
-            for item in meta_dada:
-                x += 1
-                if field_name in item.values():
-                    DataConn().update_record(recNo, field_name, self.format_for_necessary_size(data[field_name], meta_dada[x]['field_content_length']))
+            return 'Registro %i atualizado com sucesso!' % recNo
+        else:
+            raise RecordNotFoundException
