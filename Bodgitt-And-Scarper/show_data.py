@@ -20,7 +20,10 @@ class CommandTerminal(object):
         self.find = self.crud.find({'name': arguments.name, 'location': arguments.location, 'search_and': arguments.search_and})
 
         if arguments.create:
-            print self.crud.create(arguments.create)
+            try:
+                print self.crud.create(arguments.create)
+            except IndexError:
+                print 'Campo \'name\' ou \'location\' OBRIGATÓRIOS!'
 
         elif arguments.delete:
             for recNo in arguments.delete:
