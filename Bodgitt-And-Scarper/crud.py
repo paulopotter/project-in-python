@@ -42,34 +42,37 @@ class CRUD(object):
             raise RecordNotFoundException
 
     def create(self, value):
-        records = DataConn().records()
-        empty_fields = []
-        meta_dada = DataConn().meta_dada
-        value = list(value)
-        if len(value) < len(meta_dada):
-            for x in range(len(meta_dada) - len(value)):
-                value.append(' ')
-
-        for row in records:
-            if row[-1] == 1:
-                empty_fields.append(row[0])
-
-        if not empty_fields:
-            formatted_records = []
-            for x in range(len(value)):
-                formatted_records.append(self.format_for_necessary_size(value[x], meta_dada[x]['field_content_length']))
-            field_number_created = DataConn().pack_in_file(formatted_records) + 1
-
+        if value[0] == ' ' or value[1] == ' ' or value[1] == '':
+            return 'Campo \'name\' ou \'location\' OBRIGATÓRIOS!'
         else:
-            formatted_records = {}
-            for x in range(len(value)):
-                formatted_records[meta_dada[x]['field_name']] = self.format_for_necessary_size(value[x], meta_dada[x]['field_content_length'])
+            records = DataConn().records()
+            empty_fields = []
+            meta_dada = DataConn().meta_dada
+            value = list(value)
+            if len(value) < len(meta_dada):
+                for x in range(len(meta_dada) - len(value)):
+                    value.append(' ')
 
-            self.update(empty_fields[0], formatted_records)
+            for row in records:
+                if row[-1] == 1:
+                    empty_fields.append(row[0])
 
-            field_number_created = empty_fields[0]
+            if not empty_fields:
+                formatted_records = []
+                for x in range(len(value)):
+                    formatted_records.append(self.format_for_necessary_size(value[x], meta_dada[x]['field_content_length']))
+                field_number_created = DataConn().pack_in_file(formatted_records) + 1
 
-        return field_number_created
+            else:
+                formatted_records = {}
+                for x in range(len(value)):
+                    formatted_records[meta_dada[x]['field_name']] = self.format_for_necessary_size(value[x], meta_dada[x]['field_content_length'])
+
+                self.update(empty_fields[0], formatted_records)
+
+                field_number_created = empty_fields[0]
+
+            return field_number_created
 
     def format_for_necessary_size(self, value, size):
         if len(value) < size or value == '':
@@ -82,6 +85,7 @@ class CRUD(object):
         try:
             records = DataConn().records()
             DataConn().set_byte_flag_true(records[recNo][0])
+            return 'Registro apagado com sucesso!'
         except IndexError:
             raise RecordNotFoundException
 
