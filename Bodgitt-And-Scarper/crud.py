@@ -44,6 +44,10 @@ class CRUD(object):
     def create(self, value):
         if value[0] == ' ' or value[1] == ' ' or value[1] == '':
             return 'Campo \'name\' ou \'location\' OBRIGATÓRIOS!'
+
+        elif len(value) > 6:
+            return 'Erro: A quantidade total de campos são 6, você informou %i' % len(value)
+
         else:
             records = DataConn().records()
             empty_fields = []
@@ -78,6 +82,9 @@ class CRUD(object):
         if len(value) < size or value == '':
             difference = size - len(value)
             return value + (' ' * difference)
+        elif len(value) > size:
+            difference = len(value) - size
+            return value[:-difference]
         else:
             return value
 
