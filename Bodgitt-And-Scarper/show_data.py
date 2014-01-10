@@ -14,6 +14,8 @@ class CommandTerminal(object):
         parser.add_argument('-c', '--create', action='store', nargs='+', dest='create', default=None, required=False, help='Cria um novo registro. Espaços serão considerados novos campos (para digitar um texto com espaço use aspas). \'name\' e \'location\' obrigatórios.')
         parser.add_argument('-d', '--delete', action='store', dest='delete', nargs='+', default=None, required=False, help='Apaga registro com o ID passado (use espaços para apagar mais de um registro ao mesmo tempo).')
 
+        parser.add_argument('-u', '--update', action='store', dest='update', nargs='*', default=None, required=False, help='Adiciona o Id do usuario no registro informado, o primeiro valor é o campo a ser editado e o segundo o ID do usuario.(Ex.: 00 11)')
+
         arguments = parser.parse_args()
 
         self.crud = crud.CRUD()
@@ -25,6 +27,12 @@ class CommandTerminal(object):
         elif arguments.delete:
             for recNo in arguments.delete:
                 print self.crud.delete(int(recNo))
+
+        elif arguments.update:
+            if len(arguments.update) != 2:
+                print 'Erro: São necessario 2 valores, você digitou %i. Lembrando: o primeiro valor é o campo a ser editado e o segundo o ID do usuario' % len(arguments.update)
+            else:
+                print self.crud.update(int(arguments.update[0]), {'owner': arguments.update[1]})
 
         else:
             if self.find == []:
@@ -43,7 +51,7 @@ class CommandTerminal(object):
                         row.pop(-1)  # Remove a exibiçao do byte flag
                         text_table.add_row(row)
 
-                text_table.set_cols_width([2, 25, 15, 50, 5, 10, 5])
+                text_table.set_cols_width([2, 32, 32, 50, 6, 8, 8])
                 text_table.set_cols_align(['c', 'l', 'l', 'l', 'c', 'l', 'l'])
                 print text_table.draw()
 
