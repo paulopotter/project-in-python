@@ -44,3 +44,8 @@ nosetests.xml
 #Arquivos de ajuda visual
 
 visual.py
+
+# Arquivos de ajuda de trabalho
+
+* copy
+*.sublime-workspace
