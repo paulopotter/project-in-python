@@ -32,8 +32,11 @@ class CommandTerminal(object):
             except:
                 value = ' '.join(str(x) for x in arguments.delete)
                 records = self.crud.find({'name': str(value), 'location': None, 'search_and': False})
-                for recNo in records:
-                    print self.crud.delete(int(recNo))
+                if records:
+                    for recNo in records:
+                        print self.crud.delete(int(recNo))
+                else:
+                    print 'Erro: Registro não encontrado'
 
         elif arguments.update:
             if len(arguments.update) != 2:
