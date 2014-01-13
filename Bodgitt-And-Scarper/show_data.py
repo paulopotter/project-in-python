@@ -47,7 +47,7 @@ class CommandTerminal(object):
                 if records:
                     for recNo in records:
                         self.crud.delete(int(recNo))
-                        print 'Registro [%i] apagado com sucesso!' % recNo
+                        print 'Registro [%s] apagado com sucesso!' % recNo
                 else:
                     print 'ERRO: Registro não encontrado'
 
