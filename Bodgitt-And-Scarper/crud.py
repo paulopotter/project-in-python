@@ -63,6 +63,8 @@ class CRUD(object):
             if not empty_fields:
                 formatted_records = []
                 for x in range(len(values)):
+                    if meta_dada[x]['field_name'] == 'rate' and values[x].strip() != '':
+                        values[x] = '$' + values[x]
                     formatted_records.append(self.format_for_necessary_size(values[x], meta_dada[x]['field_content_length']))
 
                 field_number_created = DataConn().pack_in_file(formatted_records) + 1
@@ -70,6 +72,8 @@ class CRUD(object):
             else:
                 formatted_records = {}
                 for x in range(len(values)):
+                    if meta_dada[x]['field_name'] == 'rate' and values[x].strip() != '':
+                        values[x] = '$' + values[x]
                     formatted_records[meta_dada[x]['field_name']] = self.format_for_necessary_size(values[x], meta_dada[x]['field_content_length'])
 
                 self.update_any_record(empty_fields[0], formatted_records)
@@ -127,7 +131,11 @@ class CRUD(object):
         for x in range(len(values)):
             if size_field[x]['field_name'] in only_numbers:
                 try:
-                    int(values[x])
+                    if size_field[x]['field_name'] != 'rate':
+                        int(values[x])
+                    else:
+                        float(values[x])
+
                     if len(values[x]) <= size_field[x]['field_content_length']:
                         entry_type += 1
                     else:
