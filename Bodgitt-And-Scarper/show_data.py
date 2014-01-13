@@ -22,7 +22,12 @@ class CommandTerminal(object):
         self.find = self.crud.find({'name': arguments.name, 'location': arguments.location, 'search_and': arguments.search_and})
 
         if arguments.create:
-            print self.crud.create(arguments.create)
+
+            verify_entry_type = self.crud.verify_entry_type(arguments.create)
+            if not verify_entry_type:
+                print self.crud.create(arguments.create)
+            else:
+                print verify_entry_type
 
         elif arguments.delete:
             try:
