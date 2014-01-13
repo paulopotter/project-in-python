@@ -105,7 +105,6 @@ class CRUD(object):
             recNo = int(recNo)
             if self.read(recNo)[-1] == 0:
                 self.update_any_record(recNo, data)
-                return 'Registro [%i] atualizado com sucesso!' % recNo
             else:
                 raise RecordNotFoundException
         except:
