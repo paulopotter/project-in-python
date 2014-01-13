@@ -86,7 +86,6 @@ class DataConn:
         return records
 
     def pack_in_file(self, values):
-        self.records()
         pointer_position = self.open_file.tell()
         open_file = open(self.chosen_file, 'ab')
         open_file.seek(pointer_position)
