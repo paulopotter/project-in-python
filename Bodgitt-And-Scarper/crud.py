@@ -42,7 +42,7 @@ class CRUD(object):
             raise RecordNotFoundException
 
     def create(self, values):
-        if values[0] == ' ' or len(values) == 1 or values[1] == ' ':
+        if values[0].strip() == '' or len(values) == 1 or values[1].strip() == '':
             return 'ERRO: Campo \'name\' ou \'location\' OBRIGATÓRIOS!'
 
         elif len(values) > 6:
