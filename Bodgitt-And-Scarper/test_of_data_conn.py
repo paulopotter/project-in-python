@@ -62,8 +62,5 @@ class TestDataConn(unittest.TestCase):
         records = self.data_conn.records()
         self.assertEqual(records[0][-1], 0)
 
-    # def test_
-
-
 if __name__ == '__main__':
     unittest.main()
