@@ -38,21 +38,25 @@ class CommandTerminal(object):
             try:
                 int(arguments.delete[0])
                 for recNo in arguments.delete:
-                    print self.crud.delete(int(recNo))
+                    self.crud.delete(recNo)
+                    print 'Registro [%s] apagado com sucesso!' % recNo
+
             except:
                 value = ' '.join(str(x) for x in arguments.delete)
                 records = self.crud.find({'name': str(value), 'location': None, 'search_and': False})
                 if records:
                     for recNo in records:
-                        print self.crud.delete(int(recNo))
+                        self.crud.delete(int(recNo))
+                        print 'Registro [%i] apagado com sucesso!' % recNo
                 else:
-                    print 'Erro: Registro não encontrado'
+                    print 'ERRO: Registro não encontrado'
 
         elif arguments.update:
             if len(arguments.update) != 2:
-                print 'Erro: São necessario 2 valores, você digitou %i. \nLembrando: o primeiro valor é do registro a ser editado e o segundo o ID do usuario' % len(arguments.update)
+                print 'ERRO: São necessario 2 valores, você digitou %i. \nLembrando: o primeiro valor é o NUMERO do registro a ser editado e o segundo o ID do usuario' % len(arguments.update)
             else:
-                print self.crud.update(arguments.update[0], {'owner': arguments.update[1]})
+                self.crud.update(arguments.update[0], {'owner': arguments.update[1]})
+                print 'Registro [%s] atualizado com sucesso!' % arguments.update[0]
 
         else:
             if self.find == []:
