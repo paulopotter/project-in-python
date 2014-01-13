@@ -71,6 +71,9 @@ class TestSearch(unittest.TestCase):
         self.assertEqual(self.crud.format_for_necessary_size('1234', 5), '1234 ')
         self.assertEqual(self.crud.format_for_necessary_size('12345', 5), '12345')
 
+    def test_verify_entry_type(self):
+        self.assertFalse(self.crud.verify_entry_type(['Texto', 'Texto', 'Texto', '123', '123', '123']))
+
 
 if __name__ == '__main__':
     unittest.main()
