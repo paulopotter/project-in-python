@@ -75,7 +75,7 @@ class CRUD(object):
 
                 field_number_created = empty_fields[0]
 
-            return field_number_created
+            return 'Registro [%i] criado com sucesso!' % field_number_created
 
     def format_for_necessary_size(self, value, size):
         if len(value) < size or value == '':
@@ -97,7 +97,7 @@ class CRUD(object):
 
     def update(self, recNo, data):
         if self.read(recNo)[-1] == 0:
-            return 'Registro %i atualizado com sucesso!' % recNo
+            return 'Registro [%i] atualizado com sucesso!' % recNo
         else:
             raise RecordNotFoundException
 
@@ -110,3 +110,13 @@ class CRUD(object):
                 x += 1
                 if field_name in item.values():
                     DataConn().update_record(recNo, field_name, self.format_for_necessary_size(data[field_name], meta_dada[x]['field_content_length']))
+
+    def verify_entry_type(self, field, value):
+        only_numbers = ['size', 'owner', 'rate']
+
+        if field in only_numbers:
+            try:
+                int(value)
+                return False
+            except:
+                return 'Campo \'%s\' suporta apenas numeros' % field
