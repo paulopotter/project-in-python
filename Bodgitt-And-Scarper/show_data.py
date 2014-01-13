@@ -52,7 +52,7 @@ class CommandTerminal(object):
             if len(arguments.update) != 2:
                 print 'Erro: São necessario 2 valores, você digitou %i. \nLembrando: o primeiro valor é do registro a ser editado e o segundo o ID do usuario' % len(arguments.update)
             else:
-                print self.crud.update(int(arguments.update[0]), {'owner': arguments.update[1]})
+                print self.crud.update(arguments.update[0], {'owner': arguments.update[1]})
 
         else:
             if self.find == []:
