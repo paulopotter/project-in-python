@@ -41,20 +41,20 @@ class CRUD(object):
         except IndexError:
             raise RecordNotFoundException
 
-    def create(self, value):
-        if value[0] == ' ' or len(value) == 1 or value[1] == ' ':
-            return 'Campo \'name\' ou \'location\' OBRIGATÓRIOS!'
+    def create(self, values):
+        if values[0] == ' ' or len(values) == 1 or values[1] == ' ':
+            return 'ERRO: Campo \'name\' ou \'location\' OBRIGATÓRIOS!'
 
-        elif len(value) > 6:
-            return 'Erro: A quantidade total de campos são 6, você informou %i' % len(value)
+        elif len(values) > 6:
+            return 'ERRO: A quantidade total de campos são 6, você informou %i' % len(values)
 
         else:
             records = DataConn().records()
             empty_fields = []
             meta_dada = DataConn().meta_dada
-            if len(value) < len(meta_dada):
-                for x in range(len(meta_dada) - len(value)):
-                    value.append(' ')
+            if len(values) < len(meta_dada):
+                for x in range(len(meta_dada) - len(values)):
+                    values.append(' ')
 
             for row in records:
                 if row[-1] == 1:
@@ -62,20 +62,21 @@ class CRUD(object):
 
             if not empty_fields:
                 formatted_records = []
-                for x in range(len(value)):
-                    formatted_records.append(self.format_for_necessary_size(value[x], meta_dada[x]['field_content_length']))
+                for x in range(len(values)):
+                    formatted_records.append(self.format_for_necessary_size(values[x], meta_dada[x]['field_content_length']))
+
                 field_number_created = DataConn().pack_in_file(formatted_records) + 1
 
             else:
                 formatted_records = {}
-                for x in range(len(value)):
-                    formatted_records[meta_dada[x]['field_name']] = self.format_for_necessary_size(value[x], meta_dada[x]['field_content_length'])
+                for x in range(len(values)):
+                    formatted_records[meta_dada[x]['field_name']] = self.format_for_necessary_size(values[x], meta_dada[x]['field_content_length'])
 
                 self.update_record(empty_fields[0], formatted_records)
 
                 field_number_created = empty_fields[0]
 
-            return 'Registro [%i] criado com sucesso!' % field_number_created
+            return field_number_created
 
     def format_for_necessary_size(self, value, size):
         if len(value) < size or value == '':
@@ -124,14 +125,14 @@ class CRUD(object):
                     if len(values[x]) <= size_field[x]['field_content_length']:
                         entry_type += 1
                     else:
-                        return 'Campo \'%(field)s\' suporta até \'%(size_field)s\' caracters, você usou \'%(len_value)s\'.' % {'field': size_field[x]['field_name'], 'size_field': size_field[x]['field_content_length'], 'len_value': len(values[x])}
+                        return 'ERRO: Campo \'%(field)s\' suporta até \'%(size_field)s\' caracters, você usou \'%(len_value)s\'.' % {'field': size_field[x]['field_name'], 'size_field': size_field[x]['field_content_length'], 'len_value': len(values[x])}
                 except:
-                    return 'Campo \'%s\' suporta apenas numeros' % size_field[x]['field_name']
+                    return 'ERRO: Campo \'%s\' suporta apenas numeros' % size_field[x]['field_name']
             else:
                 if len(values[x]) <= size_field[x]['field_content_length']:
                     entry_type += 1
                 else:
-                    return 'Campo \'%(field)s\' suporta até \'%(size_field)s\' caracters, você usou \'%(len_value)s\'.' % {'field': size_field[x]['field_name'], 'size_field': size_field[x]['field_content_length'], 'len_value': len(values[x])}
+                    return 'ERRO: Campo \'%(field)s\' suporta até \'%(size_field)s\' caracters, você usou \'%(len_value)s\'.' % {'field': size_field[x]['field_name'], 'size_field': size_field[x]['field_content_length'], 'len_value': len(values[x])}
 
         if entry_type == len(values):
             return False
