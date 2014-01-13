@@ -72,7 +72,7 @@ class CRUD(object):
                 for x in range(len(values)):
                     formatted_records[meta_dada[x]['field_name']] = self.format_for_necessary_size(values[x], meta_dada[x]['field_content_length'])
 
-                self.update_record(empty_fields[0], formatted_records)
+                self.update_any_record(empty_fields[0], formatted_records)
 
                 field_number_created = empty_fields[0]
 
@@ -104,14 +104,14 @@ class CRUD(object):
         try:
             recNo = int(recNo)
             if self.read(recNo)[-1] == 0:
-                self.update_record(recNo, data)
+                self.update_any_record(recNo, data)
                 return 'Registro [%i] atualizado com sucesso!' % recNo
             else:
                 raise RecordNotFoundException
         except:
             raise RecordNotFoundException
 
-    def update_record(self, recNo, data):
+    def update_any_record(self, recNo, data):
         meta_dada = DataConn().meta_dada
 
         for field_name in data.keys():
