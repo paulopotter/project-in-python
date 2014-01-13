@@ -136,10 +136,10 @@ class CRUD(object):
                     else:
                         float(values[x])
 
-                    if len(values[x]) <= size_field[x]['field_content_length']:
+                    if len(values[x]) <= size_field[x]['field_content_length'] - 1:
                         entry_type += 1
                     else:
-                        return 'ERRO: Campo \'%(field)s\' suporta até \'%(size_field)s\' caracters, você usou \'%(len_value)s\'.' % {'field': size_field[x]['field_name'], 'size_field': size_field[x]['field_content_length'], 'len_value': len(values[x])}
+                        return 'ERRO: Campo \'%(field)s\' suporta até \'%(size_field)s\' caracters, você usou \'%(len_value)s\'.' % {'field': size_field[x]['field_name'], 'size_field': size_field[x]['field_content_length'] - 1, 'len_value': len(values[x])}
                 except:
                     return 'ERRO: Campo \'%s\' suporta apenas numeros' % size_field[x]['field_name']
             else:
