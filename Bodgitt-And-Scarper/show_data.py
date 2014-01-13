@@ -36,9 +36,9 @@ class CommandTerminal(object):
 
         elif arguments.delete:
             try:
-                if int(arguments.delete[0]):
-                    for recNo in arguments.delete:
-                        print self.crud.delete(int(recNo))
+                int(arguments.delete[0])
+                for recNo in arguments.delete:
+                    print self.crud.delete(int(recNo))
             except:
                 value = ' '.join(str(x) for x in arguments.delete)
                 records = self.crud.find({'name': str(value), 'location': None, 'search_and': False})
