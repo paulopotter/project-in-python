@@ -12,7 +12,7 @@ class CommandTerminal(object):
         parser.add_argument('-l', '--location', action='store', dest='location', default=None, required=False, help='Procura e lista todos os registros com a \'location\' informada.')
         parser.add_argument('-a', '--and', action='store_true', dest='search_and', default=False, required=False, help='Se utilizado será feito a busca no \'name\' E \'location\'( \'name\' e \'location\' obrigatórios).')
         parser.add_argument('-c', '--create', action='store', nargs='+', dest='create', default=None, required=False, help='Cria um novo registro. Espaços serão considerados novos campos (para digitar um texto com espaço use aspas). \'name\' e \'location\' obrigatórios.')
-        parser.add_argument('-d', '--delete', action='store', dest='delete', nargs='+', default=None, required=False, help='Apaga registro com o ID passado (use espaços para apagar mais de um registro ao mesmo tempo).')
+        parser.add_argument('-d', '--delete', action='store', dest='delete', nargs='+', default=None, required=False, help='Apaga registro com o ID passado (use espaços para apagar mais de um registro ao mesmo tempo). Se passado um texto, apaga todas as ocorrências deste texto.')
 
         parser.add_argument('-u', '--update', action='store', dest='update', nargs='*', default=None, required=False, help='Adiciona o Id do usuario no registro informado, o primeiro valor é o campo a ser editado e o segundo o ID do usuario.(Ex.: 00 11)')
 
@@ -25,7 +25,12 @@ class CommandTerminal(object):
 
             verify_entry_type = self.crud.verify_entry_type(arguments.create)
             if not verify_entry_type:
-                print self.crud.create(arguments.create)
+                create = self.crud.create(arguments.create)
+                if type(create) == int:
+                    message = 'Registro [%i] criado com sucesso!' % create
+                else:
+                    message = create
+                print message
             else:
                 print verify_entry_type
 
@@ -45,7 +50,7 @@ class CommandTerminal(object):
 
         elif arguments.update:
             if len(arguments.update) != 2:
-                print 'Erro: São necessario 2 valores, você digitou %i. Lembrando: o primeiro valor é o campo a ser editado e o segundo o ID do usuario' % len(arguments.update)
+                print 'Erro: São necessario 2 valores, você digitou %i. \nLembrando: o primeiro valor é do registro a ser editado e o segundo o ID do usuario' % len(arguments.update)
             else:
                 print self.crud.update(int(arguments.update[0]), {'owner': arguments.update[1]})
 
