@@ -101,10 +101,14 @@ class CRUD(object):
             raise RecordNotFoundException
 
     def update(self, recNo, data):
-        if self.read(recNo)[-1] == 0:
-            self.update_record(recNo, data)
-            return 'Registro [%i] atualizado com sucesso!' % recNo
-        else:
+        try:
+            recNo = int(recNo)
+            if self.read(recNo)[-1] == 0:
+                self.update_record(recNo, data)
+                return 'Registro [%i] atualizado com sucesso!' % recNo
+            else:
+                raise RecordNotFoundException
+        except:
             raise RecordNotFoundException
 
     def update_record(self, recNo, data):
