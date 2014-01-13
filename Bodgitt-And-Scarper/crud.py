@@ -112,14 +112,26 @@ class CRUD(object):
                 if field_name in item.values():
                     DataConn().update_record(recNo, field_name, self.format_for_necessary_size(data[field_name], meta_dada[x]['field_content_length']))
 
-    def verify_entry_type(self, field, value):
+    def verify_entry_type(self, values):
         only_numbers = ['size', 'owner', 'rate']
+        size_field = DataConn().meta_dada
+        entry_type = 0
 
-        if field in only_numbers:
-            try:
-                int(value)
-                return False
-            except:
-                return 'Campo \'%s\' suporta apenas numeros' % field
-        else:
+        for x in range(len(values)):
+            if size_field[x]['field_name'] in only_numbers:
+                try:
+                    int(values[x])
+                    if len(values[x]) <= size_field[x]['field_content_length']:
+                        entry_type += 1
+                    else:
+                        return 'Campo \'%(field)s\' suporta até \'%(size_field)s\' caracters, você usou \'%(len_value)s\'.' % {'field': size_field[x]['field_name'], 'size_field': size_field[x]['field_content_length'], 'len_value': len(values[x])}
+                except:
+                    return 'Campo \'%s\' suporta apenas numeros' % size_field[x]['field_name']
+            else:
+                if len(values[x]) <= size_field[x]['field_content_length']:
+                    entry_type += 1
+                else:
+                    return 'Campo \'%(field)s\' suporta até \'%(size_field)s\' caracters, você usou \'%(len_value)s\'.' % {'field': size_field[x]['field_name'], 'size_field': size_field[x]['field_content_length'], 'len_value': len(values[x])}
+
+        if entry_type == len(values):
             return False
