@@ -91,9 +91,8 @@ class CRUD(object):
     def delete(self, recNo):
         try:
             records = DataConn().records()
-            if self.read(recNo)[-1] == 0:
+            if self.read(int(recNo))[-1] == 0:
                 DataConn().set_byte_flag_true(records[recNo][0])
-                return 'Registro [%i] apagado com sucesso!' % recNo
             else:
                 raise RecordNotFoundException
 
