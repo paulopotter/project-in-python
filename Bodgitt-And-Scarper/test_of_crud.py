@@ -54,6 +54,11 @@ class TestSearch(unittest.TestCase):
     def test_delete_error(self):
         self.assertRaises(RecordNotFoundException, self.crud.delete, 999)
 
+        create_record = self.crud.create(['Teste', 'Teste'])
+        self.crud.delete(create_record)
+
+        self.assertRaises(RecordNotFoundException, self.crud.delete, create_record)
+
     def test_update(self):
         record = ['Teste', 'Teste']
         create_record = self.crud.create(record)

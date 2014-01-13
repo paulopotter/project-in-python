@@ -91,8 +91,12 @@ class CRUD(object):
     def delete(self, recNo):
         try:
             records = DataConn().records()
-            DataConn().set_byte_flag_true(records[recNo][0])
-            return 'Registro [%i] apagado com sucesso!' % recNo
+            if self.read(recNo)[-1] == 0:
+                DataConn().set_byte_flag_true(records[recNo][0])
+                return 'Registro [%i] apagado com sucesso!' % recNo
+            else:
+                raise RecordNotFoundException
+
         except IndexError:
             raise RecordNotFoundException
 
@@ -134,5 +138,4 @@ class CRUD(object):
                 else:
                     return 'ERRO: Campo \'%(field)s\' suporta até \'%(size_field)s\' caracters, você usou \'%(len_value)s\'.' % {'field': size_field[x]['field_name'], 'size_field': size_field[x]['field_content_length'], 'len_value': len(values[x])}
 
-        if entry_type == len(values):
-            return False
+        return False
