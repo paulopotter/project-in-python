@@ -92,7 +92,7 @@ class CRUD(object):
         try:
             records = DataConn().records()
             if self.read(int(recNo))[-1] == 0:
-                DataConn().set_byte_flag_true(records[recNo][0])
+                DataConn().set_byte_flag_true(records[int(recNo)][0])
             else:
                 raise RecordNotFoundException
 
