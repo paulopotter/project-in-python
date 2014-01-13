@@ -97,6 +97,7 @@ class CRUD(object):
 
     def update(self, recNo, data):
         if self.read(recNo)[-1] == 0:
+            self.update_record(recNo, data)
             return 'Registro [%i] atualizado com sucesso!' % recNo
         else:
             raise RecordNotFoundException
@@ -120,3 +121,5 @@ class CRUD(object):
                 return False
             except:
                 return 'Campo \'%s\' suporta apenas numeros' % field
+        else:
+            return False
