@@ -14,7 +14,7 @@ class CommandTerminal(object):
         parser.add_argument('-c', '--create', action='store', nargs='+', dest='create', default=None, required=False, help='Cria um novo registro. Espaços serão considerados novos campos (para digitar um texto com espaço use aspas). \'name\' e \'location\' obrigatórios.')
         parser.add_argument('-d', '--delete', action='store_true', dest='delete', default=False, required=False, help='Apaga registro com o ID passado (use espaços para apagar mais de um registro ao mesmo tempo). Se passado um texto, apaga todas as ocorrências deste texto.')
 
-        parser.add_argument('-u', '--update', action='store', dest='update', nargs='*', default=None, required=False, help='Adiciona o Id do usuario no registro informado, o primeiro valor é o campo a ser editado e o segundo o ID do usuario.(Ex.: 00 11)')
+        parser.add_argument('-u', '--update', action='store_true', dest='update', default=False, required=False, help='Altera o \'owner\' do registro encontrado para o ID do usuario a ser informado.')
 
         arguments = parser.parse_args()
 
@@ -58,11 +58,34 @@ class CommandTerminal(object):
                     print 'Registro não encontrado.'
 
         elif arguments.update:
-            if len(arguments.update) != 2:
-                print 'ERRO: São necessario 2 valores, você digitou %i. \nLembrando: o primeiro valor é o NUMERO do registro a ser editado e o segundo o ID do usuario' % len(arguments.update)
+            if not arguments.name or not arguments.location:
+                print 'ERRO: \'name\' e/ou \'location\' necessário'
             else:
-                self.crud.update(arguments.update[0], {'owner': arguments.update[1]})
-                print 'Registro atualizado com sucesso!'
+                print self.draw_table(self.find)
+                if self.find:
+                    update_yes_not = raw_input('\nDeseja alterar todos os registros exibidos? \nDigite SIM para alterar e NAO para cancelar a alteração. ')
+
+                    if update_yes_not.lower() == 'sim' or update_yes_not.lower() == 's':
+                        owner_number_choice = raw_input('\nDigite o valor para alterar o \'owner\' dos registros exibidos ou digite APAGAR para remover todos os valores de \'owner\' dos registros encontrados. \n.Qualquer valor que não se encaixar nesses parametros irá cancelar a alteraçao. ')
+                        try:
+                            int(owner_number_choice)
+                            for x in self.find:
+                                self.crud.update(x, {'owner': owner_number_choice})
+                                print 'Registro atualizado com sucesso!'
+                        except:
+                            if owner_number_choice.lower() == 'apagar':
+                                for x in self.find:
+                                    self.crud.update(x, {'owner': ' '})
+                                print 'Registro atualizado com sucesso!'
+                            else:
+                                print 'Alteraçao foi Cancelada.'
+
+                    elif update_yes_not.lower() == 'nao' or update_yes_not.lower() == 'não' or update_yes_not.lower() == 'n':
+                        print 'A atualizaçao foi cancelada'
+                    else:
+                        print 'Opcão inválida, a alteraçao foi cancelada.'
+                else:
+                    print 'Registro não encontrado.'
 
         else:
             print self.draw_table(self.find)
