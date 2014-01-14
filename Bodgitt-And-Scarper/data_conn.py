@@ -97,7 +97,6 @@ class DataConn:
         open_file_to_write.write(file_header)
         for line in records:
             x = 0
-            print line
             if line[0] == name and line[1] == location:
                 open_file_to_write.write(struct.pack('?', True))  # byte flag
                 line.pop(-1)
