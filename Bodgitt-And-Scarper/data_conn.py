@@ -120,32 +120,31 @@ class DataConn:
         open_file_to_write = open(self.chosen_file, 'wb')
         open_file_to_write.write(file_header)
 
+        x = 0
         for line in records:
-            x = 0
-            if line[0] != recNo:
-                line.pop(0)
+            y = 0
+            if x != recNo:
                 open_file_to_write.write(struct.pack('?', line[-1]))  # byte flag
                 line.pop(-1)
                 for value in line:
                     value = str(value)
-                    if len(value) == self.meta_dada[x]['field_content_length']:
+                    if len(value) == self.meta_dada[y]['field_content_length']:
                         s = bytes(value)
-                        open_file_to_write.write(struct.pack(str(self.meta_dada[x]['field_content_length']) + "s", s))
-                    x += 1
+                        open_file_to_write.write(struct.pack(str(self.meta_dada[y]['field_content_length']) + "s", s))
+                    y += 1
             else:
-                line.pop(0)
                 open_file_to_write.write(struct.pack('?', False))  # byte flag
                 line.pop(-1)
                 for value in line:
                     value = str(value)
-                    if len(value) == self.meta_dada[x]['field_content_length']:
-                        if self.meta_dada[x]['field_name'] == field_name:
+                    if len(value) == self.meta_dada[y]['field_content_length']:
+                        if self.meta_dada[y]['field_name'] == field_name:
                             s = bytes(changed_value)
                         else:
                             s = bytes(value)
-                        open_file_to_write.write(struct.pack(str(self.meta_dada[x]['field_content_length']) + "s", s))
-
-                    x += 1
+                        open_file_to_write.write(struct.pack(str(self.meta_dada[y]['field_content_length']) + "s", s))
+                    y += 1
+            x += 1
 
         open_file_to_write.close()
 
