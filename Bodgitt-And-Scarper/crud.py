@@ -12,21 +12,21 @@ class CRUD(object):
         if criteria['search_and']:
             for line in range(len(records)):
                 if records[line][2].lower().find(criteria['location'].lower()) == 0 and records[line][1].lower().find(criteria['name'].lower()) == 0:
-                    positions.append(line)
+                    positions.append(line + 1)
         else:
             if criteria['name'] is None and criteria['location'] is None:
                 for line in range(len(records)):
-                    positions.append(line)
+                    positions.append(line + 1)
 
             if criteria['name'] is not None:
                 for line in range(len(records)):
                     if records[line][1].lower().find(criteria['name'].lower()) == 0:
-                        positions.append(line)
+                        positions.append(line + 1)
 
             if criteria['location'] is not None:
                 for line in range(len(records)):
                     if records[line][2].lower().find(criteria['location'].lower()) == 0:
-                        positions.append(line)
+                        positions.append(line + 1)
 
         line_records = list(set(positions))
         line_records.sort()
@@ -95,7 +95,7 @@ class CRUD(object):
     def delete(self, recNo):
         try:
             records = DataConn().records()
-            if self.read(int(recNo))[-1] == 0:
+            if self.read(int(recNo) - 1)[-1] == 0:
                 DataConn().set_byte_flag_true(records[int(recNo)][0])
             else:
                 raise RecordNotFoundException
