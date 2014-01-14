@@ -64,24 +64,15 @@ class DataConn:
     def records(self):
         number_of_records = self.number_of_records()
         records = []
-
         for x in range(number_of_records):
             byte_flag = self.extract_by_byte(1)
-            new_records = [x]
+            new_records = []
             for field in self.meta_dada:
                 new_records.append(self.extract_by_string(field['field_content_length']))
 
             new_records.append(byte_flag)
 
-            if byte_flag == 1:
-                remove_data = x
-            else:
-                remove_data = False
-
             records.append(new_records)
-
-        if remove_data:
-            records.pop(remove_data)
 
         return records
 
@@ -89,42 +80,37 @@ class DataConn:
         pointer_position = self.open_file.tell()
         open_file = open(self.chosen_file, 'ab')
         open_file.seek(pointer_position)
-        x = -1
+        x = 0
         open_file.write(struct.pack('?', False))  # byte flag
         for value in values:
-            x += 1
             if len(value) == self.meta_dada[x]['field_content_length']:
                 s = bytes(value)
                 open_file.write(struct.pack(str(self.meta_dada[x]['field_content_length']) + "s", s))
+            x += 1
 
-        return self.number_of_records() - 1
+        return self.number_of_records()
 
-    def set_byte_flag_true(self, recNo):
+    def set_byte_flag_true(self, name, location):
         records = self.records()
         file_header = open(self.chosen_file, 'rb').read(self.pointer_position)
         open_file_to_write = open(self.chosen_file, 'wb')
         open_file_to_write.write(file_header)
         for line in records:
             x = 0
-            if line[0] != recNo:
-                open_file_to_write.write(struct.pack('?', line[-1]))  # byte flag
-                line.pop(-1)
-                line.pop(0)  # numeraçao criada no records
-                for value in line:
-                    value = str(value)
-                    if len(value) == self.meta_dada[x]['field_content_length']:
-                        s = bytes(value)
-                        open_file_to_write.write(struct.pack(str(self.meta_dada[x]['field_content_length']) + "s", s))
-                    x += 1
-            else:
+            print line
+            if line[0] == name and line[1] == location:
                 open_file_to_write.write(struct.pack('?', True))  # byte flag
                 line.pop(-1)
-                line.pop(0)  # numeraçao criada no records
                 for value in line:
-                    value = str(value)
-                    if len(value) == self.meta_dada[x]['field_content_length']:
-                        s = bytes(value)
-                        open_file_to_write.write(struct.pack(str(self.meta_dada[x]['field_content_length']) + "s", s))
+                    s = bytes(value)
+                    open_file_to_write.write(struct.pack(str(self.meta_dada[x]['field_content_length']) + "s", s))
+                    x += 1
+            else:
+                open_file_to_write.write(struct.pack('?', line[-1]))  # byte flag
+                line.pop(-1)
+                for value in line:
+                    s = bytes(value)
+                    open_file_to_write.write(struct.pack(str(self.meta_dada[x]['field_content_length']) + "s", s))
                     x += 1
 
         open_file_to_write.close()
