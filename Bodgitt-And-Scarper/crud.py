@@ -97,9 +97,6 @@ class CRUD(object):
             records = DataConn().records()
             if self.read(int(recNo))[-1] == 0:
                 DataConn().set_byte_flag_true(records[int(recNo)][0], records[int(recNo)][1])
-            else:
-                raise RecordNotFoundException
-
         except IndexError:
             raise RecordNotFoundException
 
