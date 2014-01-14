@@ -39,7 +39,6 @@ class CommandTerminal(object):
                 print 'ERRO: \'name\' e/ou \'location\' necessário'
             else:
                 print self.draw_table(self.find)
-
                 if self.find:
                     delete_yes_not = raw_input('\nDeseja deletar todos os registros exibidos? \nDigite SIM para apagar e NAO para cancelar a exclusão. ')
 
@@ -49,12 +48,14 @@ class CommandTerminal(object):
                                 self.crud.delete(recNo)
                                 excluded_records += 1
 
-                            print '%i registro(s) apagado(s) com sucesso!' % excluded_records
+                            print 'Registro(s) apagado(s) com sucesso!'
 
                     elif delete_yes_not.lower() == 'nao' or delete_yes_not.lower() == 'não' or delete_yes_not.lower() == 'n':
                         print 'A exclusão foi cancelada'
                     else:
                         print 'Opcão inválida, a exclusão foi cancelada.'
+                else:
+                    print 'Registro não encontrado.'
 
         elif arguments.update:
             if len(arguments.update) != 2:
