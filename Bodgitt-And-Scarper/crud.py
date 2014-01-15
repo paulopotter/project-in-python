@@ -14,16 +14,16 @@ class CRUD(object):
                 if records[line][1].lower().find(criteria['location'].lower()) == 0 and records[line][0].lower().find(criteria['name'].lower()) == 0:
                     positions.append(line)
         else:
-            if criteria['name'] is None and criteria['location'] is None:
+            if criteria['name'] == '' and criteria['location'] == '':
                 for line in range(len(records)):
                     positions.append(line)
 
-            if criteria['name'] is not None:
+            if criteria['name'] != '':
                 for line in range(len(records)):
                     if records[line][0].lower().find(criteria['name'].lower()) == 0:
                         positions.append(line)
 
-            if criteria['location'] is not None:
+            if criteria['location'] != '':
                 for line in range(len(records)):
                     if records[line][1].lower().find(criteria['location'].lower()) == 0:
                         positions.append(line)
