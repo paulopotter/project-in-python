@@ -90,7 +90,7 @@ class DataConn:
 
         return self.number_of_records()
 
-    def set_byte_flag_true(self, name, location):
+    def set_byte_flag_true_and_clear_values(self, name, location):
         records = self.records()
         file_header = open(self.chosen_file, 'rb').read(self.pointer_position)
         open_file_to_write = open(self.chosen_file, 'wb')
@@ -101,7 +101,7 @@ class DataConn:
                 open_file_to_write.write(struct.pack('?', True))  # byte flag
                 line.pop(-1)
                 for value in line:
-                    s = bytes(value)
+                    s = bytes(' ' * (self.meta_dada[x]['field_content_length'] - 1))
                     open_file_to_write.write(struct.pack(str(self.meta_dada[x]['field_content_length']) + "s", s))
                     x += 1
             else:
