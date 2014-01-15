@@ -16,19 +16,19 @@ class CommandTerminal(object):
 
         parser.add_argument('-d', '--delete', action='store_true', dest='delete', default=False, required=False, help='Apaga registro com o ID passado (use espaços para apagar mais de um registro ao mesmo tempo). Se passado um texto, apaga todas as ocorrências deste texto.')
 
-        parser.add_argument('-u', '--update', action='store_true', dest='update', default=False, required=False, help='Altera o \'owner\' do registro encontrado para o ID do usuario a ser informado.')
+        parser.add_argument('-u', '--update', action='store', dest='update', default=None, required=False, help='Altera o \'owner\' do registro encontrado para o ID do usuario a ser informado.')
 
         parser.add_argument('-p', '--specialties', action='store', nargs='+', dest='specialties', default='', required=False, help='.')
-        parser.add_argument('-s', '--size', action='store', nargs='+', dest='size', default='', required=False, help='.')
-        parser.add_argument('-r', '--rate', action='store', nargs='+', dest='rate', default='', required=False, help='.')
+        parser.add_argument('-s', '--size', action='store', dest='size', default='', required=False, help='.')
+        parser.add_argument('-r', '--rate', action='store', dest='rate', default='', required=False, help='.')
 
         arguments = parser.parse_args()
 
         self.name = ' '.join(arguments.name)
         self.location = ' '.join(arguments.location)
         self.specialties = ' '.join(arguments.specialties)
-        self.size = ' '.join(arguments.size)
-        self.rate = ' '.join(arguments.rate)
+        self.size = arguments.size
+        self.rate = arguments.rate
 
         self.crud = crud.CRUD()
         self.find = self.crud.find({'name': self.name, 'location': self.location, 'search_and': arguments.search_and})
@@ -37,16 +37,16 @@ class CommandTerminal(object):
             if not self.name or not self.location:
                 print 'ERRO: \'name\' e/ou \'location\' necessário'
             else:
-                verify_entry_type = self.crud.verify_entry_type([self.name, self.location, self.specialties, self.size, self.rate])
-            if not verify_entry_type:
+                # verify_entry_type = self.crud.verify_entry_type([self.name, self.location, self.specialties, self.size, self.rate])
+            # if not verify_entry_type:
                 create = self.crud.create([self.name, self.location, self.specialties, self.size, self.rate])
                 if type(create) == int:
                     message = 'Registro [%i] criado com sucesso!' % create
                 else:
                     message = create
                 print message
-            else:
-                print verify_entry_type
+            # else:
+            #     print verify_entry_type
 
         elif arguments.delete:
             if not self.name or not self.location:
@@ -76,30 +76,27 @@ class CommandTerminal(object):
                 print 'ERRO: \'name\' e/ou \'location\' necessário'
             else:
                 print self.draw_table(self.find)
+
                 if self.find:
                     update_yes_not = raw_input('\nDeseja alterar todos os registros exibidos? \nDigite SIM para alterar e NAO para cancelar a alteração. ')
 
                     if update_yes_not.lower() == 'sim' or update_yes_not.lower() == 's':
-                        owner_number_choice = raw_input('\nDigite o valor para alterar o \'owner\' dos registros exibidos ou digite APAGAR para remover todos os valores de \'owner\' dos registros encontrados. \n.Qualquer valor que não se encaixar nesses parametros irá cancelar a alteraçao. ')
                         try:
-                            int(owner_number_choice)
+                            int(arguments.update)
                             for x in self.find:
-                                self.crud.update(x, {'owner': owner_number_choice})
-                                print 'Registro atualizado com sucesso!'
+                                self.crud.update(x, {'owner': arguments.update})
+                                mensage = 'Registro atualizado com sucesso!'
                         except:
-                            if owner_number_choice.lower() == 'apagar':
+                            if arguments.update.lower() == 'apagar':
                                 for x in self.find:
                                     self.crud.update(x, {'owner': ' '})
-                                print 'Registro atualizado com sucesso!'
+                                mensage = 'Registro atualizado com sucesso!'
                             else:
-                                print 'Alteraçao foi Cancelada.'
-
-                    elif update_yes_not.lower() == 'nao' or update_yes_not.lower() == 'não' or update_yes_not.lower() == 'n':
-                        print 'A atualizaçao foi cancelada'
+                                mensage = 'Alteraçao foi Cancelada. Digite apenas numeros ou apagar.'
                     else:
-                        print 'Opcão inválida, a alteraçao foi cancelada.'
-                else:
-                    print 'Registro não encontrado.'
+                        mensage = 'Alteraçao foi Cancelada'
+
+                    print '\n' + mensage
 
         else:
             print self.draw_table(self.find)
