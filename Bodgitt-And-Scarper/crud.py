@@ -45,9 +45,6 @@ class CRUD(object):
         if values[0].strip() == '' or len(values) == 1 or values[1].strip() == '':
             return 'ERRO: Campo \'name\' ou \'location\' OBRIGATÓRIOS!'
 
-        elif len(values) > 6:
-            return 'ERRO: A quantidade total de campos são 6, você informou %i' % len(values)
-
         else:
             records = DataConn().records()
             empty_fields = []
