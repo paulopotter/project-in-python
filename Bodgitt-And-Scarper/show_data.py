@@ -8,24 +8,38 @@ class CommandTerminal(object):
 
     def __init__(self):
         parser = argparse.ArgumentParser(description='File search for dbSchema')
-        parser.add_argument('-n', '--name', action='store', dest='name', default=None, required=False, help='Procura e lista todos os registros com o \'name\' informada.')
-        parser.add_argument('-l', '--location', action='store', dest='location', default=None, required=False, help='Procura e lista todos os registros com a \'location\' informada.')
+        parser.add_argument('-n', '--name', action='store', nargs='+', dest='name', default='', required=False, help='Procura e lista todos os registros com o \'name\' informada.')
+        parser.add_argument('-l', '--location', action='store', nargs='+', dest='location', default='', required=False, help='Procura e lista todos os registros com a \'location\' informada.')
         parser.add_argument('-a', '--and', action='store_true', dest='search_and', default=False, required=False, help='Se utilizado será feito a busca no \'name\' E \'location\'( \'name\' e \'location\' obrigatórios).')
-        parser.add_argument('-c', '--create', action='store', nargs='+', dest='create', default=None, required=False, help='Cria um novo registro. Espaços serão considerados novos campos (para digitar um texto com espaço use aspas). \'name\' e \'location\' obrigatórios.')
+
+        parser.add_argument('-c', '--create', action='store_true', dest='create', default=None, required=False, help='Cria um novo registro. Espaços serão considerados novos campos (para digitar um texto com espaço use aspas). \'name\' e \'location\' obrigatórios.')
+
         parser.add_argument('-d', '--delete', action='store_true', dest='delete', default=False, required=False, help='Apaga registro com o ID passado (use espaços para apagar mais de um registro ao mesmo tempo). Se passado um texto, apaga todas as ocorrências deste texto.')
 
         parser.add_argument('-u', '--update', action='store_true', dest='update', default=False, required=False, help='Altera o \'owner\' do registro encontrado para o ID do usuario a ser informado.')
 
+        parser.add_argument('-p', '--specialties', action='store', nargs='+', dest='specialties', default='', required=False, help='.')
+        parser.add_argument('-s', '--size', action='store', nargs='+', dest='size', default='', required=False, help='.')
+        parser.add_argument('-r', '--rate', action='store', nargs='+', dest='rate', default='', required=False, help='.')
+
         arguments = parser.parse_args()
 
+        self.name = ' '.join(arguments.name)
+        self.location = ' '.join(arguments.location)
+        self.specialties = ' '.join(arguments.specialties)
+        self.size = ' '.join(arguments.size)
+        self.rate = ' '.join(arguments.rate)
+
         self.crud = crud.CRUD()
-        self.find = self.crud.find({'name': arguments.name, 'location': arguments.location, 'search_and': arguments.search_and})
+        self.find = self.crud.find({'name': self.name, 'location': self.location, 'search_and': arguments.search_and})
 
         if arguments.create:
-
-            verify_entry_type = self.crud.verify_entry_type(arguments.create)
+            if not self.name or not self.location:
+                print 'ERRO: \'name\' e/ou \'location\' necessário'
+            else:
+                verify_entry_type = self.crud.verify_entry_type([self.name, self.location, self.specialties, self.size, self.rate])
             if not verify_entry_type:
-                create = self.crud.create(arguments.create)
+                create = self.crud.create([self.name, self.location, self.specialties, self.size, self.rate])
                 if type(create) == int:
                     message = 'Registro [%i] criado com sucesso!' % create
                 else:
@@ -35,7 +49,7 @@ class CommandTerminal(object):
                 print verify_entry_type
 
         elif arguments.delete:
-            if not arguments.name or not arguments.location:
+            if not self.name or not self.location:
                 print 'ERRO: \'name\' e/ou \'location\' necessário'
             else:
                 print self.draw_table(self.find)
@@ -58,7 +72,7 @@ class CommandTerminal(object):
                     print 'Registro não encontrado.'
 
         elif arguments.update:
-            if not arguments.name or not arguments.location:
+            if not self.name or not self.location:
                 print 'ERRO: \'name\' e/ou \'location\' necessário'
             else:
                 print self.draw_table(self.find)
