@@ -1,6 +1,7 @@
 # coding:utf-8
 from data_conn import DataConn
 from my_exceptions import RecordNotFoundException
+from my_exceptions import DuplicateKeyException
 
 
 class CRUD(object):
@@ -42,10 +43,9 @@ class CRUD(object):
             raise RecordNotFoundException
 
     def create(self, values):
-        if values[0].strip() == '' or len(values) == 1 or values[1].strip() == '':
-            return 'ERRO: Campo \'name\' ou \'location\' OBRIGATÓRIOS!'
+        find = self.find({'name': values[0], 'location': values[1], 'search_and': True})
 
-        else:
+        if not find:
             records = DataConn().records()
             empty_fields = []
             meta_dada = DataConn().meta_dada
@@ -53,24 +53,20 @@ class CRUD(object):
                 for x in range(len(meta_dada) - len(values)):
                     values.append(' ')
 
-            for row in records:
+            for line, row in enumerate(records):
                 if row[-1] == 1:
-                    empty_fields.append(row[0])
+                    empty_fields.append(line)
 
             if not empty_fields:
                 formatted_records = []
                 for x in range(len(values)):
-                    if meta_dada[x]['field_name'] == 'rate' and values[x].strip() != '':
-                        values[x] = '$' + values[x]
                     formatted_records.append(self.format_for_necessary_size(values[x], meta_dada[x]['field_content_length']))
 
-                field_number_created = DataConn().pack_in_file(formatted_records) + 1
+                field_number_created = DataConn().pack_in_file(formatted_records)
 
             else:
                 formatted_records = {}
                 for x in range(len(values)):
-                    if meta_dada[x]['field_name'] == 'rate' and values[x].strip() != '':
-                        values[x] = '$' + values[x]
                     formatted_records[meta_dada[x]['field_name']] = self.format_for_necessary_size(values[x], meta_dada[x]['field_content_length'])
 
                 self.update_any_record(empty_fields[0], formatted_records)
@@ -78,6 +74,8 @@ class CRUD(object):
                 field_number_created = empty_fields[0]
 
             return field_number_created
+        else:
+            raise DuplicateKeyException
 
     def format_for_necessary_size(self, value, size):
         if len(value) < size or value == '':
@@ -93,7 +91,7 @@ class CRUD(object):
         try:
             records = DataConn().records()
             if self.read(int(recNo))[-1] == 0:
-                DataConn().set_byte_flag_true(records[int(recNo)][0], records[int(recNo)][1])
+                DataConn().set_byte_flag_true_and_clear_values(records[int(recNo)][0], records[int(recNo)][1])
         except IndexError:
             raise RecordNotFoundException
 
@@ -118,7 +116,7 @@ class CRUD(object):
                     DataConn().update_record(recNo, field_name, self.format_for_necessary_size(data[field_name], meta_dada[x]['field_content_length']))
 
     def verify_entry_type(self, values):
-        only_numbers = ['size', 'owner', 'rate']
+        only_numbers = ['size', 'owner']
         size_field = DataConn().meta_dada
         entry_type = 0
 
