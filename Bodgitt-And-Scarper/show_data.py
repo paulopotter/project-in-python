@@ -12,15 +12,15 @@ class CommandTerminal(object):
         parser.add_argument('-l', '--location', action='store', nargs='+', dest='location', default='', required=False, help='Procura e lista todos os registros com a \'location\' informada.')
         parser.add_argument('-a', '--and', action='store_true', dest='search_and', default=False, required=False, help='Se utilizado será feito a busca no \'name\' E \'location\'( \'name\' e \'location\' obrigatórios).')
 
-        parser.add_argument('-c', '--create', action='store_true', dest='create', default=None, required=False, help='Cria um novo registro. Espaços serão considerados novos campos (para digitar um texto com espaço use aspas). \'name\' e \'location\' obrigatórios.')
+        parser.add_argument('-c', '--create', action='store_true', dest='create', default=None, required=False, help='Cria um novo registro.  \'name\' e \'location\' obrigatórios.')
 
-        parser.add_argument('-d', '--delete', action='store_true', dest='delete', default=False, required=False, help='Apaga registro com o ID passado (use espaços para apagar mais de um registro ao mesmo tempo). Se passado um texto, apaga todas as ocorrências deste texto.')
+        parser.add_argument('-d', '--delete', action='store_true', dest='delete', default=False, required=False, help='Apaga registro com o \'name\' e \'location\' passado.(\'name\' e \'location\' obrigatórios.)')
 
-        parser.add_argument('-u', '--update', action='store', dest='update', default=None, required=False, help='Altera o \'owner\' do registro encontrado para o ID do usuario a ser informado.')
+        parser.add_argument('-u', '--update', action='store', dest='update', default=None, required=False, help='Altera o \'owner\' do registro encontrado para o  do usuario informado. Se passar APAGAR o \'owner\' do registro encontrado será limpo. (\'name\' e \'location\' obrigatórios.)')
 
-        parser.add_argument('-p', '--specialties', action='store', nargs='+', dest='specialties', default='', required=False, help='.')
-        parser.add_argument('-s', '--size', action='store', dest='size', default='', required=False, help='.')
-        parser.add_argument('-r', '--rate', action='store', dest='rate', default='', required=False, help='.')
+        parser.add_argument('-p', '--specialties', action='store', nargs='+', dest='specialties', default='', required=False, help='Cria a informaçao passada na posiçao specialties. Utilizado somente quando for criar um registro novo.')
+        parser.add_argument('-s', '--size', action='store', dest='size', default='', required=False, help='Cria a informaçao passada na posiçao size. Utilizado somente quando for criar um registro novo.')
+        parser.add_argument('-r', '--rate', action='store', dest='rate', default='', required=False, help='Cria a informaçao passada na posiçao rate. Utilizado somente quando for criar um registro novo.')
 
         arguments = parser.parse_args()
 
