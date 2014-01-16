@@ -37,16 +37,16 @@ class CommandTerminal(object):
             if not self.name or not self.location:
                 print 'ERRO: \'name\' e/ou \'location\' necessário'
             else:
-                # verify_entry_type = self.crud.verify_entry_type([self.name, self.location, self.specialties, self.size, self.rate])
-            # if not verify_entry_type:
+                verify_entry_type = self.crud.verify_entry_type([self.name, self.location, self.specialties, self.size, self.rate])
+            if not verify_entry_type:
                 create = self.crud.create([self.name, self.location, self.specialties, self.size, self.rate])
                 if type(create) == int:
                     message = 'Registro [%i] criado com sucesso!' % create
                 else:
                     message = create
                 print message
-            # else:
-            #     print verify_entry_type
+            else:
+                print verify_entry_type
 
         elif arguments.delete:
             if not self.name or not self.location:
