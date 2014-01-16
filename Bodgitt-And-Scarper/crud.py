@@ -61,7 +61,7 @@ class CRUD(object):
                 formatted_records = []
                 for x in range(len(values)):
                     if meta_dada[x]['field_name'] == 'rate':
-                        if values[x][0] != '$':
+                        if values[x][0] != '$' and values[x] != ' ':
                             values[x] = '$' + str(values[x])
                     formatted_records.append(self.format_for_necessary_size(values[x], meta_dada[x]['field_content_length']))
 
@@ -70,6 +70,9 @@ class CRUD(object):
             else:
                 formatted_records = {}
                 for x in range(len(values)):
+                    if meta_dada[x]['field_name'] == 'rate':
+                        if values[x][0] != '$' and values[x] != ' ':
+                            values[x] = '$' + str(values[x])
                     formatted_records[meta_dada[x]['field_name']] = self.format_for_necessary_size(values[x], meta_dada[x]['field_content_length'])
 
                 self.update_any_record(empty_fields[0], formatted_records)
