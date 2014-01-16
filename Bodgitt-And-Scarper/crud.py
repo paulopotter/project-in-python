@@ -1,5 +1,5 @@
-from data_conn import DataConn
 # coding:utf-8
+from data_conn import DataConn
 from my_exceptions import RecordNotFoundException
 from my_exceptions import DuplicateKeyException
 
