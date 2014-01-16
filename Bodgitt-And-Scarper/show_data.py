@@ -50,27 +50,24 @@ class CommandTerminal(object):
                 print verify_entry_type
 
         elif arguments.delete:
-            if not self.name or not self.location:
-                print 'ERRO: \'name\' e/ou \'location\' necessário'
-            else:
-                print self.draw_table(self.find)
-                if self.find:
-                    delete_yes_not = raw_input('\nDeseja deletar todos os registros exibidos? \nDigite SIM para apagar e NAO para cancelar a exclusão. ')
+            print self.draw_table(self.find)
+            if self.find:
+                delete_yes_not = raw_input('\nDeseja deletar todos os registros exibidos? \nDigite SIM para apagar e NAO para cancelar a exclusão. ')
 
-                    if delete_yes_not.lower() == 'sim' or delete_yes_not.lower() == 's':
-                            excluded_records = 0
-                            for recNo in self.find:
-                                self.crud.delete(recNo)
-                                excluded_records += 1
+                if delete_yes_not.lower() == 'sim' or delete_yes_not.lower() == 's':
+                        excluded_records = 0
+                        for recNo in self.find:
+                            self.crud.delete(recNo)
+                            excluded_records += 1
 
-                            print 'Registro(s) apagado(s) com sucesso!'
+                        print 'Registro(s) apagado(s) com sucesso!'
 
-                    elif delete_yes_not.lower() == 'nao' or delete_yes_not.lower() == 'não' or delete_yes_not.lower() == 'n':
-                        print 'A exclusão foi cancelada'
-                    else:
-                        print 'Opcão inválida, a exclusão foi cancelada.'
+                elif delete_yes_not.lower() == 'nao' or delete_yes_not.lower() == 'não' or delete_yes_not.lower() == 'n':
+                    print 'A exclusão foi cancelada'
                 else:
-                    print 'Registro não encontrado.'
+                    print 'Opcão inválida, a exclusão foi cancelada.'
+            else:
+                print 'Registro não encontrado.'
 
         elif arguments.update:
             if not self.name or not self.location:
