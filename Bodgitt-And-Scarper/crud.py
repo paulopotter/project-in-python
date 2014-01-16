@@ -1,5 +1,5 @@
-# coding:utf-8
 from data_conn import DataConn
+# coding:utf-8
 from my_exceptions import RecordNotFoundException
 from my_exceptions import DuplicateKeyException
 
@@ -92,6 +92,8 @@ class CRUD(object):
             records = DataConn().records()
             if self.read(int(recNo))[-1] == 0:
                 DataConn().set_byte_flag_true_and_clear_values(records[int(recNo)][0], records[int(recNo)][1])
+            else:
+                raise RecordNotFoundException
         except IndexError:
             raise RecordNotFoundException
 
