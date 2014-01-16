@@ -32,75 +32,66 @@ class CommandTerminal(object):
         self.rate = arguments.rate
 
         self.crud = crud.CRUD()
-        self.find = self.crud.find({'name': self.name, 'location': self.location, 'search_and': arguments.search_and})
+        self.matches = self.crud.find({'name': self.name, 'location': self.location, 'search_and': arguments.search_and})
 
         if arguments.create:
-            if not self.name or not self.location:
-                print 'ERRO: \'name\' e/ou \'location\' necessário'
-            else:
-                verify_entry_type = self.crud.verify_entry_type([self.name, self.location, self.specialties, self.size, self.rate])
+            self.check_required_parameters
+            verify_entry_type = self.crud.verify_entry_type([self.name, self.location, self.specialties, self.size, self.rate])
             if not verify_entry_type:
                 create = self.crud.create([self.name, self.location, self.specialties, self.size, self.rate])
-                if type(create) == int:
-                    message = 'Registro [%i] criado com sucesso!' % create
-                else:
-                    message = create
-                print message
+                print 'Registro [%i] criado com sucesso!' % create
             else:
                 print verify_entry_type
 
         elif arguments.delete:
-            print self.draw_table(self.find)
-            if self.find:
+            print self.draw_table(self.matches)
+
+            if self.matches:
                 delete_yes_not = raw_input('\nDeseja deletar todos os registros exibidos? \nDigite SIM para apagar e NAO para cancelar a exclusão. ')
 
-                if delete_yes_not.lower() == 'sim' or delete_yes_not.lower() == 's':
-                        excluded_records = 0
-                        for recNo in self.find:
-                            self.crud.delete(recNo)
-                            excluded_records += 1
+                if delete_yes_not.lower() in ['sim', 's']:
+                    for recNo in self.matches:
+                        self.crud.delete(recNo)
 
-                        print 'Registro(s) apagado(s) com sucesso!'
+                    print 'Registro(s) apagado(s) com sucesso!'
 
-                elif delete_yes_not.lower() == 'nao' or delete_yes_not.lower() == 'não' or delete_yes_not.lower() == 'n':
+                elif delete_yes_not.lower() in ['nao', 'não', 'n']:
                     print 'A exclusão foi cancelada'
+
                 else:
                     print 'Opcão inválida, a exclusão foi cancelada.'
-            else:
-                print 'Registro não encontrado.'
 
         elif arguments.update:
-            if not self.name or not self.location:
-                print 'ERRO: \'name\' e/ou \'location\' necessário'
-            else:
-                print self.draw_table(self.find)
+            self.check_required_parameters(self.name, self.location)
 
-                if self.find:
-                    update_yes_not = raw_input('\nDeseja alterar todos os registros exibidos? \nDigite SIM para alterar e NAO para cancelar a alteração. ')
+            print self.draw_table(self.matches)
 
-                    if update_yes_not.lower() == 'sim' or update_yes_not.lower() == 's':
-                        try:
-                            int(arguments.update)
-                            for x in self.find:
-                                self.crud.update(x, {'owner': arguments.update})
-                                mensage = 'Registro atualizado com sucesso!'
-                        except:
-                            if arguments.update.lower() == 'apagar':
-                                for x in self.find:
-                                    self.crud.update(x, {'owner': ' '})
-                                mensage = 'Registro atualizado com sucesso!'
-                            else:
-                                mensage = 'Alteraçao foi Cancelada. Digite apenas numeros ou apagar.'
-                    else:
-                        mensage = 'Alteraçao foi Cancelada'
+            if self.matches:
+                update_yes_not = raw_input('\nDeseja alterar todos os registros exibidos? \nDigite SIM para alterar e NAO para cancelar a alteração. ')
 
-                    print '\n' + mensage
+                if update_yes_not.lower() in ['sim', 's']:
+                    try:
+                        int(arguments.update)
+                        for x in self.matches:
+                            self.crud.update(x, {'owner': arguments.update})
+                            mensage = 'Registro atualizado com sucesso!'
+                    except:
+                        if arguments.update.lower() == 'apagar':
+                            for x in self.matches:
+                                self.crud.update(x, {'owner': ' '})
+                            mensage = 'Registro atualizado com sucesso!'
+                        else:
+                            mensage = 'Alteraçao foi Cancelada. Digite apenas numeros ou apagar.'
+                else:
+                    mensage = 'Alteraçao foi Cancelada'
+
+                print '\n' + mensage
 
         else:
-            print self.draw_table(self.find)
+            print self.draw_table(self.matches)
 
-    def draw_table(self, find):
-        if find == []:
+    def draw_table(self, matches):
+        if not matches:
             return 'Registro informado não encontrado.'
 
         else:
@@ -109,8 +100,8 @@ class CommandTerminal(object):
 
             text_table.header(header)
             x = 1
-            for line_records in range(len(find)):
-                row = self.crud.read(find[line_records])
+            for line_records in range(len(matches)):
+                row = self.crud.read(matches[line_records])
 
                 if row[-1] != 1:  # Se o byte flag for false, exibe
                     row.pop(-1)  # Remove a exibiçao do byte flag
@@ -121,9 +112,16 @@ class CommandTerminal(object):
             text_table.set_cols_align(['c', 'l', 'l', 'l', 'c', 'l', 'l'])
             return text_table.draw()
 
+    def check_required_parameters(self, *parameters):
+        for parameter in parameters:
+            if not parameter:
+                raise Exception('ERRO: \'name\' e/ou \'location\' necessário')
+
+        return True
+
 
 if __name__ == '__main__':
     try:
         CommandTerminal()
     except Exception as e:
-        print 'Erro:', e
+        print e
