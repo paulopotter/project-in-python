@@ -60,6 +60,9 @@ class CRUD(object):
             if not empty_fields:
                 formatted_records = []
                 for x in range(len(values)):
+                    if meta_dada[x]['field_name'] == 'rate':
+                        if values[x][0] != '$':
+                            values[x] = '$' + str(values[x])
                     formatted_records.append(self.format_for_necessary_size(values[x], meta_dada[x]['field_content_length']))
 
                 field_number_created = DataConn().pack_in_file(formatted_records)
@@ -123,17 +126,34 @@ class CRUD(object):
         for x in range(len(values)):
             if size_field[x]['field_name'] in only_numbers:
                 try:
-                    if size_field[x]['field_name'] != 'rate':
+                    if values[x] != '':
                         int(values[x])
+                        if len(values[x]) <= size_field[x]['field_content_length']:
+                            entry_type += 1
+                        else:
+                            return 'ERRO: Campo \'%(field)s\' suporta até \'%(size_field)s\' caracters, você usou \'%(len_value)s\'.' % {'field': size_field[x]['field_name'], 'size_field': size_field[x]['field_content_length'] - 1, 'len_value': len(values[x])}
                     else:
-                        float(values[x])
-
-                    if len(values[x]) <= size_field[x]['field_content_length'] - 1:
                         entry_type += 1
-                    else:
-                        return 'ERRO: Campo \'%(field)s\' suporta até \'%(size_field)s\' caracters, você usou \'%(len_value)s\'.' % {'field': size_field[x]['field_name'], 'size_field': size_field[x]['field_content_length'] - 1, 'len_value': len(values[x])}
+
                 except:
                     return 'ERRO: Campo \'%s\' suporta apenas numeros' % size_field[x]['field_name']
+            elif size_field[x]['field_name'] == 'rate':
+                if values[x] != '':
+                    if len(values[x]) <= size_field[x]['field_content_length']:
+                        try:
+                            if values[x][0] == '$':
+                                float(values[x][1:])
+                                entry_type += 1
+                            else:
+                                float(values[x])
+                                entry_type += 1
+                        except:
+                            return 'O campo rate aceita apenas numero, ponto e $.'
+
+                    else:
+                        return 'ERRO: Campo \'%(field)s\' suporta até \'%(size_field)s\' caracters, você usou \'%(len_value)s\'.' % {'field': size_field[x]['field_name'], 'size_field': size_field[x]['field_content_length'], 'len_value': len(values[x])}
+                else:
+                    entry_type += 1
             else:
                 if len(values[x]) <= size_field[x]['field_content_length']:
                     entry_type += 1
