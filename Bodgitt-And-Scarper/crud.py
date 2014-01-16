@@ -111,11 +111,9 @@ class CRUD(object):
         meta_dada = DataConn().meta_dada
 
         for field_name in data.keys():
-            x = -1
-            for item in meta_dada:
-                x += 1
+            for line, item in enumerate(meta_dada):
                 if field_name in item.values():
-                    DataConn().update_record(recNo, field_name, self.format_for_necessary_size(data[field_name], meta_dada[x]['field_content_length']))
+                    DataConn().update_record(recNo, field_name, self.format_for_necessary_size(data[field_name], meta_dada[line]['field_content_length']))
 
     def verify_entry_type(self, values):
         only_numbers = ['size', 'owner']
