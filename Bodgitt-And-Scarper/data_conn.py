@@ -98,7 +98,7 @@ class DataConn:
                 open_file_to_write.write(struct.pack('?', True))  # byte flag
                 line.pop(-1)
                 for line_number, value in enumerate(line):
-                    s = bytes(' ' * (self.meta_dada[line_number]['field_content_length'] - 1))
+                    s = bytes(' ' * (self.meta_dada[line_number]['field_content_length']))
                     open_file_to_write.write(struct.pack(str(self.meta_dada[line_number]['field_content_length']) + "s", s))
             else:
                 open_file_to_write.write(struct.pack('?', line[-1]))  # byte flag
