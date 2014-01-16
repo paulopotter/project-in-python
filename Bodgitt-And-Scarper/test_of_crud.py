@@ -9,16 +9,16 @@ class TestSearch(unittest.TestCase):
         self.crud = crud.CRUD()
 
     def test_find_return_type(self):
-        self.assertIsInstance(self.crud.find({'name': None, 'location': None, 'search_and': False}), list)
+        self.assertIsInstance(self.crud.find({'name': '', 'location': '', 'search_and': False}), list)
 
     def test_find_location(self):
         create_record = self.crud.create(['Teste 123', 'Teste 321'])
-        self.assertEqual(self.crud.find({'name': None, 'location': 'Teste 321', 'search_and': False}), [create_record])
+        self.assertEqual(self.crud.find({'name': '', 'location': 'Teste 321', 'search_and': False}), [create_record])
         self.crud.delete(create_record)
 
     def test_find_name(self):
         create_record = self.crud.create(['Teste 321', 'Teste 311'])
-        self.assertEqual(self.crud.find({'name': 'Teste 321', 'location': None, 'search_and': False}), [create_record])
+        self.assertEqual(self.crud.find({'name': 'Teste 321', 'location': '', 'search_and': False}), [create_record])
         self.crud.delete(create_record)
 
     def test_find_record_with_name_and_location(self):
@@ -31,7 +31,7 @@ class TestSearch(unittest.TestCase):
 
     def test_read(self):
         create_record = self.crud.create(['Teste read', 'Teste read'])
-        self.assertEqual(self.crud.read(create_record), [create_record, 'Teste read                      ', 'Teste read                                                      ', ' ' * 64, ' ' * 6, ' ' * 8, ' ' * 8, 0])
+        self.assertEqual(self.crud.read(create_record), ['Teste read                      ', 'Teste read                                                      ', ' ' * 64, ' ' * 6, ' ' * 8, ' ' * 8, 0])
         self.crud.delete(create_record)
 
     def test_read_error(self):
@@ -52,7 +52,7 @@ class TestSearch(unittest.TestCase):
         self.crud.delete(create_record)
 
     def test_delete_error(self):
-        self.assertRaises(RecordNotFoundException, self.crud.delete, 999)
+        self.assertRaises(RecordNotFoundException, self.crud.delete, 99999)
 
         create_record = self.crud.create(['Teste', 'Teste'])
         self.crud.delete(create_record)
