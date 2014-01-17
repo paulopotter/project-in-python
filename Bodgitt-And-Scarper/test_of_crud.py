@@ -1,3 +1,4 @@
+# coding:utf-8
 import unittest
 import crud
 from my_exceptions import RecordNotFoundException
@@ -84,19 +85,23 @@ class TestSearch(unittest.TestCase):
         self.crud.delete(create_record)
 
     def test_update_error(self):
-        record = ['Teste Name Update', 'Teste Location Update', '', '', ' ', '321']
+        record = ['Teste Name Update', 'Teste Location Update', '', '', '', '321']
         create_record = self.crud.create(record)
         self.crud.delete(create_record)
         self.assertRaises(RecordNotFoundException, self.crud.update, create_record, {'owner': 123})
 
 
     def test_format_for_necessary_size(self):
-        self.assertEqual(self.crud.format_for_necessary_size('123456789', 5), '12345')
-        self.assertEqual(self.crud.format_for_necessary_size('1234', 5), '1234 ')
-        self.assertEqual(self.crud.format_for_necessary_size('12345', 5), '12345')
+        self.assertEqual(self.crud.format_for_necessary_size('12345', 'size'), '12345 ')
+
+    def test_format_for_necessary_size_error(self):
+        self.assertRaises(Exception, self.crud.format_for_necessary_size, '1234567', 'size')
 
     def test_verify_entry_type(self):
-        self.assertFalse(self.crud.verify_entry_type(['Texto', 'Texto', 'Texto', '123', '123', '123']))
+        self.assertTrue(self.crud.verify_entry_type(['Texto', 'Texto', 'Texto', '123', '123', '123']))
+
+    def test_verify_entry_type_error(self):
+        self.assertRaises(Exception, self.crud.verify_entry_type, (['Texto', 'Texto', 'Texto', '123', 'Texto', '123']))
 
 
 if __name__ == '__main__':
