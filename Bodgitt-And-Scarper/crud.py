@@ -61,9 +61,10 @@ class CRUD(object):
                     break
 
             else:
+                formatted_records = []
                 for x in range(len(values)):
-                    formatted_records[meta_dada[x]['field_name']] = self.format_for_necessary_size(values[x], meta_dada[x]['field_name'])
-
+                    formatted_records.append(self.format_for_necessary_size(values[x], meta_dada[x]['field_name']))
+                formatted_records.append(self.format_for_necessary_size('', 'owner'))
                 field_number_created = DataConn().pack_in_file(formatted_records)
 
             return field_number_created
@@ -86,7 +87,7 @@ class CRUD(object):
                     difference = size - len(value)
                     value = value + (' ' * difference)
                 elif len(value) > size:
-                    raise Exception("ERRO: o campo %s contem %i caracters e o campo suporta até %i" % (field_name, len(value), field['field_content_length']))
+                    raise Exception("ERRO: o campo %s contem %i caracters e o campo suporta até %i" % (field_name, len(value), size))
 
                 return value
 
