@@ -47,6 +47,7 @@ class CRUD(object):
     def create(self, values):
         matches = self.find({'name': values[0], 'location': values[1], 'search_and': True})
         if not matches:
+            self.verify_entry_type(values)
             records = DataConn().records()
             meta_dada = DataConn().meta_dada
 
@@ -73,7 +74,6 @@ class CRUD(object):
 
     def format_for_necessary_size(self, value, field_name):
         meta_dada = DataConn().meta_dada
-
         for field in meta_dada:
             if field_name in field.values():
                 size = field['field_content_length']
@@ -81,7 +81,6 @@ class CRUD(object):
                 if field_name == 'rate':
                     if value != '' and value[0] != '$':
                         value = '$' + str(value)
-                        size -= 1
 
                 if len(value) < size or value == '':
                     difference = size - len(value)
@@ -123,7 +122,6 @@ class CRUD(object):
         only_numbers = ['size', 'owner']
         size_field = DataConn().meta_dada
         entry_type = 0
-
         for x in range(len(values)):
             if size_field[x]['field_name'] in only_numbers:
                 try:
@@ -132,12 +130,12 @@ class CRUD(object):
                         if len(values[x]) <= size_field[x]['field_content_length']:
                             entry_type += 1
                         else:
-                            return 'ERRO: Campo \'%(field)s\' suporta até \'%(size_field)s\' caracters, você usou \'%(len_value)s\'.' % {'field': size_field[x]['field_name'], 'size_field': size_field[x]['field_content_length'] - 1, 'len_value': len(values[x])}
+                            raise Exception('ERRO: Campo \'%(field)s\' suporta até \'%(size_field)s\' caracters, você usou \'%(len_value)s\'.' % {'field': size_field[x]['field_name'], 'size_field': size_field[x]['field_content_length'] - 1, 'len_value': len(values[x])})
                     else:
                         entry_type += 1
 
                 except:
-                    return 'ERRO: Campo \'%s\' suporta apenas numeros' % size_field[x]['field_name']
+                    raise Exception('ERRO: Campo \'%s\' suporta apenas numeros' % size_field[x]['field_name'])
             elif size_field[x]['field_name'] == 'rate':
                 if values[x] != '':
                     if len(values[x]) <= size_field[x]['field_content_length']:
@@ -149,16 +147,16 @@ class CRUD(object):
                                 float(values[x])
                                 entry_type += 1
                         except:
-                            return 'O campo rate aceita apenas numero, ponto e $.'
+                            raise Exception('O campo rate aceita apenas numero, ponto e $.')
 
                     else:
-                        return 'ERRO: Campo \'%(field)s\' suporta até \'%(size_field)s\' caracters, você usou \'%(len_value)s\'.' % {'field': size_field[x]['field_name'], 'size_field': size_field[x]['field_content_length'], 'len_value': len(values[x])}
+                        raise Exception('ERRO: Campo \'%(field)s\' suporta até \'%(size_field)s\' caracters, você usou \'%(len_value)s\'.' % {'field': size_field[x]['field_name'], 'size_field': size_field[x]['field_content_length'], 'len_value': len(values[x])})
                 else:
                     entry_type += 1
             else:
                 if len(values[x]) <= size_field[x]['field_content_length']:
                     entry_type += 1
                 else:
-                    return 'ERRO: Campo \'%(field)s\' suporta até \'%(size_field)s\' caracters, você usou \'%(len_value)s\'.' % {'field': size_field[x]['field_name'], 'size_field': size_field[x]['field_content_length'], 'len_value': len(values[x])}
+                    raise Exception('ERRO: Campo \'%(field)s\' suporta até \'%(size_field)s\' caracters, você usou \'%(len_value)s\'.' % {'field': size_field[x]['field_name'], 'size_field': size_field[x]['field_content_length'], 'len_value': len(values[x])})
 
-        return False
+        return True
