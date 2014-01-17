@@ -9,27 +9,29 @@ class CRUD(object):
     def find(self, criteria):
         records = DataConn().records()
         positions = []
+        positions_name = []
+        positions_location = []
+
+        if criteria['name'] == '' and criteria['location'] == '':
+            for line in range(len(records)):
+                positions.append(line)
+            return positions
+
+        if criteria['name']:
+            for line in range(len(records)):
+                if records[line][0].lower().find(criteria['name'].lower()) == 0:
+                    positions_name.append(line)
+        if criteria['location']:
+            for line in range(len(records)):
+                if records[line][1].lower().find(criteria['location'].lower()) == 0:
+                    positions_location.append(line)
 
         if criteria['search_and']:
-            for line in range(len(records)):
-                if records[line][1].lower().find(criteria['location'].lower()) == 0 and records[line][0].lower().find(criteria['name'].lower()) == 0:
-                    positions.append(line)
+            line_records = list(set(positions_name).intersection(set(positions_location)))
         else:
-            if criteria['name'] == '' and criteria['location'] == '':
-                for line in range(len(records)):
-                    positions.append(line)
+            positions_name.extend(positions_location)
+            line_records = list(set(positions_name))
 
-            if criteria['name'] != '':
-                for line in range(len(records)):
-                    if records[line][0].lower().find(criteria['name'].lower()) == 0:
-                        positions.append(line)
-
-            if criteria['location'] != '':
-                for line in range(len(records)):
-                    if records[line][1].lower().find(criteria['location'].lower()) == 0:
-                        positions.append(line)
-
-        line_records = list(set(positions))
         line_records.sort()
 
         return line_records
@@ -43,55 +45,50 @@ class CRUD(object):
             raise RecordNotFoundException
 
     def create(self, values):
-        find = self.find({'name': values[0], 'location': values[1], 'search_and': True})
-
-        if not find:
+        matches = self.find({'name': values[0], 'location': values[1], 'search_and': True})
+        if not matches:
             records = DataConn().records()
-            empty_fields = []
             meta_dada = DataConn().meta_dada
-            if len(values) < len(meta_dada):
-                for x in range(len(meta_dada) - len(values)):
-                    values.append(' ')
 
+            formatted_records = {}
             for line, row in enumerate(records):
                 if row[-1] == 1:
-                    empty_fields.append(line)
+                    for x in range(len(values)):
+                        formatted_records[meta_dada[x]['field_name']] = self.format_for_necessary_size(values[x], meta_dada[x]['field_name'])
 
-            if not empty_fields:
-                formatted_records = []
-                for x in range(len(values)):
-                    if meta_dada[x]['field_name'] == 'rate':
-                        if values[x][0] != '$' and values[x] != ' ':
-                            values[x] = '$' + str(values[x])
-                    formatted_records.append(self.format_for_necessary_size(values[x], meta_dada[x]['field_content_length']))
-
-                field_number_created = DataConn().pack_in_file(formatted_records)
+                    self.update_any_record(line, formatted_records)
+                    field_number_created = line
+                    break
 
             else:
-                formatted_records = {}
                 for x in range(len(values)):
-                    if meta_dada[x]['field_name'] == 'rate':
-                        if values[x][0] != '$' and values[x] != ' ':
-                            values[x] = '$' + str(values[x])
-                    formatted_records[meta_dada[x]['field_name']] = self.format_for_necessary_size(values[x], meta_dada[x]['field_content_length'])
+                    formatted_records[meta_dada[x]['field_name']] = self.format_for_necessary_size(values[x], meta_dada[x]['field_name'])
 
-                self.update_any_record(empty_fields[0], formatted_records)
-
-                field_number_created = empty_fields[0]
+                field_number_created = DataConn().pack_in_file(formatted_records)
 
             return field_number_created
         else:
             raise DuplicateKeyException
 
-    def format_for_necessary_size(self, value, size):
-        if len(value) < size or value == '':
-            difference = size - len(value)
-            return value + (' ' * difference)
-        elif len(value) > size:
-            difference = len(value) - size
-            return value[:-difference]
-        else:
-            return value
+    def format_for_necessary_size(self, value, field_name):
+        meta_dada = DataConn().meta_dada
+
+        for field in meta_dada:
+            if field_name in field.values():
+                size = field['field_content_length']
+
+                if field_name == 'rate':
+                    if value != '' and value[0] != '$':
+                        value = '$' + str(value)
+                        size -= 1
+
+                if len(value) < size or value == '':
+                    difference = size - len(value)
+                    value = value + (' ' * difference)
+                elif len(value) > size:
+                    raise Exception("ERRO: o campo %s contem %i caracters e o campo suporta até %i" % (field_name, len(value), field['field_content_length']))
+
+                return value
 
     def delete(self, recNo):
         try:
