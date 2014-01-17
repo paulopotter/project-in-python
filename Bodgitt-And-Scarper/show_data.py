@@ -36,12 +36,12 @@ class CommandTerminal(object):
 
         if arguments.create:
             self.check_required_parameters
-            verify_entry_type = self.crud.verify_entry_type([self.name, self.location, self.specialties, self.size, self.rate])
-            if not verify_entry_type:
-                create = self.crud.create([self.name, self.location, self.specialties, self.size, self.rate])
-                print 'Registro [%i] criado com sucesso!' % create
-            else:
-                print verify_entry_type
+            # verify_entry_type = self.crud.verify_entry_type([self.name, self.location, self.specialties, self.size, self.rate])
+            # if not verify_entry_type:
+            self.crud.create([self.name, self.location, self.specialties, self.size, self.rate])
+            print 'Registro criado com sucesso!'
+            # else:
+            #     print verify_entry_type
 
         elif arguments.delete:
             print self.draw_table(self.matches)
