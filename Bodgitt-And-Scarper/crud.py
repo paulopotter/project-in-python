@@ -6,6 +6,9 @@ from my_exceptions import DuplicateKeyException
 
 class CRUD(object):
 
+    def __init__(self):
+        self.meta_data = DataConn().meta_dada
+
     def find(self, criteria):
         records = DataConn().records()
         positions = []
