@@ -1,0 +1,45 @@
+<html>
+  <head>
+    <script src='../static/script.js'></script>
+    <link rel="stylesheet" href="../static/style.css">
+    <title>{{title}} :: Bodgitt and Scarper</title>
+  </head>
+  <body>
+    <form action="#" method='Post' name='' id='' class='search-records'>
+        <fieldset>
+            <legend>Search</legend>
+            <p>
+                <label for="input-name">
+                    <span>Name: </span>
+                    <input type="text" id='input-name' name='input-name' class='input-name'>
+                </label>
+                <label for="input-location">
+                    <span>Location: </span>
+                    <input type="text" id='input-location' name='input-location' class='input-location'>
+                </label>
+                <label for="input-and">
+                    <input type="checkbox" name='input-and' id='input-and' value='True' class='input-and'>
+                    <span class='text-and'>Apenas os valores pesquisados</span>
+                </label>
+            </p>
+        </fieldset>
+    </form>
+
+    <form action="#" name='form-records' id='form-records' class='form-recods'>
+      <table id='show-records' name='show-records' class='show-records'>
+          <tr id='table-row-title' name='table-row-title' class='table-row-title'>
+            {% for table_title in meta_data %}
+              <th>{{table_title.field_name}}</th>
+            {% endfor %}
+          </tr>
+          {% for record in records %}
+          <tr name='table-row-data' class='table-row-data'>
+            {% for data in record %}
+            <td><input type="text" value="{{data}}" name="{{meta_data}}"></td>
+            {% endfor %}
+          </tr>
+          {% endfor %}
+      </table>
+    </form>
+  </body>
+</html>
