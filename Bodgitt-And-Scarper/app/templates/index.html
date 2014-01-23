@@ -1,29 +1,28 @@
-{% extends 'busca.html' %}
-{% block content %}
+{% extends 'table.html' %}
 
-      <table id='show-records' name='show-records' class='show-records'>
-        <thead>
-          <tr id='table-row-title' name='table-row-title' class='table-row-title'>
+{% block table_title %}
+
             {% for table_title in meta_data %}
               <th>{{table_title.field_name}}</th>
             {% endfor %}
-            <th>Remover registro</th>
-          </tr>
-        </thead>
-        <tbody>
+
+{% endblock %}
+
+{% block table_content %}
+
           {% for record in records %}
           <tr name='table-row-data' class='table-row-data'>
             <form action="#" name='form-{{record[0]}}' id='form-{{record[0]}}'>
+
             {% for data in record %}
             <td>{{data}}</td>
             {% endfor %}
+
             </form>
             <td>
                 <a href="/remove?name={{record[1]}}&location={{record[2]}}" name='rmv-record' id='rmv-record'>X</a>
             </td>
           </tr>
           {% endfor %}
-        </tbody>
-      </table>
 
 {% endblock %}
