@@ -1,0 +1,16 @@
+{% extends 'busca.html' %}
+{% block content %}
+
+      <table id='show-records' name='show-records' class='show-records'>
+        <thead>
+          <tr id='table-row-title' name='table-row-title' class='table-row-title'>
+            {% block table_title %}{% endblock %}
+            <th>Remover registro</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% block table_content %}{% endblock %}
+        </tbody>
+      </table>
+
+{% endblock %}
