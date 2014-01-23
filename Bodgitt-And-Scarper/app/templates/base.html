@@ -1,0 +1,51 @@
+<html>
+  <head>
+    <meta charset='utf-8'/>
+    <script src='../static/script.js'></script>
+    <link rel="stylesheet" href="../static/style.css">
+    <title>{{title}} :: Bodgitt and Scarper</title>
+  </head>
+  <body>
+    <form action="search" method='get' name='search-form' id='search-form' class='search-records' onSubmit='return(verify_search(this))'>
+        <fieldset>
+            <legend>Search</legend>
+            <p>
+                <label for="input-name">
+                    <span>Name: </span>
+                    {% if input_search %}
+                      <input type="text" id='input-name' name='input-name' class='input-name' value='{{input_search.name}}'>
+                    {% else %}
+                      <input type="text" id='input-name' name='input-name' class='input-name' value=''>
+                    {% endif %}
+                </label>
+                <label for="input-location">
+                    <span>Location: </span>
+                    {% if input_search %}
+                      <input type="text" id='input-location' name='input-location' class='input-location' value='{{input_search.location}}'>
+                    {% else %}
+                      <input type="text" id='input-location' name='input-location' class='input-location' value=''>
+                    {% endif %}
+                </label>
+                <label for="input-and">
+                    {% if input_search and input_search.search_and%}
+                      <input type="checkbox" name='input-and' id='input-and' value='True' checked='checked' class='input-and'>
+                    {% else %}
+                      <input type="checkbox" name='input-and' id='input-and' value='True' class='input-and'>
+                    {% endif %}
+                    <span class='text-and'>Apenas os valores pesquisados</span>
+                </label>
+                <input type="submit" value="Pesquisar" name="btn-search" id="btn-search" class="btn-search" />
+            </p>
+            <div id="search-msg" name="search-msg" class="search-msg"></div>
+        </fieldset>
+    </form>
+    <div name='menu-bar' id='menu-bar' class='menu-bar'>
+        <p>
+            <a href="/">Visualizar todos os registros</a>
+            <a href="/create" name='add-record' id='add-record'>Adicionar novo registro</a>
+        </p>
+
+    </div>
+    {% block content %}{% endblock %}
+  </body>
+</html>
