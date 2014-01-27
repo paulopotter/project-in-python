@@ -15,28 +15,24 @@ function searchResult(str){
 
 
 function addRecords(){
-  var div_msg = document.getElementById('background-msg')
+  var div_msg = document.getElementById('background-msg');
   div_msg.style.display = 'block';
   ajax_require('background-msg', "/create");
 }
 
 function remove_record(name, location){
-  var div_msg = document.getElementById('background-msg')
+  var div_msg = document.getElementById('background-msg');
   div_msg.style.display = 'block';
-  var msg = '<p class="msg">Você deseja apagar o registro:<br/> <strong>Name:</strong> ' + name + '<br/><strong>Location:</strong> ' + location + '?<br/>' ;
-  msg += '<input type="button" value="Sim" />';
-  msg +=  '<input type="button" value="Não" onclick="close_msg()"/>';
-  msg += '</p>';
-  div_msg.innerHTML = msg
+  ajax_require('background-msg', '/remove?name=' + name + '&location=' + location);
 }
 
 function edit_record(name, location){
-  var div_msg = document.getElementById('background-msg')
+  var div_msg = document.getElementById('background-msg');
   div_msg.style.display = 'block';
-  ajax_require('background-msg', "/edit?q=" + name);
+  ajax_require('background-msg', "/edit?name=" + name + '&location=' + location);
 }
 
 function close_msg(){
-  var div_msg = document.getElementById('background-msg')
+  var div_msg = document.getElementById('background-msg');
   div_msg.style.display = 'none';
 }
