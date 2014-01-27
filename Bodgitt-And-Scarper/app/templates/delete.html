@@ -1,0 +1,15 @@
+<form class="msg" action="/remove-validation" method='POST'>
+Você deseja apagar o registro:<br/>
+
+    <strong>Name:</strong>
+    <span>{{name}}</span>
+    <input type="hidden" value="{{name}}" name="delete-name" class="input-delete" />
+    <br/>
+
+    <strong>Location:</strong>
+    <span>{{location}}</span>
+    <input type="hidden" value="{{location}}" name="delete-location" class="input-delete" />?
+    <br/>
+    <input type="submit" value="Sim" />
+    <input type="button" value="Não" onclick="close_msg()"/>
+</form>
