@@ -1,28 +1,19 @@
 {% extends 'table.html' %}
 
-{% block table_title %}
-
-            {% for table_title in meta_data %}
-              <th>{{table_title.field_name}}</th>
-            {% endfor %}
-
-{% endblock %}
-
 {% block table_content %}
 
-          {% for record in records %}
-          <tr name='table-row-data' class='table-row-data'>
-            <form action="#" name='form-{{record[0]}}' id='form-{{record[0]}}'>
-
-            {% for data in record %}
-            <td>{{data}}</td>
-            {% endfor %}
-
-            </form>
+    {% for record in records %}
+        <tr class='table-row-data'>
+                {% for data in record %}
+                    <td>{{data}}</td>
+                {% endfor %}
             <td>
-                <a href="/remove?name={{record[1]}}&location={{record[2]}}" name='rmv-record' id='rmv-record'>X</a>
+                <span class='line-menu'>
+                    <input type='button' name='edit-record' id='edit-record' onClick='edit_record("{{record[0]}}", "{{record[1]}}");' value='Editar'>
+                    <input type='button' name='rmv-record' id='rmv-record' onClick='remove_record("{{record[0]}}", "{{record[1]}}");' value='Remover'>
+                </span>
             </td>
-          </tr>
-          {% endfor %}
+        </tr>
+    {% endfor %}
 
 {% endblock %}
