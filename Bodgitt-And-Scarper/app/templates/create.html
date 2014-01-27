@@ -1,0 +1,17 @@
+{% block table_content%}
+<form action="create-validation" method='POST' class='msg'>
+    <fieldset>
+    <legend>Criar novo registro.</legend>
+        {% for table_title in meta_data %}
+        <p>
+            <label for="{{table_title.field_name}}">
+                <span>{{table_title.field_name}}:</span>
+            </label>
+            <input type="text" name="{{table_title.field_name}}" id="{{table_title.field_name}}" class="input-new-record">
+        </p>
+        {% endfor %}
+            <input type="submit" value='Criar Registro'>
+            <a href="/">Cancelar</a>
+    </fieldset>
+</form>
+{% endblock %}
