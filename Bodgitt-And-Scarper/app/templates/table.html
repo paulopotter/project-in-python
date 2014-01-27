@@ -1,14 +1,16 @@
-{% extends 'busca.html' %}
+{% extends 'base.html' %}
 {% block content %}
 
-      <table id='show-records' name='show-records' class='show-records'>
+      <table id='show-records' name='show-records' class='show-records sortable'>
         <thead>
           <tr id='table-row-title' name='table-row-title' class='table-row-title'>
-            {% block table_title %}{% endblock %}
-            <th>Remover registro</th>
+            {% for table_title in meta_data %}
+                <td>{{table_title.field_name}}</td>
+            {% endfor %}
+            <td>&nbsp;</td>
           </tr>
         </thead>
-        <tbody>
+        <tbody id='table-body'>
           {% block table_content %}{% endblock %}
         </tbody>
       </table>
