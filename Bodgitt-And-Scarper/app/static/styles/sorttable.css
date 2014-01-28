@@ -1,0 +1,19 @@
+table.sortable tbody {
+    counter-reset: sortabletablescope;
+}
+table.sortable thead tr::before {
+    padding: 10px;
+    text-transform: capitalize;
+    font-weight: bolder;
+    border-bottom: 2px solid #000;
+    content: "#";
+    display: table-cell;
+}
+table.sortable tbody tr::before {
+    content: counter(sortabletablescope);
+    counter-increment: sortabletablescope;
+    display: table-cell;
+    border-bottom: 1px solid rgba(192, 192, 192, 1.0);
+    padding:7px;
+    display: block;
+}

@@ -1,10 +1,3 @@
-*{
-    padding: 0;
-    margin: 0;
-    text-transform: none;
-    font-weight: normal;
-    text-decoration: none
-}
 strong{
     font-weight: bolder;
 }
@@ -32,11 +25,13 @@ input[type=submit]:hover{
     display: block;
     width: 915px
 }
-.table-row-title{
+
+.table-row-title {
     background-color: #9F9F9F;
     cursor: default;
 }
-.table-row-title td{
+
+.table-row-title td {
     padding: 10px;
     text-transform: capitalize;
     font-weight: bolder;
@@ -103,11 +98,11 @@ input[type=submit]:hover{
 .search-q{
     width: 100%;
     padding: 5px;
-    border:1px solid rgba(0,0,0,0.1);
+    border:1px solid rgba(0, 0, 0, 0.1);
     font-size: 1.2em;
     background-color: #fff;
     color:#000;
-    box-shadow: 1px 1px 5px rgba(0,0,0,0.5);
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
     display: inline;
     background-image: url('../image/search-icon.png');
     background-repeat: no-repeat;
@@ -117,7 +112,7 @@ input[type=submit]:hover{
     display: none;
     width: 100%;
     height: 100%;
-    background-color: rgba(0,0,0,0.7);
+    background-color: rgba(0, 0, 0, 0.7);
     position: fixed;
     top:0;
 }
@@ -129,24 +124,4 @@ input[type=submit]:hover{
     border: 1px solid #000;
     border-radius: 10px;
     padding: 15px;
-}
-
-table.sortable tbody {
-    counter-reset: sortabletablescope;
-}
-table.sortable thead tr::before {
-    padding: 10px;
-    text-transform: capitalize;
-    font-weight: bolder;
-    border-bottom: 2px solid #000;
-    content: "#";
-    display: table-cell;
-}
-table.sortable tbody tr::before {
-    content: counter(sortabletablescope);
-    counter-increment: sortabletablescope;
-    display: table-cell;
-    border-bottom: 1px solid rgba(192,192,192,1.0);
-    padding:7px;
-    display: block;
 }
