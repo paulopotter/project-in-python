@@ -1,4 +1,13 @@
-<form class="msg" action="/remove-validation" method='POST'>
+{% if msg_delete %}
+
+<div class="msg">
+
+<strong>{{msg_delete}}</strong>
+<br/>
+<input type="button" onclick="close_msg(true)" value="Fechar">
+</div>
+{% else %}
+<form class="msg" action="#" method='POST'>
 Você deseja apagar o registro:<br/>
 
     <strong>Name:</strong>
@@ -10,6 +19,7 @@ Você deseja apagar o registro:<br/>
     <span>{{location}}</span>
     <input type="hidden" value="{{location}}" name="delete-location" class="input-delete" />?
     <br/>
-    <input type="submit" value="Sim" />
+    <input type="button" value="Sim" onclick="remove_record('{{name}}', '{{location}}', true)"/>
     <input type="button" value="Não" onclick="close_msg()"/>
 </form>
+{% endif %}
