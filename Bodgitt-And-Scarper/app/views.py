@@ -55,17 +55,18 @@ def remove():
     return render_template("delete.html", title='Delete', name=request.args.get('name').strip(), location=request.args.get('location').strip())
 
 
-@app.route('/remove-validation', methods=['POST'])
+@app.route('/remove-validation', methods=['GET'])
 def validation_remove():
-    record = CRUD().find({'name': request.form['delete-name'], 'location': request.form['delete-location'], 'search_and': True})
+    record = CRUD().find({'name': request.args.get('name'), 'location': request.args.get('location'), 'search_and': True})
 
-    try:
-        CRUD().delete(record[0])
-        return index()
-    except:
-        return 'msg - error'
+    delete = CRUD().delete(record[0])
+    if delete:
+        return render_template('delete.html', msg_delete=record)
+    else:
+        return render_template('delete.html', msg_delete='Registro apagado com sucesso!')
 
 
 @app.route('/edit', methods=['GET'])
 def edit():
+
     return render_template("edit.html", title='Edit', name=request.args.get('name').strip(), location=request.args.get('location').strip(), meta_data=meta_data)
