@@ -20,11 +20,17 @@ function addRecords(){
   ajax_require('background-msg', "/create");
 }
 
-function remove_record(name, location){
+function remove_record(name, location, validate){
+
+  if (validate) {
+    ajax_require('background-msg', '/remove-validation?name=' + name + '&location=' + location)
+  }else{
   var div_msg = document.getElementById('background-msg');
   div_msg.style.display = 'block';
-  ajax_require('background-msg', '/remove?name=' + name + '&location=' + location);
+    ajax_require('background-msg', '/remove?name=' + name + '&location=' + location);
+  }
 }
+
 
 function edit_record(name, location){
   var div_msg = document.getElementById('background-msg');
@@ -32,7 +38,10 @@ function edit_record(name, location){
   ajax_require('background-msg', "/edit?name=" + name + '&location=' + location);
 }
 
-function close_msg(){
+function close_msg(redirect_home){
   var div_msg = document.getElementById('background-msg');
   div_msg.style.display = 'none';
+  if (redirect_home) {
+    ajax_require('body', '/')
+  }
 }
