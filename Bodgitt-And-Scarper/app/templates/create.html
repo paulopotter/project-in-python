@@ -1,17 +1,39 @@
-{% block table_content%}
-<form action="create-validation" method='POST' class='msg'>
-    <fieldset>
-    <legend>Criar novo registro.</legend>
-        {% for table_title in meta_data %}
-        <p>
-            <label for="{{table_title.field_name}}">
-                <span>{{table_title.field_name}}:</span>
-            </label>
-            <input type="text" name="{{table_title.field_name}}" id="{{table_title.field_name}}" class="input-new-record">
-        </p>
-        {% endfor %}
-            <input type="submit" value='Criar Registro'>
-            <a href="/">Cancelar</a>
-    </fieldset>
-</form>
-{% endblock %}
+{% if create %}
+    <div class="msg">
+
+    <strong>Registro Criado com sucesso!</strong>
+    <br/>
+    <input type="button" onclick="close_msg(true)" value="Fechar">
+    </div>
+
+{%else%}
+    {% block table_content%}
+    <form action="/create-validation" method='POST' class='msg'>
+        <fieldset>
+        <legend>Criar novo registro.</legend>
+        <table>
+
+            {% for table_title in meta_data %}
+            <tr>
+                <td>
+                <label for="{{table_title.field_name}}">
+                    <span>{{table_title.field_name}}:</span>
+                </label>
+                <span class="form-help">Até <strong>{{table_title.field_content_length}}</strong> caracteres</span>
+            </td>
+            <td>
+
+                <input type="text" name="{{table_title.field_name}}" id="{{table_title.field_name}}" maxlength="{{table_title.field_content_length}}" size="{{table_title.field_content_length}}" class="input-new-record">
+            </td>
+        </tr>
+            {% endfor %}
+            <tr>
+
+                <td><input type="submit" value='Criar Registro'></td>
+                <td><a href="/">Cancelar</a></td>
+            </tr>
+        </table>
+        </fieldset>
+    </form>
+    {% endblock %}
+{% endif %}
