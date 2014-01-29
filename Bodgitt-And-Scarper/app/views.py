@@ -1,4 +1,4 @@
-#coding=utf-8
+# -*- coding: utf-8 -*-
 from flask import render_template, request
 from app import app
 from crud import CRUD
@@ -20,39 +20,40 @@ def basic_structure(name='', location='', search_and=False):
 @app.route('/index')
 def index():
 
-    return render_template("index.html", title='Home', records=basic_structure(), meta_data=meta_data)
+    return render_template("index.html", records=basic_structure(), meta_data=meta_data)
 
 
 @app.route('/search', methods=['GET'])
 def search():
     value_to_search = request.args.get('q').strip()
 
-    return render_template("search.html", title='Busca', records=basic_structure(value_to_search, value_to_search), meta_data=meta_data)
+    return render_template("search.html", records=basic_structure(value_to_search, value_to_search), meta_data=meta_data)
 
 
 @app.route('/create')
 def create():
     meta_data = CRUD().meta_data[0:5]
 
-    return render_template("create.html", title='Criar novo registro', meta_data=meta_data)
+    return render_template("create.html", meta_data=meta_data)
 
 
 @app.route('/create-validation', methods=['POST'])
-def validation():
+def create_validation():
     meta_data = CRUD().meta_data[0:5]
     create = []
     for data in meta_data:
-        create.append(str(request.form[data['field_name']]))
+        value_input = request.form[data['field_name']]
+        create.append(value_input)
 
-    creata = CRUD().create(create)
+    reply_create = CRUD().create(create)
 
-    return render_template("create.html", title='Validando', meta_data=meta_data, create=creata)
+    return render_template("create.html", meta_data=meta_data, create=reply_create)
 
 
 @app.route('/remove', methods=['GET'])
 def remove():
 
-    return render_template("delete.html", title='Delete', name=request.args.get('name').strip(), location=request.args.get('location').strip())
+    return render_template("delete.html", name=request.args.get('name').strip(), location=request.args.get('location').strip())
 
 
 @app.route('/remove-validation', methods=['GET'])
@@ -68,5 +69,22 @@ def validation_remove():
 
 @app.route('/edit', methods=['GET'])
 def edit():
+    search = CRUD().find({'name': request.args.get('name'), 'location': request.args.get('location'), 'search_and': True})
+    recNo = search[0]
+    record = CRUD().read(recNo)
+    values = []
+    for value in record:
+        values.append(str(value).strip())
 
-    return render_template("edit.html", title='Edit', name=request.args.get('name').strip(), location=request.args.get('location').strip(), meta_data=meta_data)
+    return render_template("edit.html", values=values, meta_data=meta_data, recNo=recNo)
+
+
+@app.route('/edit-validation', methods=['POST'])
+def edit_validation():
+    meta_data = CRUD().meta_data[0:6]
+    edit = {}
+    for data in meta_data:
+        edit[data['field_name']] = request.form[data['field_name']]
+    CRUD().update(request.form['recNo'], edit)
+
+    return render_template("edit.html", meta_data=meta_data, reply_edit=True)
