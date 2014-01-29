@@ -1,9 +1,15 @@
-strong{
+strong {
     font-weight: bolder;
 }
+
+input[type='text'] {
+    padding:3px;
+    margin: 2px;
+}
+
 a,
 input[type=button],
-input[type=submit]{
+input[type=submit] {
     color:black;
     border:1px solid rgba(192,192,192,0.3);
     background-color: rgba(255, 255, 255, 0.9);
@@ -12,14 +18,16 @@ input[type=submit]{
     display: inline-block;
     box-shadow: 1px 3px 5px rgba(192,192,192,1);
     cursor:hand;
-    font-size: 0.8em
+    font-size: 0.8em;
 }
+
 a:hover,
 input[type=button]:hover,
-input[type=submit]:hover{
+input[type=submit]:hover {
     box-shadow: -1px -1px 5px rgba(0,0,0,0.5);
 }
-.show-records{
+
+.show-records {
     border-spacing: 0;
     margin: 35px auto;
     display: block;
@@ -36,24 +44,34 @@ input[type=submit]:hover{
     text-transform: capitalize;
     font-weight: bolder;
     border-bottom: 2px solid #000;
+    text-align: center;
 }
 
-.table-row-data{
+.table-row-data {
     background-color: rgba(192,192,192,0.3);
 }
-.table-row-data:nth-child(2n){
+
+.table-row-data:nth-child(2n) {
     background-color: rgba(192,192,192,0.2);
 }
-.table-row-data:hover{
+
+.table-row-data:hover {
     background-color: rgba(192,192,192,0.7);
     cursor: default;
 }
-.table-row-data td{
+
+.table-row-data td {
     padding:7px;
     display: block;
     border-bottom: 1px solid rgba(192,192,192,1.0);
 }
-.line-menu{
+.formatting-text{
+    text-align: left;
+}
+.formatting-number{
+    text-align: right;
+}
+.line-menu {
     display: none;
     padding: 0;
     position: absolute;
@@ -61,12 +79,13 @@ input[type=submit]:hover{
     background-color: rgba(192,192,192,0.8);
     box-shadow: 1px 3px 5px rgba(192,192,192,0.5);
 }
-.table-row-data:hover .line-menu{
+
+.table-row-data:hover .line-menu {
     display: block;
 }
 
 
-.menu-bar{
+.menu-bar {
     background-color: rgba(192,192,192,0.2);
     box-shadow: 1px 3px 5px rgba(192,192,192,0.5);
     border:none;
@@ -75,13 +94,11 @@ input[type=submit]:hover{
     width: 590px;
 }
 
-.search-records input[type='text']{
-    padding:3px;
-}
-.search-records span{
+.search-records span {
     font-weight: bold;
 }
-.search-records .text-and{
+
+.search-records .text-and {
     font-size: 0.7em;
     font-weight:normal;
     font-style: italic;
@@ -89,13 +106,14 @@ input[type=submit]:hover{
     display: inline-block;
     vertical-align: bottom;
 }
-#form-records input{
+#form-records input {
     background-color: transparent;
     border:none;
     padding:5px;
     font-size: 1em;
 }
-.search-q{
+
+.search-q {
     width: 100%;
     padding: 5px;
     border:1px solid rgba(0, 0, 0, 0.1);
@@ -108,7 +126,8 @@ input[type=submit]:hover{
     background-repeat: no-repeat;
     background-position: right;
 }
-.background-msg{
+
+.background-msg {
     display: none;
     width: 100%;
     height: 100%;
@@ -116,12 +135,46 @@ input[type=submit]:hover{
     position: fixed;
     top:0;
 }
-.background-msg .msg{
+
+.background-msg .msg {
     position: fixed;
-    left: 40%;
-    top: 40%;
+    left: 50%;
+    top: 50%;
+    margin-left: -15%;
+    margin-top: -15%;
     background-color: rgba(250,250,250,0.9);
     border: 1px solid #000;
     border-radius: 10px;
     padding: 15px;
+    max-width: 450px;
+    overflow: auto;
+}
+
+.msg fieldset {
+    border: none;
+}
+
+.msg legend {
+    font-size: 16px;
+    font-weight: bolder;
+    margin-bottom: 10px;
+}
+
+.msg label span {
+    text-transform: capitalize;
+    font-weight: bolder;
+}
+
+.msg table td:first-child {
+    text-align: right;
+}
+
+.msg table td {
+    vertical-align: text-top;
+}
+
+.form-help {
+    font-size: 12px;
+    display: block;
+    margin-bottom: 15px;
 }
