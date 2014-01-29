@@ -1,17 +1,28 @@
-{% block table_content%}
-<form action="create-validation" method='POST' class='msg'>
-    <fieldset>
-    <legend>Editar registro.</legend>
-        {% for table_title in meta_data %}
-        <p>
-            <label for="{{table_title.field_name}}">
-                <span>{{table_title.field_name}}:</span>
-            </label>
-            <input type="text" name="{{table_title.field_name}}" id="{{table_title.field_name}}" class="input-new-record" value='{{table_title.field_name}}'>
-        </p>
-        {% endfor %}
-            <input type="submit" value='Criar Registro'>
-            <a href="/">Cancelar</a>
-    </fieldset>
-</form>
-{% endblock %}
+{% if reply_edit %}
+    <div class="msg">
+
+    <strong>Registro Alterado com sucesso!</strong>
+    <br/>
+    <input type="button" onclick="close_msg(true)" value="Fechar">
+    </div>
+
+{% else %}
+    {% block table_content%}
+        <form action="/edit-validation" method='POST' class='msg'>
+            <fieldset>
+            <legend>Editar registro.</legend>
+                {% for table_title in meta_data %}
+                <p>
+                    <label for="{{table_title.field_name}}">
+                        <span>{{table_title.field_name}}:</span>
+                    </label>
+                    <input type="text" name="{{table_title.field_name}}" id="{{table_title.field_name}}" onkeypress='return mask(event, "{{table_title.field_name}}")' class="input-new-record" value='{{values[loop.index0]}}' maxlength="{{table_title.field_content_length}}">
+                </p>
+                {% endfor %}
+                    <input type="hidden" value="{{recNo}}" name='recNo' id='recNo'>
+                    <input type="submit" value='Editar Registro'>
+                    <a href="/">Cancelar</a>
+            </fieldset>
+        </form>
+        {% endblock %}
+{% endif %}
