@@ -31,7 +31,7 @@ input[type=submit]:hover {
     border-spacing: 0;
     margin: 35px auto;
     display: block;
-    width: 915px
+    width: 915px;
 }
 
 .table-row-title {
@@ -39,7 +39,7 @@ input[type=submit]:hover {
     cursor: default;
 }
 
-.table-row-title td {
+.table-row-title th {
     padding: 10px;
     text-transform: capitalize;
     font-weight: bolder;
@@ -52,18 +52,17 @@ input[type=submit]:hover {
 }
 
 .table-row-data:nth-child(2n) {
-    background-color: rgba(192,192,192,0.2);
+    background-color: rgba(192,192,192,0.1);
 }
 
 .table-row-data:hover {
-    background-color: rgba(192,192,192,0.7);
+    background-color: rgba(192,192,192,0.9);
     cursor: default;
 }
 
 .table-row-data td {
     padding:7px;
-    display: block;
-    border-bottom: 1px solid rgba(192,192,192,1.0);
+    height: 25px;
 }
 .formatting-text{
     text-align: left;
@@ -98,14 +97,6 @@ input[type=submit]:hover {
     font-weight: bold;
 }
 
-.search-records .text-and {
-    font-size: 0.7em;
-    font-weight:normal;
-    font-style: italic;
-    width: 100px;
-    display: inline-block;
-    vertical-align: bottom;
-}
 #form-records input {
     background-color: transparent;
     border:none;
@@ -122,9 +113,6 @@ input[type=submit]:hover {
     color:#000;
     box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
     display: inline;
-    background-image: url('../image/search-icon.png');
-    background-repeat: no-repeat;
-    background-position: right;
 }
 
 .background-msg {
@@ -142,7 +130,7 @@ input[type=submit]:hover {
     top: 50%;
     margin-left: -15%;
     margin-top: -15%;
-    background-color: rgba(250,250,250,0.9);
+    background-color: rgba(250, 250, 250, 0.9);
     border: 1px solid #000;
     border-radius: 10px;
     padding: 15px;
