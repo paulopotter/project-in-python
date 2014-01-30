@@ -5,11 +5,11 @@
     {% for record in records %}
         <tr class='table-row-data'>
                 {% for data in record %}
-                    <td>{{data}}</td>
+                    <td id='{{data}}'>{{data}}</td>
                 {% endfor %}
             <td>
                 <span class='line-menu'>
-                    <input type='button' name='edit-record' id='edit-record' onClick='edit_record("{{record[0]}}", "{{record[1]}}");' value='Editar'>
+                    <!-- <input type='button' name='edit-record' id='edit-record' onClick='edit_record("{{record[0]}}", "{{record[1]}}");' value='Editar'> -->
                     <input type='button' name='rmv-record' id='rmv-record' onClick='remove_record("{{record[0]}}", "{{record[1]}}");' value='Remover'>
                 </span>
             </td>
