@@ -1,13 +1,13 @@
 {% extends 'base.html' %}
 {% block content %}
 
-      <table id='show-records' name='show-records' class='show-records sortable'>
+      <table id='show-records' name='show-records' class='show-records sortable editable'>
         <thead>
           <tr id='table-row-title' name='table-row-title' class='table-row-title'>
             {% for table_title in meta_data %}
-                <td>{{table_title.field_name}}</td>
+                <th>{{table_title.field_name}}</th>
             {% endfor %}
-            <td>&nbsp;</td>
+            <th>&nbsp;</th>
           </tr>
         </thead>
         <tbody id='table-body'>
