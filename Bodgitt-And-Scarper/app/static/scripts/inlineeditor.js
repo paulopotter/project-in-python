@@ -590,9 +590,8 @@ InlineEditor.addEvent(window,'load',InlineEditor.init,false);
         InlineEditor.addClass( theElement, 'uneditable' ); // Special InlineEditor class
         InlineEditor.addClass( theElement, 'saving' );     // My own class, maybe gray text
 
-        var request = new XMLHttpRequest(); // I was using Google's tools
-        // var url = "/edit-v?id=" + theElement.id + "&val="+newVal;
-        var url = "/edit-me?id=" + theElement.id;
+        var request = new XMLHttpRequest();
+        var url = "/edit-me?id=" + encodeURIComponent(theElement.id) + '&val=' + encodeURIComponent(newVal);
 
         request.open("GET", url, true);
         request.onreadystatechange = function() {

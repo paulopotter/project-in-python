@@ -2,6 +2,7 @@
 from flask import render_template, request
 from app import app
 from crud import CRUD
+import json
 
 meta_data = CRUD().meta_data
 
@@ -12,15 +13,20 @@ def basic_structure(name='', location='', search_and=False):
     registro = []
     for record in records:
         if CRUD().read(record)[-1] != 1:
-            registro.append(CRUD().read(record)[0:6])
+            line_record = CRUD().read(record)[0:6]
+            strip_record = [x.strip(' ') for x in line_record]
+            registro.append(strip_record)
     return registro
 
 
 @app.route('/')
 @app.route('/index')
 def index():
+    line_record = {}
+    for line, record in enumerate(basic_structure()):
+        line_record[line] = record
 
-    return render_template("index.html", records=basic_structure(), meta_data=meta_data)
+    return render_template("index.html", meta_data=meta_data, line_record=line_record)
 
 
 @app.route('/search', methods=['GET'])
@@ -79,12 +85,21 @@ def edit():
     return render_template("edit.html", values=values, meta_data=meta_data, recNo=recNo)
 
 
-@app.route('/edit-validation', methods=['POST'])
+@app.route('/edit-me', methods=['GET'])
 def edit_validation():
     meta_data = CRUD().meta_data[0:6]
     edit = {}
-    for data in meta_data:
-        edit[data['field_name']] = request.form[data['field_name']]
-    CRUD().update(request.form['recNo'], edit)
+    id_line = request.args.get('id')
+    new_value = request.args.get('val')
+    edit['id'] = json.loads(id_line)
+    edit['value'] = new_value
+    read = CRUD().read(edit['id'][0])
+    new_record = {}
+    for line, old_record in enumerate(read[:6]):
+        if meta_data[line]['field_name'] == edit['id'][1]:
+            new_record[meta_data[line]['field_name']] = edit['value']
+        else:
+            new_record[meta_data[line]['field_name']] = old_record
 
+    CRUD().update(edit['id'][0], new_record)
     return render_template("edit.html", meta_data=meta_data, reply_edit=True)
