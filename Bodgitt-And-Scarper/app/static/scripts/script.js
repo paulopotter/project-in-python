@@ -36,11 +36,6 @@ function remove_record(name, location, validate){
   }
 }
 
-function edit_record(name, location){
-  var div_msg = document.getElementById('background-msg');
-  div_msg.style.display = 'block';
-  ajax_require('background-msg', "/edit?name=" + name + '&location=' + location);
-}
 
 function close_msg(reload_page){
   var div_msg = document.getElementById('background-msg');
@@ -63,3 +58,84 @@ function mask(evt, field){
     break;
   }
 }
+
+
+
+
+ InlineEditor.customEditor = function( theElement )
+    {
+        // Only interested in setting up something custom
+        // for paragraph tags.
+        if( theElement.tagName != 'P' )
+            return;
+
+        var editor = document.createElement( 'textarea' );
+        editor.innerHTML    = theElement.innerHTML;
+        editor.style.width  = "100%";
+        editor.style.height = theElement.offsetHeight + "px";
+
+        return editor;
+    }   // end customEditor
+
+
+
+    // If you use a custom editor, you may need to provide a
+    // way to determine what the value is. The default behavior,
+    // which will still take over if you return nothing, is
+    // to check for the presence of the 'value' property.
+    // If your editor has no 'value' property then the 'innerHTML'
+    // property is used. If this suits your needs
+    // even with your custom editor, then there's no need to
+    // use this function.
+    //
+    InlineEditor.editorValue = function( editor )
+    {
+        // Hypothetical editor with some obscure way
+        // of determing what the user selection is.
+        if( editor.tagName == 'SomeObscureControl' )
+            return editor.squareRootOfSelectedMenuItem;
+
+    }   // end editorValue
+
+
+    // If you have anything "funny" going on you're welcome
+    // to define/override this function to determine just what
+    // the starting value is. The default behavior, which will
+    // be employed if you return nothing, is to use 'innerHTML'.
+    InlineEditor.elementValue = function( theElement )
+    {
+        // Ignore the extra 'span' I threw in there. Just give me text.
+        return theElement.innerText;
+
+    }   // end elementValue
+
+
+
+    // Unless you just want people to dink around with the
+    // transient-by-nature current page, you'll probably want
+    // to define/override this function and do something that
+    // saves the user's changes. Here is an example using
+    // "ajax" to immediately post a change. In this case,
+    // I was using Google's Map APIs, so that's how I create
+    // the HttpRequest.
+    //
+    InlineEditor.elementChanged = function( theElement, oldVal, newVal )
+    {
+        InlineEditor.addClass( theElement, 'uneditable' ); // Special InlineEditor class
+        InlineEditor.addClass( theElement, 'saving' );     // My own class, maybe gray text
+
+        var request = new XMLHttpRequest();
+        var url = "/edit-me?id=" + encodeURIComponent(theElement.id) + '&val=' + encodeURIComponent(newVal);
+
+        request.open("GET", url, true);
+        request.onreadystatechange = function() {
+            if (request.readyState == 4) {
+
+                InlineEditor.removeClass( theElement, 'uneditable' );
+                InlineEditor.removeClass( theElement, 'saving' );
+
+            }   // end if: readystate 4
+        };  // end onreadystatechange
+        request.send(null);
+
+    };  // end elementChanged
