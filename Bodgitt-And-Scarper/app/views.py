@@ -3,12 +3,10 @@ from flask import render_template, request
 from app import app
 from crud import CRUD
 import json
-
 meta_data = CRUD().meta_data
 
 
 def basic_structure(name='', location='', search_and=False):
-
     records = CRUD().find({'name': name, 'location': location, 'search_and': search_and})
     registro = []
     for record in records:
@@ -32,8 +30,11 @@ def index():
 @app.route('/search', methods=['GET'])
 def search():
     value_to_search = request.args.get('q').strip()
+    line_record = {}
+    for line, record in enumerate(basic_structure(value_to_search, value_to_search)):
+        line_record[line] = record
 
-    return render_template("search.html", records=basic_structure(value_to_search, value_to_search), meta_data=meta_data)
+    return render_template("search.html", meta_data=meta_data, line_record=line_record)
 
 
 @app.route('/create')
