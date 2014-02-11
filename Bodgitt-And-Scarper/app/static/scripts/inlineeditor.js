@@ -386,6 +386,7 @@ your code
 //             else {
                 editor = document.createElement('input');
                 editor.value = oldVal;
+                editor.className = 'input-edit'
 //                editor.style.position = 'absolute';
 //                editor.style.zindex = 99;
 //                editor.style.left   = target.offsetLeft + 'px';
