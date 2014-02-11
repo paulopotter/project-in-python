@@ -1,22 +1,37 @@
-function ajax_require(element, page){
+function ajax_require(element, page, method, post_values){
+  method = typeof method !== 'undefined' ? method : 'GET';
+  post_values = typeof post_values !== 'undefined' ? post_values : null;
   xmlhttp = new XMLHttpRequest();
   xmlhttp.onreadystatechange = function(){
     if (xmlhttp.readyState == 4 && xmlhttp.status == 200){
         document.getElementById(element).innerHTML = xmlhttp.responseText;
     }
   }
-  xmlhttp.open("GET", page, true);
-  xmlhttp.send();
+  xmlhttp.open(method, page, true);
+  xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+  xmlhttp.send(post_values);
 }
 
 function searchResult(str){
   ajax_require('table-body',"/search?q=" + str);
 }
 
-function addRecords(){
-  var div_msg = document.getElementById('background-msg');
-  div_msg.style.display = 'block';
-  ajax_require('background-msg', "/create");
+function addRecords(validate){
+ if (validate) {
+  var name_value  = encodeURIComponent(document.getElementById("name").value)
+  var location_value  = encodeURIComponent(document.getElementById("location").value)
+  var specialties_value = encodeURIComponent(document.getElementById("specialties").value)
+  var size_value  = encodeURIComponent(document.getElementById("size").value)
+  var rate_value  = encodeURIComponent(document.getElementById("rate").value)
+
+  var post_values = "name=" + name_value + "&location=" + location_value + "&specialties=" + specialties_value + "&size=" + size_value + "&rate=" + rate_value
+
+    ajax_require('background-msg', '/create-validation', 'POST', post_values)
+  }else{
+    var div_msg = document.getElementById('background-msg');
+    div_msg.style.display = 'block';
+    ajax_require('background-msg', '/create');
+  }
 }
 
 function verify_new_record(meta_data){
