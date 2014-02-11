@@ -97,7 +97,8 @@ input[type=submit]:hover {
     font-weight: bold;
 }
 
-#form-records input {
+#form-records input,
+.input-edit {
     background-color: transparent;
     border:none;
     padding:5px;
