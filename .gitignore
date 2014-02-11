@@ -49,3 +49,4 @@ visual.py
 
 * copy
 *.sublime-workspace
+*.log
