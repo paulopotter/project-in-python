@@ -2,14 +2,21 @@
 from data_conn import DataConn
 from my_exceptions import RecordNotFoundException
 from my_exceptions import DuplicateKeyException
+from log import LOG
 
 
 class CRUD(object):
 
     def __init__(self):
         self.meta_data = DataConn().meta_dada
+        self.only_log = 'info'
 
     def find(self, criteria):
+        if criteria['search_and']:
+            and_or = 'e'
+        else:
+            and_or = 'ou'
+
         records = DataConn().records()
         positions = []
         positions_name = []
@@ -20,6 +27,7 @@ class CRUD(object):
                 positions.append(line)
             return positions
 
+        LOG('info', self.only_log).message('Busca feita por: "' + criteria['name'] + '" ' + and_or + ' "' + criteria['location'] + '"')
         if criteria['name']:
             for line in range(len(records)):
                 if records[line][0].lower().find(criteria['name'].lower()) == 0:
@@ -45,6 +53,7 @@ class CRUD(object):
             line_value = records[recNo]
             return line_value
         except IndexError:
+            LOG('debug', self.only_log).message('IndexError no read. recNo = ' + str(recNo))
             raise RecordNotFoundException
 
     def create(self, values):
@@ -70,9 +79,10 @@ class CRUD(object):
                     formatted_records.append(self.format_for_necessary_size(values[x], meta_dada[x]['field_name']))
                 formatted_records.append(self.format_for_necessary_size('', 'owner'))
                 field_number_created = DataConn().pack_in_file(formatted_records)
-
+            LOG('info', self.only_log).message('Criado registro. %i. valores: %s' % (field_number_created, str(values)))
             return field_number_created
         else:
+            LOG('debug', self.only_log).message('DuplicateKeyException no create. valores: ' + str(values))
             raise DuplicateKeyException
 
     def format_for_necessary_size(self, value, field_name):
@@ -98,9 +108,12 @@ class CRUD(object):
             records = DataConn().records()
             if self.read(int(recNo))[-1] == 0:
                 DataConn().set_byte_flag_true_and_clear_values(records[int(recNo)][0], records[int(recNo)][1])
+                LOG('info', self.only_log).message('Registro %i deletado.' % recNo)
             else:
+                LOG('debug', self.only_log).message('Tentativa de exclusão de registro ja deletado. recNo: ' + str(recNo))
                 raise RecordNotFoundException
         except IndexError:
+            LOG('debug', self.only_log).message('RecordNotFoundException no delete. recNo: ' + str(recNo))
             raise RecordNotFoundException
 
     def update(self, recNo, data):
@@ -108,14 +121,16 @@ class CRUD(object):
             recNo = int(recNo)
             if self.read(recNo)[-1] == 0:
                 self.update_any_record(recNo, data)
+                LOG('info', self.only_log).message('Registro %i alterado para: %s' % (recNo, str(data)))
             else:
+                LOG('debug', self.only_log).message('Tentativa de update do registro %i que não pode ser alterado.' % recNo)
                 raise RecordNotFoundException
         except:
+            LOG('debug', self.only_log).message('RecordNotFoundException em update. Registro numero: %i' % recNo)
             raise RecordNotFoundException
 
     def update_any_record(self, recNo, data):
         meta_dada = DataConn().meta_dada
-
         for field_name in data.keys():
             for line, item in enumerate(meta_dada):
                 if field_name in item.values():
