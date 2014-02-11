@@ -1,4 +1,4 @@
-{% if create %}
+{% if reply_create %}
     <div class="msg">
 
     <strong>Registro Criado com sucesso!</strong>
@@ -28,8 +28,7 @@
         </tr>
             {% endfor %}
             <tr>
-
-                <td><input type="submit" value='Criar Registro'></td>
+                <td><input type="button" value='Criar Registro' onclick="addRecords(true)"></td>
                 <td><a href="/">Cancelar</a></td>
             </tr>
         </table>
