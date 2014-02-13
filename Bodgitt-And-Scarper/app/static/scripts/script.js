@@ -27,7 +27,7 @@ function addRecords(validate){
   var post_values = "name=" + name_value + "&location=" + location_value + "&specialties=" + specialties_value + "&size=" + size_value + "&rate=" + rate_value
 
     ajax_require('background-msg', '/create-validation', 'POST', post_values)
-  }else{
+  } else {
     var div_msg = document.getElementById('background-msg');
     div_msg.style.display = 'block';
     ajax_require('background-msg', '/create');
@@ -44,7 +44,7 @@ function remove_record(name, location, validate){
 
   if (validate) {
     ajax_require('background-msg', '/remove-validation?name=' + name + '&location=' + location)
-  }else{
+  } else {
     var div_msg = document.getElementById('background-msg');
     div_msg.style.display = 'block';
     ajax_require('background-msg', '/remove?name=' + name + '&location=' + location);
@@ -74,8 +74,7 @@ function mask(evt, field){
   }
 }
 
-
-
+/* ==== Inline editor ==== */
 
 InlineEditor.customEditor = function( theElement )
   {
