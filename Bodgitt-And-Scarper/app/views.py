@@ -83,7 +83,7 @@ def edit():
     for value in record:
         values.append(str(value).strip())
 
-    return render_template("edit.html", values=values, meta_data=meta_data, recNo=recNo)
+    return ''
 
 
 @app.route('/edit-me', methods=['GET'])
@@ -103,4 +103,4 @@ def edit_validation():
             new_record[meta_data[line]['field_name']] = old_record
 
     CRUD().update(edit['id'][0], new_record)
-    return render_template("edit.html", meta_data=meta_data, reply_edit=True)
+    return ''
